@@ -21,7 +21,7 @@ public class PluginConfigurationTests
         Assert.Equal(AiProvider.Gemini, config.Provider);
         Assert.Equal(string.Empty, config.ApiKey);
         Assert.Equal("http://localhost:8080", config.ApiEndpoint);
-        Assert.Equal("gpt-3.5-turbo", config.ModelName);
+        Assert.Equal("gemini-pro", config.ModelName);
         Assert.True(config.EnableAutoTagging);
         Assert.True(config.ProcessOnLibraryScan);
         Assert.False(config.OverwriteExistingTags);
