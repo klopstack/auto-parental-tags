@@ -1,0 +1,1773 @@
+{
+  "Jellyfin.Plugin.AutoParentalTags.dll": {
+    "/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/LibraryMonitor.cs": {
+      "Jellyfin.Plugin.AutoParentalTags.LibraryMonitor": {
+        "System.Void Jellyfin.Plugin.AutoParentalTags.LibraryMonitor::.ctor(MediaBrowser.Controller.Library.ILibraryManager,Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.LibraryMonitor>,Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory)": {
+          "Lines": {
+            "32": 12,
+            "33": 12,
+            "34": 12,
+            "35": 12,
+            "36": 12,
+            "37": 12,
+            "38": 12,
+            "39": 12,
+            "40": 12
+          },
+          "Branches": []
+        }
+      },
+      "Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<>c": {
+        "System.Boolean Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<>c::<ProcessMovieAsync>b__5_0(System.String)": {
+          "Lines": {
+            "117": 11,
+            "118": 11,
+            "119": 11
+          },
+          "Branches": [
+            {
+              "Line": 117,
+              "Offset": 12,
+              "EndOffset": 14,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 117,
+              "Offset": 26,
+              "EndOffset": 28,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 1
+            },
+            {
+              "Line": 117,
+              "Offset": 12,
+              "EndOffset": 42,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 3
+            },
+            {
+              "Line": 117,
+              "Offset": 26,
+              "EndOffset": 42,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 3
+            }
+          ]
+        }
+      },
+      "Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<ProcessMovieAsync>d__5": {
+        "System.Void Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<ProcessMovieAsync>d__5::MoveNext()": {
+          "Lines": {
+            "114": 7,
+            "116": 7,
+            "121": 7,
+            "122": 1,
+            "123": 1,
+            "124": 1,
+            "125": 1,
+            "126": 1,
+            "127": 1,
+            "131": 6,
+            "132": 6,
+            "133": 6,
+            "134": 6,
+            "135": 6,
+            "138": 6,
+            "139": 6,
+            "140": 6,
+            "141": 6,
+            "142": 6,
+            "143": 6,
+            "145": 6,
+            "146": 2,
+            "147": 2,
+            "148": 2,
+            "152": 4,
+            "153": 2,
+            "154": 2,
+            "155": 10,
+            "156": 2,
+            "157": 2,
+            "158": 2,
+            "160": 2,
+            "161": 2,
+            "164": 4,
+            "165": 4,
+            "166": 4,
+            "167": 4,
+            "168": 4,
+            "171": 4,
+            "173": 4,
+            "174": 4,
+            "175": 4,
+            "176": 4,
+            "177": 4,
+            "178": 4,
+            "179": 7
+          },
+          "Branches": [
+            {
+              "Line": 116,
+              "Offset": 42,
+              "EndOffset": 44,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 116,
+              "Offset": 42,
+              "EndOffset": 48,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 7
+            },
+            {
+              "Line": 121,
+              "Offset": 101,
+              "EndOffset": 103,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 121,
+              "Offset": 101,
+              "EndOffset": 107,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 7
+            },
+            {
+              "Line": 121,
+              "Offset": 115,
+              "EndOffset": 117,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 3
+            },
+            {
+              "Line": 121,
+              "Offset": 115,
+              "EndOffset": 128,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 4
+            },
+            {
+              "Line": 121,
+              "Offset": 131,
+              "EndOffset": 133,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 1
+            },
+            {
+              "Line": 121,
+              "Offset": 131,
+              "EndOffset": 200,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 6
+            },
+            {
+              "Line": 135,
+              "Offset": 281,
+              "EndOffset": 283,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 0
+            },
+            {
+              "Line": 135,
+              "Offset": 281,
+              "EndOffset": 287,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 6
+            },
+            {
+              "Line": 145,
+              "Offset": 477,
+              "EndOffset": 479,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 2
+            },
+            {
+              "Line": 145,
+              "Offset": 477,
+              "EndOffset": 522,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 4
+            },
+            {
+              "Line": 152,
+              "Offset": 528,
+              "EndOffset": 530,
+              "Path": 0,
+              "Ordinal": 12,
+              "Hits": 2
+            },
+            {
+              "Line": 152,
+              "Offset": 537,
+              "EndOffset": 539,
+              "Path": 0,
+              "Ordinal": 14,
+              "Hits": 0
+            },
+            {
+              "Line": 152,
+              "Offset": 537,
+              "EndOffset": 543,
+              "Path": 1,
+              "Ordinal": 15,
+              "Hits": 2
+            },
+            {
+              "Line": 152,
+              "Offset": 528,
+              "EndOffset": 553,
+              "Path": 1,
+              "Ordinal": 13,
+              "Hits": 2
+            },
+            {
+              "Line": 152,
+              "Offset": 558,
+              "EndOffset": 563,
+              "Path": 0,
+              "Ordinal": 16,
+              "Hits": 2
+            },
+            {
+              "Line": 154,
+              "Offset": 577,
+              "EndOffset": 579,
+              "Path": 0,
+              "Ordinal": 18,
+              "Hits": 0
+            },
+            {
+              "Line": 154,
+              "Offset": 577,
+              "EndOffset": 583,
+              "Path": 1,
+              "Ordinal": 19,
+              "Hits": 2
+            },
+            {
+              "Line": 154,
+              "Offset": 589,
+              "EndOffset": 591,
+              "Path": 0,
+              "Ordinal": 20,
+              "Hits": 0
+            },
+            {
+              "Line": 154,
+              "Offset": 589,
+              "EndOffset": 597,
+              "Path": 1,
+              "Ordinal": 21,
+              "Hits": 2
+            },
+            {
+              "Line": 155,
+              "Offset": 677,
+              "EndOffset": 622,
+              "Path": 1,
+              "Ordinal": 23,
+              "Hits": 2
+            },
+            {
+              "Line": 155,
+              "Offset": 677,
+              "EndOffset": 679,
+              "Path": 0,
+              "Ordinal": 22,
+              "Hits": 2
+            },
+            {
+              "Line": 152,
+              "Offset": 558,
+              "EndOffset": 747,
+              "Path": 1,
+              "Ordinal": 17,
+              "Hits": 4
+            },
+            {
+              "Line": 164,
+              "Offset": 760,
+              "EndOffset": 762,
+              "Path": 0,
+              "Ordinal": 24,
+              "Hits": 0
+            },
+            {
+              "Line": 164,
+              "Offset": 760,
+              "EndOffset": 766,
+              "Path": 1,
+              "Ordinal": 25,
+              "Hits": 4
+            },
+            {
+              "Line": 164,
+              "Offset": 772,
+              "EndOffset": 774,
+              "Path": 0,
+              "Ordinal": 26,
+              "Hits": 0
+            },
+            {
+              "Line": 164,
+              "Offset": 772,
+              "EndOffset": 780,
+              "Path": 1,
+              "Ordinal": 27,
+              "Hits": 4
+            },
+            {
+              "Line": 165,
+              "Offset": 814,
+              "EndOffset": 819,
+              "Path": 0,
+              "Ordinal": 28,
+              "Hits": 4
+            },
+            {
+              "Line": 165,
+              "Offset": 814,
+              "EndOffset": 1045,
+              "Path": 1,
+              "Ordinal": 29,
+              "Hits": 4
+            }
+          ]
+        }
+      },
+      "Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<Run>d__4": {
+        "System.Void Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<Run>d__4::MoveNext()": {
+          "Lines": {
+            "44": 3,
+            "45": 3,
+            "46": 3,
+            "47": 1,
+            "48": 1,
+            "49": 1,
+            "52": 2,
+            "53": 1,
+            "54": 1,
+            "55": 1,
+            "59": 1,
+            "62": 1,
+            "63": 1,
+            "64": 1,
+            "65": 1,
+            "66": 1,
+            "67": 1,
+            "69": 1,
+            "71": 1,
+            "72": 1,
+            "74": 3,
+            "75": 0,
+            "76": 0,
+            "77": 0,
+            "78": 0,
+            "82": 0,
+            "83": 0,
+            "84": 0,
+            "86": 0,
+            "87": 0,
+            "88": 0,
+            "89": 0,
+            "90": 0,
+            "91": 0,
+            "92": 0,
+            "95": 0,
+            "96": 0,
+            "98": 1,
+            "99": 3
+          },
+          "Branches": [
+            {
+              "Line": 45,
+              "Offset": 26,
+              "EndOffset": 28,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 45,
+              "Offset": 26,
+              "EndOffset": 32,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 3
+            },
+            {
+              "Line": 46,
+              "Offset": 48,
+              "EndOffset": 50,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 3
+            },
+            {
+              "Line": 46,
+              "Offset": 61,
+              "EndOffset": 63,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 2
+            },
+            {
+              "Line": 46,
+              "Offset": 48,
+              "EndOffset": 79,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 1
+            },
+            {
+              "Line": 46,
+              "Offset": 61,
+              "EndOffset": 79,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 1
+            },
+            {
+              "Line": 46,
+              "Offset": 82,
+              "EndOffset": 84,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 1
+            },
+            {
+              "Line": 46,
+              "Offset": 82,
+              "EndOffset": 117,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 2
+            },
+            {
+              "Line": 52,
+              "Offset": 135,
+              "EndOffset": 137,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 1
+            },
+            {
+              "Line": 52,
+              "Offset": 135,
+              "EndOffset": 170,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 1
+            },
+            {
+              "Line": 74,
+              "Offset": 880,
+              "EndOffset": 401,
+              "Path": 1,
+              "Ordinal": 13,
+              "Hits": 0
+            },
+            {
+              "Line": 76,
+              "Offset": 434,
+              "EndOffset": 436,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 0
+            },
+            {
+              "Line": 76,
+              "Offset": 434,
+              "EndOffset": 442,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 0
+            },
+            {
+              "Line": 74,
+              "Offset": 880,
+              "EndOffset": 885,
+              "Path": 0,
+              "Ordinal": 12,
+              "Hits": 1
+            }
+          ]
+        }
+      }
+    },
+    "/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/Plugin.cs": {
+      "Jellyfin.Plugin.AutoParentalTags.Plugin": {
+        "System.String Jellyfin.Plugin.AutoParentalTags.Plugin::get_Name()": {
+          "Lines": {
+            "29": 3
+          },
+          "Branches": []
+        },
+        "System.Guid Jellyfin.Plugin.AutoParentalTags.Plugin::get_Id()": {
+          "Lines": {
+            "32": 2
+          },
+          "Branches": []
+        },
+        "Jellyfin.Plugin.AutoParentalTags.Plugin Jellyfin.Plugin.AutoParentalTags.Plugin::get_Instance()": {
+          "Lines": {
+            "37": 16
+          },
+          "Branches": []
+        },
+        "System.Collections.Generic.IEnumerable`1<MediaBrowser.Model.Plugins.PluginPageInfo> Jellyfin.Plugin.AutoParentalTags.Plugin::GetPages()": {
+          "Lines": {
+            "41": 1,
+            "42": 1,
+            "43": 1,
+            "44": 1,
+            "45": 1,
+            "46": 1,
+            "47": 1,
+            "48": 1,
+            "49": 1,
+            "50": 1
+          },
+          "Branches": []
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Plugin::.ctor(MediaBrowser.Common.Configuration.IApplicationPaths,MediaBrowser.Model.Serialization.IXmlSerializer)": {
+          "Lines": {
+            "23": 8,
+            "24": 8,
+            "25": 8,
+            "26": 8
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/ServiceRegistrator.cs": {
+      "Jellyfin.Plugin.AutoParentalTags.ServiceRegistrator": {
+        "System.Void Jellyfin.Plugin.AutoParentalTags.ServiceRegistrator::RegisterServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,MediaBrowser.Controller.IServerApplicationHost)": {
+          "Lines": {
+            "15": 3,
+            "16": 3,
+            "17": 3,
+            "18": 3
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/Services/AiServiceFactory.cs": {
+      "Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory": {
+        "Jellyfin.Plugin.AutoParentalTags.Services.IAiService Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory::CreateService(Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration)": {
+          "Lines": {
+            "29": 5,
+            "30": 5,
+            "31": 5,
+            "32": 2,
+            "33": 1,
+            "34": 1,
+            "35": 1,
+            "36": 5,
+            "39": 4,
+            "41": 4,
+            "42": 1,
+            "43": 1,
+            "44": 1,
+            "45": 3,
+            "46": 1,
+            "48": 1,
+            "49": 1,
+            "52": 4,
+            "53": 2,
+            "54": 2,
+            "55": 2,
+            "57": 4,
+            "58": 4
+          },
+          "Branches": [
+            {
+              "Line": 30,
+              "Offset": 13,
+              "EndOffset": 32,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 2
+            },
+            {
+              "Line": 30,
+              "Offset": 13,
+              "EndOffset": 51,
+              "Path": 2,
+              "Ordinal": 2,
+              "Hits": 1
+            },
+            {
+              "Line": 30,
+              "Offset": 13,
+              "EndOffset": 70,
+              "Path": 3,
+              "Ordinal": 3,
+              "Hits": 1
+            },
+            {
+              "Line": 30,
+              "Offset": 13,
+              "EndOffset": 89,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 41,
+              "Offset": 171,
+              "EndOffset": 173,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 1
+            },
+            {
+              "Line": 41,
+              "Offset": 171,
+              "EndOffset": 190,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 3
+            },
+            {
+              "Line": 45,
+              "Offset": 203,
+              "EndOffset": 205,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 1
+            },
+            {
+              "Line": 45,
+              "Offset": 203,
+              "EndOffset": 219,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 4
+            },
+            {
+              "Line": 52,
+              "Offset": 234,
+              "EndOffset": 236,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 2
+            },
+            {
+              "Line": 52,
+              "Offset": 234,
+              "EndOffset": 251,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 4
+            }
+          ]
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory::.ctor(Microsoft.Extensions.Logging.ILoggerFactory)": {
+          "Lines": {
+            "18": 18,
+            "19": 18,
+            "20": 18,
+            "21": 18
+          },
+          "Branches": []
+        }
+      }
+    },
+    "/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/Services/GeminiService.cs": {
+      "Jellyfin.Plugin.AutoParentalTags.Services.GeminiService": {
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::SetApiKey(System.String)": {
+          "Lines": {
+            "32": 7,
+            "33": 7,
+            "34": 7
+          },
+          "Branches": []
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::SetEndpoint(System.String)": {
+          "Lines": {
+            "38": 1,
+            "40": 1
+          },
+          "Branches": []
+        },
+        "System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::BuildPrompt(System.String,System.Nullable`1<System.Int32>,System.String,System.String,System.String[])": {
+          "Lines": {
+            "139": 4,
+            "140": 4,
+            "141": 4,
+            "142": 4,
+            "143": 4,
+            "144": 4,
+            "145": 4,
+            "146": 4,
+            "147": 4,
+            "148": 4,
+            "149": 4,
+            "150": 4,
+            "151": 4,
+            "152": 4,
+            "153": 4,
+            "154": 4,
+            "155": 4,
+            "156": 4,
+            "157": 4,
+            "158": 4,
+            "159": 4,
+            "160": 4,
+            "161": 4,
+            "162": 4,
+            "163": 4,
+            "164": 4,
+            "165": 4,
+            "167": 4,
+            "168": 4
+          },
+          "Branches": [
+            {
+              "Line": 140,
+              "Offset": 58,
+              "EndOffset": 60,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 140,
+              "Offset": 58,
+              "EndOffset": 63,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 3
+            },
+            {
+              "Line": 140,
+              "Offset": 84,
+              "EndOffset": 86,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 1
+            },
+            {
+              "Line": 140,
+              "Offset": 84,
+              "EndOffset": 92,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 4
+            },
+            {
+              "Line": 140,
+              "Offset": 115,
+              "EndOffset": 117,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 1
+            },
+            {
+              "Line": 140,
+              "Offset": 115,
+              "EndOffset": 123,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 4
+            },
+            {
+              "Line": 140,
+              "Offset": 146,
+              "EndOffset": 148,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 3
+            },
+            {
+              "Line": 140,
+              "Offset": 146,
+              "EndOffset": 153,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 1
+            },
+            {
+              "Line": 140,
+              "Offset": 151,
+              "EndOffset": 153,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 1
+            },
+            {
+              "Line": 140,
+              "Offset": 151,
+              "EndOffset": 160,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 3
+            },
+            {
+              "Line": 140,
+              "Offset": 195,
+              "EndOffset": 197,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 1
+            },
+            {
+              "Line": 140,
+              "Offset": 195,
+              "EndOffset": 203,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 4
+            }
+          ]
+        },
+        "System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::ParseAudienceTag(System.String)": {
+          "Lines": {
+            "171": 0,
+            "173": 0,
+            "175": 0,
+            "176": 0,
+            "177": 0,
+            "178": 0,
+            "181": 0,
+            "182": 0,
+            "183": 0,
+            "184": 0,
+            "187": 0,
+            "188": 0,
+            "189": 0,
+            "190": 0,
+            "194": 0,
+            "195": 0
+          },
+          "Branches": [
+            {
+              "Line": 175,
+              "Offset": 31,
+              "EndOffset": 33,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 175,
+              "Offset": 31,
+              "EndOffset": 47,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 175,
+              "Offset": 50,
+              "EndOffset": 52,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 175,
+              "Offset": 50,
+              "EndOffset": 61,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 181,
+              "Offset": 73,
+              "EndOffset": 75,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 181,
+              "Offset": 73,
+              "EndOffset": 89,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 181,
+              "Offset": 92,
+              "EndOffset": 94,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            },
+            {
+              "Line": 181,
+              "Offset": 92,
+              "EndOffset": 103,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            },
+            {
+              "Line": 187,
+              "Offset": 115,
+              "EndOffset": 117,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 0
+            },
+            {
+              "Line": 187,
+              "Offset": 115,
+              "EndOffset": 131,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 0
+            },
+            {
+              "Line": 187,
+              "Offset": 134,
+              "EndOffset": 136,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 0
+            },
+            {
+              "Line": 187,
+              "Offset": 134,
+              "EndOffset": 145,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 0
+            }
+          ]
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose()": {
+          "Lines": {
+            "199": 11,
+            "200": 11,
+            "201": 11,
+            "202": 11
+          },
+          "Branches": []
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose(System.Boolean)": {
+          "Lines": {
+            "209": 11,
+            "210": 11,
+            "211": 11,
+            "212": 11,
+            "213": 11,
+            "214": 11
+          },
+          "Branches": [
+            {
+              "Line": 210,
+              "Offset": 4,
+              "EndOffset": 6,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 11
+            },
+            {
+              "Line": 212,
+              "Offset": 14,
+              "EndOffset": 16,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 212,
+              "Offset": 14,
+              "EndOffset": 19,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 11
+            },
+            {
+              "Line": 210,
+              "Offset": 4,
+              "EndOffset": 26,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 11
+            }
+          ]
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.GeminiService>)": {
+          "Lines": {
+            "24": 11,
+            "25": 11,
+            "26": 11,
+            "27": 11,
+            "28": 11
+          },
+          "Branches": []
+        }
+      },
+      "Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<DetermineTargetAudienceAsync>d__6": {
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<DetermineTargetAudienceAsync>d__6::MoveNext()": {
+          "Lines": {
+            "57": 5,
+            "58": 5,
+            "59": 1,
+            "60": 1,
+            "61": 1,
+            "65": 4,
+            "66": 4,
+            "68": 4,
+            "70": 4,
+            "71": 4,
+            "72": 4,
+            "73": 4,
+            "74": 4,
+            "75": 4,
+            "76": 4,
+            "77": 4,
+            "78": 4,
+            "79": 4,
+            "80": 4,
+            "81": 4,
+            "82": 4,
+            "84": 4,
+            "85": 4,
+            "87": 4,
+            "88": 4,
+            "90": 4,
+            "91": 4,
+            "92": 4,
+            "93": 4,
+            "94": 4,
+            "95": 4,
+            "96": 4,
+            "97": 4,
+            "98": 4,
+            "101": 0,
+            "102": 0,
+            "104": 0,
+            "105": 0,
+            "106": 0,
+            "107": 0,
+            "108": 0,
+            "109": 0,
+            "110": 0,
+            "111": 0,
+            "112": 0,
+            "114": 0,
+            "115": 0,
+            "116": 0,
+            "117": 0,
+            "118": 0,
+            "120": 0,
+            "121": 0,
+            "123": 0,
+            "124": 0,
+            "126": 0,
+            "127": 0,
+            "128": 0,
+            "129": 0,
+            "131": 5
+          },
+          "Branches": [
+            {
+              "Line": 58,
+              "Offset": 34,
+              "EndOffset": 36,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 58,
+              "Offset": 34,
+              "EndOffset": 71,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 8
+            },
+            {
+              "Line": 90,
+              "Offset": 488,
+              "EndOffset": 493,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 4
+            },
+            {
+              "Line": 90,
+              "Offset": 488,
+              "EndOffset": 710,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 105,
+              "Offset": 930,
+              "EndOffset": 935,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 110,
+              "Offset": 1016,
+              "EndOffset": 1021,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            },
+            {
+              "Line": 114,
+              "Offset": 1081,
+              "EndOffset": 1083,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 0
+            },
+            {
+              "Line": 114,
+              "Offset": 1081,
+              "EndOffset": 1173,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 0
+            },
+            {
+              "Line": 110,
+              "Offset": 1016,
+              "EndOffset": 1181,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            },
+            {
+              "Line": 105,
+              "Offset": 930,
+              "EndOffset": 1218,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/Services/OpenAiService.cs": {
+      "Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService": {
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::SetApiKey(System.String)": {
+          "Lines": {
+            "34": 8,
+            "35": 8,
+            "36": 8
+          },
+          "Branches": []
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::SetEndpoint(System.String)": {
+          "Lines": {
+            "40": 7,
+            "41": 7,
+            "42": 5,
+            "44": 5,
+            "45": 5,
+            "46": 4,
+            "47": 4,
+            "48": 4,
+            "49": 5,
+            "50": 7
+          },
+          "Branches": [
+            {
+              "Line": 41,
+              "Offset": 12,
+              "EndOffset": 14,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 5
+            },
+            {
+              "Line": 45,
+              "Offset": 51,
+              "EndOffset": 53,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 4
+            },
+            {
+              "Line": 45,
+              "Offset": 51,
+              "EndOffset": 77,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 5
+            },
+            {
+              "Line": 41,
+              "Offset": 12,
+              "EndOffset": 78,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 7
+            }
+          ]
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::SetModelName(System.String)": {
+          "Lines": {
+            "57": 6,
+            "58": 6,
+            "59": 4,
+            "60": 4,
+            "61": 4,
+            "62": 6
+          },
+          "Branches": [
+            {
+              "Line": 58,
+              "Offset": 12,
+              "EndOffset": 14,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 4
+            },
+            {
+              "Line": 58,
+              "Offset": 12,
+              "EndOffset": 23,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 6
+            }
+          ]
+        },
+        "System.String Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::BuildPrompt(System.String,System.Nullable`1<System.Int32>,System.String,System.String,System.String[])": {
+          "Lines": {
+            "155": 5,
+            "156": 5,
+            "157": 5,
+            "158": 5,
+            "159": 5,
+            "160": 5,
+            "161": 5,
+            "162": 5,
+            "163": 5,
+            "164": 5,
+            "165": 5,
+            "166": 5,
+            "167": 5,
+            "168": 5,
+            "169": 5,
+            "170": 5,
+            "171": 5,
+            "172": 5,
+            "173": 5,
+            "174": 5,
+            "175": 5,
+            "176": 5,
+            "177": 5,
+            "178": 5,
+            "179": 5,
+            "180": 5,
+            "181": 5,
+            "183": 5,
+            "184": 5
+          },
+          "Branches": [
+            {
+              "Line": 156,
+              "Offset": 58,
+              "EndOffset": 60,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 1
+            },
+            {
+              "Line": 156,
+              "Offset": 58,
+              "EndOffset": 63,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 4
+            },
+            {
+              "Line": 156,
+              "Offset": 84,
+              "EndOffset": 86,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 1
+            },
+            {
+              "Line": 156,
+              "Offset": 84,
+              "EndOffset": 92,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 5
+            },
+            {
+              "Line": 156,
+              "Offset": 115,
+              "EndOffset": 117,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 1
+            },
+            {
+              "Line": 156,
+              "Offset": 115,
+              "EndOffset": 123,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 5
+            },
+            {
+              "Line": 156,
+              "Offset": 146,
+              "EndOffset": 148,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 4
+            },
+            {
+              "Line": 156,
+              "Offset": 146,
+              "EndOffset": 153,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 1
+            },
+            {
+              "Line": 156,
+              "Offset": 151,
+              "EndOffset": 153,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 1
+            },
+            {
+              "Line": 156,
+              "Offset": 151,
+              "EndOffset": 160,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 4
+            },
+            {
+              "Line": 156,
+              "Offset": 195,
+              "EndOffset": 197,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 1
+            },
+            {
+              "Line": 156,
+              "Offset": 195,
+              "EndOffset": 203,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 5
+            }
+          ]
+        },
+        "System.String Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::ParseAudienceTag(System.String)": {
+          "Lines": {
+            "187": 0,
+            "189": 0,
+            "191": 0,
+            "192": 0,
+            "193": 0,
+            "194": 0,
+            "197": 0,
+            "198": 0,
+            "199": 0,
+            "200": 0,
+            "203": 0,
+            "204": 0,
+            "205": 0,
+            "206": 0,
+            "210": 0,
+            "211": 0
+          },
+          "Branches": [
+            {
+              "Line": 191,
+              "Offset": 31,
+              "EndOffset": 33,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 0
+            },
+            {
+              "Line": 191,
+              "Offset": 31,
+              "EndOffset": 47,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 0
+            },
+            {
+              "Line": 191,
+              "Offset": 50,
+              "EndOffset": 52,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 191,
+              "Offset": 50,
+              "EndOffset": 61,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 197,
+              "Offset": 73,
+              "EndOffset": 75,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 197,
+              "Offset": 73,
+              "EndOffset": 89,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            },
+            {
+              "Line": 197,
+              "Offset": 92,
+              "EndOffset": 94,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            },
+            {
+              "Line": 197,
+              "Offset": 92,
+              "EndOffset": 103,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            },
+            {
+              "Line": 203,
+              "Offset": 115,
+              "EndOffset": 117,
+              "Path": 0,
+              "Ordinal": 8,
+              "Hits": 0
+            },
+            {
+              "Line": 203,
+              "Offset": 115,
+              "EndOffset": 131,
+              "Path": 1,
+              "Ordinal": 9,
+              "Hits": 0
+            },
+            {
+              "Line": 203,
+              "Offset": 134,
+              "EndOffset": 136,
+              "Path": 0,
+              "Ordinal": 10,
+              "Hits": 0
+            },
+            {
+              "Line": 203,
+              "Offset": 134,
+              "EndOffset": 145,
+              "Path": 1,
+              "Ordinal": 11,
+              "Hits": 0
+            }
+          ]
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose()": {
+          "Lines": {
+            "215": 18,
+            "216": 18,
+            "217": 18,
+            "218": 18
+          },
+          "Branches": []
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose(System.Boolean)": {
+          "Lines": {
+            "225": 18,
+            "226": 18,
+            "227": 18,
+            "228": 18,
+            "229": 18,
+            "230": 18
+          },
+          "Branches": [
+            {
+              "Line": 226,
+              "Offset": 4,
+              "EndOffset": 6,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 18
+            },
+            {
+              "Line": 228,
+              "Offset": 14,
+              "EndOffset": 16,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 0
+            },
+            {
+              "Line": 228,
+              "Offset": 14,
+              "EndOffset": 19,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 18
+            },
+            {
+              "Line": 226,
+              "Offset": 4,
+              "EndOffset": 26,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 18
+            }
+          ]
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService>)": {
+          "Lines": {
+            "19": 18,
+            "20": 18,
+            "26": 18,
+            "27": 18,
+            "28": 18,
+            "29": 18,
+            "30": 18
+          },
+          "Branches": []
+        }
+      },
+      "Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<DetermineTargetAudienceAsync>d__9": {
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<DetermineTargetAudienceAsync>d__9::MoveNext()": {
+          "Lines": {
+            "71": 5,
+            "73": 5,
+            "74": 5,
+            "76": 5,
+            "78": 5,
+            "79": 5,
+            "80": 5,
+            "81": 5,
+            "82": 5,
+            "83": 5,
+            "84": 5,
+            "85": 5,
+            "86": 5,
+            "87": 5,
+            "88": 5,
+            "89": 5,
+            "90": 5,
+            "91": 5,
+            "92": 5,
+            "93": 5,
+            "94": 5,
+            "95": 5,
+            "96": 5,
+            "98": 5,
+            "99": 5,
+            "102": 5,
+            "103": 5,
+            "104": 5,
+            "105": 5,
+            "106": 5,
+            "108": 5,
+            "110": 5,
+            "111": 5,
+            "112": 5,
+            "113": 5,
+            "114": 5,
+            "115": 5,
+            "116": 5,
+            "117": 5,
+            "118": 5,
+            "121": 0,
+            "122": 0,
+            "124": 0,
+            "125": 0,
+            "126": 0,
+            "127": 0,
+            "128": 0,
+            "129": 0,
+            "131": 0,
+            "132": 0,
+            "133": 0,
+            "134": 0,
+            "135": 0,
+            "137": 0,
+            "139": 0,
+            "140": 0,
+            "142": 0,
+            "143": 0,
+            "144": 0,
+            "145": 0,
+            "147": 5
+          },
+          "Branches": [
+            {
+              "Line": 102,
+              "Offset": 287,
+              "EndOffset": 289,
+              "Path": 0,
+              "Ordinal": 0,
+              "Hits": 5
+            },
+            {
+              "Line": 102,
+              "Offset": 287,
+              "EndOffset": 366,
+              "Path": 1,
+              "Ordinal": 1,
+              "Hits": 5
+            },
+            {
+              "Line": 110,
+              "Offset": 542,
+              "EndOffset": 547,
+              "Path": 0,
+              "Ordinal": 2,
+              "Hits": 5
+            },
+            {
+              "Line": 110,
+              "Offset": 542,
+              "EndOffset": 764,
+              "Path": 1,
+              "Ordinal": 3,
+              "Hits": 0
+            },
+            {
+              "Line": 125,
+              "Offset": 984,
+              "EndOffset": 989,
+              "Path": 0,
+              "Ordinal": 4,
+              "Hits": 0
+            },
+            {
+              "Line": 131,
+              "Offset": 1079,
+              "EndOffset": 1081,
+              "Path": 0,
+              "Ordinal": 6,
+              "Hits": 0
+            },
+            {
+              "Line": 131,
+              "Offset": 1079,
+              "EndOffset": 1171,
+              "Path": 1,
+              "Ordinal": 7,
+              "Hits": 0
+            },
+            {
+              "Line": 125,
+              "Offset": 984,
+              "EndOffset": 1203,
+              "Path": 1,
+              "Ordinal": 5,
+              "Hits": 0
+            }
+          ]
+        }
+      }
+    },
+    "/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/Configuration/PluginConfiguration.cs": {
+      "Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration": {
+        "Jellyfin.Plugin.AutoParentalTags.Configuration.AiProvider Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_Provider()": {
+          "Lines": {
+            "48": 44
+          },
+          "Branches": []
+        },
+        "System.String Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ApiKey()": {
+          "Lines": {
+            "53": 36
+          },
+          "Branches": []
+        },
+        "System.String Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ApiEndpoint()": {
+          "Lines": {
+            "58": 25
+          },
+          "Branches": []
+        },
+        "System.String Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ModelName()": {
+          "Lines": {
+            "63": 27
+          },
+          "Branches": []
+        },
+        "System.Boolean Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_EnableAutoTagging()": {
+          "Lines": {
+            "68": 31
+          },
+          "Branches": []
+        },
+        "System.Boolean Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ProcessOnLibraryScan()": {
+          "Lines": {
+            "73": 30
+          },
+          "Branches": []
+        },
+        "System.Boolean Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_OverwriteExistingTags()": {
+          "Lines": {
+            "78": 26
+          },
+          "Branches": []
+        },
+        "System.Void Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::.ctor()": {
+          "Lines": {
+            "34": 20,
+            "35": 20,
+            "36": 20,
+            "37": 20,
+            "38": 20,
+            "39": 20,
+            "40": 20,
+            "41": 20,
+            "42": 20,
+            "43": 20
+          },
+          "Branches": []
+        }
+      }
+    }
+  }
+}

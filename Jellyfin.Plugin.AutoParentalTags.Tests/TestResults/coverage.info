@@ -1,0 +1,706 @@
+SF:/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/LibraryMonitor.cs
+FN:34,System.Void Jellyfin.Plugin.AutoParentalTags.LibraryMonitor::.ctor(MediaBrowser.Controller.Library.ILibraryManager,Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.LibraryMonitor>,Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory,System.Nullable`1<System.TimeSpan>)
+FNDA:13,System.Void Jellyfin.Plugin.AutoParentalTags.LibraryMonitor::.ctor(MediaBrowser.Controller.Library.ILibraryManager,Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.LibraryMonitor>,Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory,System.Nullable`1<System.TimeSpan>)
+DA:35,13
+DA:36,13
+DA:37,13
+DA:38,13
+DA:39,13
+DA:40,13
+DA:41,13
+DA:42,13
+DA:43,13
+DA:44,13
+DA:45,13
+BRDA:44,40,0,12
+BRDA:44,40,1,1
+FN:131,System.Boolean Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<>c::<ProcessMovieAsync>b__6_0(System.String)
+FNDA:13,System.Boolean Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<>c::<ProcessMovieAsync>b__6_0(System.String)
+DA:132,13
+DA:133,13
+DA:134,13
+BRDA:132,12,0,1
+BRDA:132,26,0,1
+BRDA:132,12,1,3
+BRDA:132,26,1,3
+FN:128,System.Void Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<ProcessMovieAsync>d__6::MoveNext()
+FNDA:9,System.Void Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<ProcessMovieAsync>d__6::MoveNext()
+DA:129,9
+DA:131,9
+DA:136,9
+DA:137,1
+DA:138,1
+DA:139,1
+DA:140,1
+DA:141,1
+DA:142,1
+DA:146,8
+DA:147,8
+DA:148,8
+DA:149,8
+DA:150,8
+DA:153,8
+DA:154,8
+DA:155,8
+DA:156,8
+DA:157,8
+DA:158,8
+DA:160,8
+DA:161,2
+DA:162,2
+DA:163,2
+DA:167,6
+DA:168,2
+DA:169,2
+DA:170,10
+DA:171,2
+DA:172,2
+DA:173,2
+DA:175,2
+DA:176,2
+DA:179,6
+DA:180,6
+DA:181,6
+DA:182,6
+DA:183,6
+DA:186,6
+DA:188,6
+DA:189,6
+DA:190,6
+DA:191,6
+DA:192,6
+DA:193,6
+DA:194,9
+BRDA:131,42,0,0
+BRDA:131,42,1,9
+BRDA:136,101,0,0
+BRDA:136,101,1,9
+BRDA:136,115,0,3
+BRDA:136,115,1,6
+BRDA:136,131,0,1
+BRDA:136,131,1,8
+BRDA:150,281,0,0
+BRDA:150,281,1,8
+BRDA:160,477,0,2
+BRDA:160,477,1,6
+BRDA:167,528,0,4
+BRDA:167,537,0,0
+BRDA:167,537,1,4
+BRDA:167,528,1,2
+BRDA:167,558,0,2
+BRDA:169,577,0,0
+BRDA:169,577,1,2
+BRDA:169,589,0,0
+BRDA:169,589,1,2
+BRDA:170,677,1,2
+BRDA:170,677,0,2
+BRDA:167,558,1,6
+BRDA:179,760,0,0
+BRDA:179,760,1,6
+BRDA:179,772,0,0
+BRDA:179,772,1,6
+BRDA:180,814,0,6
+BRDA:180,814,1,6
+FN:48,System.Void Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<Run>d__5::MoveNext()
+FNDA:4,System.Void Jellyfin.Plugin.AutoParentalTags.LibraryMonitor/<Run>d__5::MoveNext()
+DA:49,4
+DA:52,4
+DA:53,4
+DA:54,4
+DA:55,0
+DA:56,0
+DA:57,0
+DA:58,0
+DA:61,4
+DA:62,1
+DA:63,1
+DA:64,1
+DA:67,3
+DA:68,1
+DA:69,1
+DA:70,1
+DA:74,2
+DA:77,2
+DA:78,2
+DA:79,2
+DA:80,2
+DA:81,2
+DA:82,2
+DA:84,2
+DA:86,2
+DA:87,2
+DA:89,10
+DA:90,2
+DA:91,2
+DA:92,0
+DA:93,0
+DA:97,2
+DA:98,2
+DA:99,2
+DA:101,2
+DA:102,2
+DA:103,2
+DA:104,0
+DA:105,0
+DA:106,0
+DA:107,0
+DA:110,2
+DA:111,2
+DA:113,2
+DA:114,4
+BRDA:53,27,0,0
+BRDA:53,27,1,4
+BRDA:61,99,0,4
+BRDA:61,112,0,3
+BRDA:61,99,1,1
+BRDA:61,112,1,1
+BRDA:61,133,0,1
+BRDA:61,133,1,3
+BRDA:67,186,0,1
+BRDA:67,186,1,2
+BRDA:89,940,1,2
+BRDA:91,490,0,0
+BRDA:91,490,1,2
+BRDA:89,940,0,2
+LF:105
+LH:95
+BRF:50
+BRH:40
+FNF:4
+FNH:4
+end_of_record
+SF:/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/Plugin.cs
+FN:28,System.String Jellyfin.Plugin.AutoParentalTags.Plugin::get_Name()
+FNDA:3,System.String Jellyfin.Plugin.AutoParentalTags.Plugin::get_Name()
+DA:29,3
+FN:31,System.Guid Jellyfin.Plugin.AutoParentalTags.Plugin::get_Id()
+FNDA:2,System.Guid Jellyfin.Plugin.AutoParentalTags.Plugin::get_Id()
+DA:32,2
+FN:36,Jellyfin.Plugin.AutoParentalTags.Plugin Jellyfin.Plugin.AutoParentalTags.Plugin::get_Instance()
+FNDA:19,Jellyfin.Plugin.AutoParentalTags.Plugin Jellyfin.Plugin.AutoParentalTags.Plugin::get_Instance()
+DA:37,19
+FN:40,System.Collections.Generic.IEnumerable`1<MediaBrowser.Model.Plugins.PluginPageInfo> Jellyfin.Plugin.AutoParentalTags.Plugin::GetPages()
+FNDA:1,System.Collections.Generic.IEnumerable`1<MediaBrowser.Model.Plugins.PluginPageInfo> Jellyfin.Plugin.AutoParentalTags.Plugin::GetPages()
+DA:41,1
+DA:42,1
+DA:43,1
+DA:44,1
+DA:45,1
+DA:46,1
+DA:47,1
+DA:48,1
+DA:49,1
+DA:50,1
+FN:22,System.Void Jellyfin.Plugin.AutoParentalTags.Plugin::.ctor(MediaBrowser.Common.Configuration.IApplicationPaths,MediaBrowser.Model.Serialization.IXmlSerializer)
+FNDA:9,System.Void Jellyfin.Plugin.AutoParentalTags.Plugin::.ctor(MediaBrowser.Common.Configuration.IApplicationPaths,MediaBrowser.Model.Serialization.IXmlSerializer)
+DA:23,9
+DA:24,9
+DA:25,9
+DA:26,9
+LF:17
+LH:17
+BRF:0
+BRH:0
+FNF:5
+FNH:5
+end_of_record
+SF:/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/ServiceRegistrator.cs
+FN:14,System.Void Jellyfin.Plugin.AutoParentalTags.ServiceRegistrator::RegisterServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,MediaBrowser.Controller.IServerApplicationHost)
+FNDA:3,System.Void Jellyfin.Plugin.AutoParentalTags.ServiceRegistrator::RegisterServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,MediaBrowser.Controller.IServerApplicationHost)
+DA:15,3
+DA:16,3
+DA:17,3
+DA:18,3
+LF:4
+LH:4
+BRF:0
+BRH:0
+FNF:1
+FNH:1
+end_of_record
+SF:/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/Services/AiServiceFactory.cs
+FN:28,Jellyfin.Plugin.AutoParentalTags.Services.IAiService Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory::CreateService(Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration)
+FNDA:5,Jellyfin.Plugin.AutoParentalTags.Services.IAiService Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory::CreateService(Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration)
+DA:29,5
+DA:30,5
+DA:31,5
+DA:32,2
+DA:33,1
+DA:34,1
+DA:35,1
+DA:36,5
+DA:39,4
+DA:41,4
+DA:42,1
+DA:43,1
+DA:44,1
+DA:45,3
+DA:46,1
+DA:48,1
+DA:49,1
+DA:52,4
+DA:53,2
+DA:54,2
+DA:55,2
+DA:57,4
+DA:58,4
+BRDA:30,13,1,2
+BRDA:30,13,2,1
+BRDA:30,13,3,1
+BRDA:30,13,0,1
+BRDA:41,171,0,1
+BRDA:41,171,1,3
+BRDA:45,203,0,1
+BRDA:45,203,1,4
+BRDA:52,234,0,2
+BRDA:52,234,1,4
+FN:17,System.Void Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory::.ctor(Microsoft.Extensions.Logging.ILoggerFactory)
+FNDA:19,System.Void Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory::.ctor(Microsoft.Extensions.Logging.ILoggerFactory)
+DA:18,19
+DA:19,19
+DA:20,19
+DA:21,19
+LF:27
+LH:27
+BRF:10
+BRH:10
+FNF:2
+FNH:2
+end_of_record
+SF:/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/Services/GeminiService.cs
+FN:31,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::SetApiKey(System.String)
+FNDA:7,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::SetApiKey(System.String)
+DA:32,7
+DA:33,7
+DA:34,7
+FN:37,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::SetEndpoint(System.String)
+FNDA:1,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::SetEndpoint(System.String)
+DA:38,1
+DA:40,1
+FN:138,System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::BuildPrompt(System.String,System.Nullable`1<System.Int32>,System.String,System.String,System.String[])
+FNDA:4,System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::BuildPrompt(System.String,System.Nullable`1<System.Int32>,System.String,System.String,System.String[])
+DA:139,4
+DA:140,4
+DA:141,4
+DA:142,4
+DA:143,4
+DA:144,4
+DA:145,4
+DA:146,4
+DA:147,4
+DA:148,4
+DA:149,4
+DA:150,4
+DA:151,4
+DA:152,4
+DA:153,4
+DA:154,4
+DA:155,4
+DA:156,4
+DA:157,4
+DA:158,4
+DA:159,4
+DA:160,4
+DA:161,4
+DA:162,4
+DA:163,4
+DA:164,4
+DA:165,4
+DA:167,4
+DA:168,4
+BRDA:140,58,0,1
+BRDA:140,58,1,3
+BRDA:140,84,0,1
+BRDA:140,84,1,4
+BRDA:140,115,0,1
+BRDA:140,115,1,4
+BRDA:140,146,0,3
+BRDA:140,146,1,1
+BRDA:140,151,0,1
+BRDA:140,151,1,3
+BRDA:140,195,0,1
+BRDA:140,195,1,4
+FN:170,System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::ParseAudienceTag(System.String)
+FNDA:0,System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::ParseAudienceTag(System.String)
+DA:171,0
+DA:173,0
+DA:175,0
+DA:176,0
+DA:177,0
+DA:178,0
+DA:181,0
+DA:182,0
+DA:183,0
+DA:184,0
+DA:187,0
+DA:188,0
+DA:189,0
+DA:190,0
+DA:194,0
+DA:195,0
+BRDA:175,31,0,0
+BRDA:175,31,1,0
+BRDA:175,50,0,0
+BRDA:175,50,1,0
+BRDA:181,73,0,0
+BRDA:181,73,1,0
+BRDA:181,92,0,0
+BRDA:181,92,1,0
+BRDA:187,115,0,0
+BRDA:187,115,1,0
+BRDA:187,134,0,0
+BRDA:187,134,1,0
+FN:198,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose()
+FNDA:11,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose()
+DA:199,11
+DA:200,11
+DA:201,11
+DA:202,11
+FN:208,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose(System.Boolean)
+FNDA:11,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose(System.Boolean)
+DA:209,11
+DA:210,11
+DA:211,11
+DA:212,11
+DA:213,11
+DA:214,11
+BRDA:210,4,0,11
+BRDA:212,14,0,0
+BRDA:212,14,1,11
+BRDA:210,4,1,11
+FN:23,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.GeminiService>)
+FNDA:11,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.GeminiService>)
+DA:24,11
+DA:25,11
+DA:26,11
+DA:27,11
+DA:28,11
+FN:56,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<DetermineTargetAudienceAsync>d__6::MoveNext()
+FNDA:5,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<DetermineTargetAudienceAsync>d__6::MoveNext()
+DA:57,5
+DA:58,5
+DA:59,1
+DA:60,1
+DA:61,1
+DA:65,4
+DA:66,4
+DA:68,4
+DA:70,4
+DA:71,4
+DA:72,4
+DA:73,4
+DA:74,4
+DA:75,4
+DA:76,4
+DA:77,4
+DA:78,4
+DA:79,4
+DA:80,4
+DA:81,4
+DA:82,4
+DA:84,4
+DA:85,4
+DA:87,4
+DA:88,4
+DA:90,4
+DA:91,4
+DA:92,4
+DA:93,4
+DA:94,4
+DA:95,4
+DA:96,4
+DA:97,4
+DA:98,4
+DA:101,0
+DA:102,0
+DA:104,0
+DA:105,0
+DA:106,0
+DA:107,0
+DA:108,0
+DA:109,0
+DA:110,0
+DA:111,0
+DA:112,0
+DA:114,0
+DA:115,0
+DA:116,0
+DA:117,0
+DA:118,0
+DA:120,0
+DA:121,0
+DA:123,0
+DA:124,0
+DA:126,0
+DA:127,0
+DA:128,0
+DA:129,0
+DA:131,5
+BRDA:58,34,0,1
+BRDA:58,34,1,8
+BRDA:90,488,0,4
+BRDA:90,488,1,0
+BRDA:105,930,0,0
+BRDA:110,1016,0,0
+BRDA:114,1081,0,0
+BRDA:114,1081,1,0
+BRDA:110,1016,1,0
+BRDA:105,930,1,0
+LF:124
+LH:84
+BRF:38
+BRH:18
+FNF:8
+FNH:7
+end_of_record
+SF:/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/Services/OpenAiService.cs
+FN:33,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::SetApiKey(System.String)
+FNDA:8,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::SetApiKey(System.String)
+DA:34,8
+DA:35,8
+DA:36,8
+FN:39,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::SetEndpoint(System.String)
+FNDA:7,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::SetEndpoint(System.String)
+DA:40,7
+DA:41,7
+DA:42,5
+DA:44,5
+DA:45,5
+DA:46,4
+DA:47,4
+DA:48,4
+DA:49,5
+DA:50,7
+BRDA:41,12,0,5
+BRDA:45,51,0,4
+BRDA:45,51,1,5
+BRDA:41,12,1,7
+FN:56,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::SetModelName(System.String)
+FNDA:6,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::SetModelName(System.String)
+DA:57,6
+DA:58,6
+DA:59,4
+DA:60,4
+DA:61,4
+DA:62,6
+BRDA:58,12,0,4
+BRDA:58,12,1,6
+FN:154,System.String Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::BuildPrompt(System.String,System.Nullable`1<System.Int32>,System.String,System.String,System.String[])
+FNDA:5,System.String Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::BuildPrompt(System.String,System.Nullable`1<System.Int32>,System.String,System.String,System.String[])
+DA:155,5
+DA:156,5
+DA:157,5
+DA:158,5
+DA:159,5
+DA:160,5
+DA:161,5
+DA:162,5
+DA:163,5
+DA:164,5
+DA:165,5
+DA:166,5
+DA:167,5
+DA:168,5
+DA:169,5
+DA:170,5
+DA:171,5
+DA:172,5
+DA:173,5
+DA:174,5
+DA:175,5
+DA:176,5
+DA:177,5
+DA:178,5
+DA:179,5
+DA:180,5
+DA:181,5
+DA:183,5
+DA:184,5
+BRDA:156,58,0,1
+BRDA:156,58,1,4
+BRDA:156,84,0,1
+BRDA:156,84,1,5
+BRDA:156,115,0,1
+BRDA:156,115,1,5
+BRDA:156,146,0,4
+BRDA:156,146,1,1
+BRDA:156,151,0,1
+BRDA:156,151,1,4
+BRDA:156,195,0,1
+BRDA:156,195,1,5
+FN:186,System.String Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::ParseAudienceTag(System.String)
+FNDA:0,System.String Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::ParseAudienceTag(System.String)
+DA:187,0
+DA:189,0
+DA:191,0
+DA:192,0
+DA:193,0
+DA:194,0
+DA:197,0
+DA:198,0
+DA:199,0
+DA:200,0
+DA:203,0
+DA:204,0
+DA:205,0
+DA:206,0
+DA:210,0
+DA:211,0
+BRDA:191,31,0,0
+BRDA:191,31,1,0
+BRDA:191,50,0,0
+BRDA:191,50,1,0
+BRDA:197,73,0,0
+BRDA:197,73,1,0
+BRDA:197,92,0,0
+BRDA:197,92,1,0
+BRDA:203,115,0,0
+BRDA:203,115,1,0
+BRDA:203,134,0,0
+BRDA:203,134,1,0
+FN:214,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose()
+FNDA:18,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose()
+DA:215,18
+DA:216,18
+DA:217,18
+DA:218,18
+FN:224,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose(System.Boolean)
+FNDA:18,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose(System.Boolean)
+DA:225,18
+DA:226,18
+DA:227,18
+DA:228,18
+DA:229,18
+DA:230,18
+BRDA:226,4,0,18
+BRDA:228,14,0,0
+BRDA:228,14,1,18
+BRDA:226,4,1,18
+FN:18,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService>)
+FNDA:18,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService>)
+DA:19,18
+DA:20,18
+DA:26,18
+DA:27,18
+DA:28,18
+DA:29,18
+DA:30,18
+FN:70,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<DetermineTargetAudienceAsync>d__9::MoveNext()
+FNDA:5,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<DetermineTargetAudienceAsync>d__9::MoveNext()
+DA:71,5
+DA:73,5
+DA:74,5
+DA:76,5
+DA:78,5
+DA:79,5
+DA:80,5
+DA:81,5
+DA:82,5
+DA:83,5
+DA:84,5
+DA:85,5
+DA:86,5
+DA:87,5
+DA:88,5
+DA:89,5
+DA:90,5
+DA:91,5
+DA:92,5
+DA:93,5
+DA:94,5
+DA:95,5
+DA:96,5
+DA:98,5
+DA:99,5
+DA:102,5
+DA:103,5
+DA:104,5
+DA:105,5
+DA:106,5
+DA:108,5
+DA:110,5
+DA:111,5
+DA:112,5
+DA:113,5
+DA:114,5
+DA:115,5
+DA:116,5
+DA:117,5
+DA:118,5
+DA:121,0
+DA:122,0
+DA:124,0
+DA:125,0
+DA:126,0
+DA:127,0
+DA:128,0
+DA:129,0
+DA:131,0
+DA:132,0
+DA:133,0
+DA:134,0
+DA:135,0
+DA:137,0
+DA:139,0
+DA:140,0
+DA:142,0
+DA:143,0
+DA:144,0
+DA:145,0
+DA:147,5
+BRDA:102,287,0,5
+BRDA:102,287,1,5
+BRDA:110,542,0,5
+BRDA:110,542,1,0
+BRDA:125,984,0,0
+BRDA:131,1079,0,0
+BRDA:131,1079,1,0
+BRDA:125,984,1,0
+LF:142
+LH:106
+BRF:42
+BRH:24
+FNF:9
+FNH:8
+end_of_record
+SF:/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/Configuration/PluginConfiguration.cs
+FN:47,Jellyfin.Plugin.AutoParentalTags.Configuration.AiProvider Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_Provider()
+FNDA:46,Jellyfin.Plugin.AutoParentalTags.Configuration.AiProvider Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_Provider()
+DA:48,46
+FN:52,System.String Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ApiKey()
+FNDA:39,System.String Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ApiKey()
+DA:53,39
+FN:57,System.String Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ApiEndpoint()
+FNDA:26,System.String Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ApiEndpoint()
+DA:58,26
+FN:62,System.String Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ModelName()
+FNDA:28,System.String Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ModelName()
+DA:63,28
+FN:67,System.Boolean Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_EnableAutoTagging()
+FNDA:34,System.Boolean Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_EnableAutoTagging()
+DA:68,34
+FN:72,System.Boolean Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ProcessOnLibraryScan()
+FNDA:33,System.Boolean Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_ProcessOnLibraryScan()
+DA:73,33
+FN:77,System.Boolean Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_OverwriteExistingTags()
+FNDA:30,System.Boolean Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::get_OverwriteExistingTags()
+DA:78,30
+FN:33,System.Void Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::.ctor()
+FNDA:21,System.Void Jellyfin.Plugin.AutoParentalTags.Configuration.PluginConfiguration::.ctor()
+DA:34,21
+DA:35,21
+DA:36,21
+DA:37,21
+DA:38,21
+DA:39,21
+DA:40,21
+DA:41,21
+DA:42,21
+DA:43,21
+LF:17
+LH:17
+BRF:0
+BRH:0
+FNF:8
+FNH:8
+end_of_record

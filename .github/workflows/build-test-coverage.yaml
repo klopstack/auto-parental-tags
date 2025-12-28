@@ -1,0 +1,56 @@
+name: "CI Build, Lint, and Coverage"
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+          cache: true
+
+      - name: Restore
+        run: dotnet restore Jellyfin.Plugin.AutoParentalTags.sln
+
+      - name: Install dotnet-format
+        run: |
+          dotnet tool install -g dotnet-format
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Lint (dotnet-format)
+        run: dotnet format Jellyfin.Plugin.AutoParentalTags.sln --verify-no-changes
+
+      - name: Build (Debug)
+        run: dotnet build Jellyfin.Plugin.AutoParentalTags.sln --configuration Debug --no-restore
+
+      - name: Test with Coverage (Coverlet)
+        run: |
+          dotnet test Jellyfin.Plugin.AutoParentalTags.Tests/Jellyfin.Plugin.AutoParentalTags.Tests.csproj \
+            --configuration Debug \
+            /p:CollectCoverage=true \
+            /p:CoverletOutput=../TestResults/coverage.info \
+            /p:CoverletOutputFormat=lcov
+
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-lcov
+          path: TestResults/coverage.info
+          if-no-files-found: error
+
+      - name: Fail if coverage below 80%
+        run: |
+          percent=$(awk -F, '/^DA:/{total++; if($2>0) covered++} END{printf "%.2f", (covered/total)*100}' TestResults/coverage.info)
+          echo "Line coverage: ${percent}%"
+          awk -v p="$percent" 'BEGIN{exit p<80}'
