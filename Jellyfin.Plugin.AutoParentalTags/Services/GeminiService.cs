@@ -137,7 +137,7 @@ public class GeminiService : IAiService, IDisposable
         string? officialRating,
         string[]? genres)
     {
-        var prompt = $@"Analyze this movie and determine its TARGET AUDIENCE (not content rating). 
+        var prompt = $@"Analyze this movie and determine its TARGET AUDIENCE (not content rating).
 Consider that target audience is different from content appropriateness:
 - A PG movie from the 1970s might be targeted at adults despite being appropriate for children
 - A PG-13 action movie might be targeted specifically at teenagers

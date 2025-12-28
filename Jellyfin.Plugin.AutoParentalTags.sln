@@ -1,5 +1,5 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Plugin.AutoParentalTags", "Jellyfin.Plugin.AutoParentalTags\Jellyfin.Plugin.AutoParentalTags.csproj", "{D921B930-CF91-406F-ACBC-08914DCD0D34}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Plugin.AutoParentalTags.Tests", "Jellyfin.Plugin.AutoParentalTags.Tests\Jellyfin.Plugin.AutoParentalTags.Tests.csproj", "{EB7E525D-6B7A-4E4E-96A6-F14432C80566}"
