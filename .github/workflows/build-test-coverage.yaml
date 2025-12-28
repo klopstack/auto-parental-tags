@@ -19,9 +19,10 @@ jobs:
         with:
           dotnet-version: "9.0.x"
           cache: true
+          cache-dependency-path: '**/packages.lock.json'
 
       - name: Restore
-        run: dotnet restore Jellyfin.Plugin.AutoParentalTags.sln
+        run: dotnet restore Jellyfin.Plugin.AutoParentalTags.sln --locked-mode
 
       - name: Install dotnet-format
         run: |
