@@ -1,11 +1,11 @@
-using Jellyfin.Plugin.AutoParentalTags.Services;
 using System.Linq;
+using Jellyfin.Plugin.AutoParentalTags.Services;
 using MediaBrowser.Controller;
-using MediaBrowser.Controller.Plugins;
 using MediaBrowser.Controller.Library;
+using MediaBrowser.Controller.Plugins;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 

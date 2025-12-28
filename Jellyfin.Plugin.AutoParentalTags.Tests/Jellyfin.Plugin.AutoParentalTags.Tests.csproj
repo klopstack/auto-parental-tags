@@ -12,6 +12,7 @@
     <CoverletOutputFormat>lcov</CoverletOutputFormat>
     <ExcludeByFile>**/Services/GeminiService.cs;**/Services/OpenAiService.cs</ExcludeByFile>
     <Threshold>80</Threshold>
+    <ThresholdType>line</ThresholdType>
   </PropertyGroup>
 
   <ItemGroup>
