@@ -1,17 +1,16 @@
 ---
 name: "Auto Parental Tags"
 guid: "eb5d7894-8eef-4b36-aa6f-5d124e828ce1"
-version: "1.0.0.0"
-targetAbi: "10.9.0.0"
+version: "0.1.0"
+targetAbi: "10.11.5.0"
 framework: "net9.0"
 overview: "Automatically tag movies with target audience using AI"
 description: >
-  Uses AI (Google Gemini, OpenAI, or LocalAI) to analyze movie metadata
-  and automatically add audience target tags (kids, teens, adults).
-  Considers target audience rather than just content ratings.
+  Uses AI (Google Gemini, OpenAI, or LocalAI) to analyze movie metadata and automatically add audience target tags (kids, teens, adults). Considers target audience rather than just content ratings.
+
 category: "Metadata"
 owner: "benklop"
 artifacts:
-- "Jellyfin.Plugin.AutoParentalTags.dll"
-changelog: >
-  Initial release with AI-based audience tagging
+  - "Jellyfin.Plugin.AutoParentalTags.dll"
+changelog: |-
+  - Add comprehensive Copilot instructions for Auto Parental Tags plugin (@benklop) (#1)
