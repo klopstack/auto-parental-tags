@@ -22,4 +22,4 @@ jobs:
     with:
       repository-name: klopstack/auto-parental-tags
     secrets:
-      token: ${{ secrets.TOKEN }}
+      token: ${{ secrets.GITHUB_TOKEN }}

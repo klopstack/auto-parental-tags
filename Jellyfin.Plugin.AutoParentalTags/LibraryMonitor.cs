@@ -61,12 +61,14 @@ public class LibraryMonitor : ILibraryPostScanTask
         if (config == null || !config.EnableAutoTagging || !config.ProcessOnLibraryScan)
         {
             _logger.LogDebug("Auto-tagging is disabled or not configured to run on library scan");
+            progress?.Report(100);
             return;
         }
 
         if (string.IsNullOrEmpty(config.ApiKey))
         {
             _logger.LogWarning("AI API key is not configured");
+            progress?.Report(100);
             return;
         }
 
@@ -111,6 +113,9 @@ public class LibraryMonitor : ILibraryPostScanTask
         }
 
         _logger.LogInformation("Completed processing {Count} movies", processedCount);
+
+        // Always report 100% completion at the end
+        progress?.Report(100);
     }
 
     /// <summary>
