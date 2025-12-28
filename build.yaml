@@ -13,4 +13,5 @@ owner: "benklop"
 artifacts:
   - "Jellyfin.Plugin.AutoParentalTags.dll"
 changelog: |-
+  - Prepare for release v0.1.0 (@[github-actions[bot]](https://github.com/apps/github-actions)) (#2)
   - Add comprehensive Copilot instructions for Auto Parental Tags plugin (@benklop) (#1)
