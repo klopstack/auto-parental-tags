@@ -1,0 +1,40 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'type: feature'
+      - 'enhancement'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'type: bug'
+      - 'bugfix'
+  - title: '📚 Documentation'
+    labels:
+      - 'type: docs'
+      - 'documentation'
+  - title: '🔧 Maintenance'
+    labels:
+      - 'type: chore'
+      - 'maintenance'
+  - title: '⚡ Performance'
+    labels:
+      - 'type: performance'
+      - 'performance'
+change-template: '- $TITLE (@$AUTHOR) (#$NUMBER)'
+change-title-escapes: '\<*_&'
+version-resolver:
+  major:
+    labels:
+      - 'semver: major'
+  minor:
+    labels:
+      - 'semver: minor'
+  patch:
+    labels:
+      - 'semver: patch'
+  default: patch
+template: |
+  ## Changes in $RESOLVED_VERSION
+
+  $CHANGES
