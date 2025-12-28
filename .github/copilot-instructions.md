@@ -62,6 +62,24 @@ Plugin location after build:
 - Linux: `$HOME/.local/share/jellyfin/plugins/Jellyfin.Plugin.AutoParentalTags/`
 - Windows: `%LOCALAPPDATA%/jellyfin/plugins/Jellyfin.Plugin.AutoParentalTags/`
 
+### Creating Releases
+
+**Version Format Fix**: This project uses a local copy of the changelog workflow ([.github/workflows/changelog-local.yaml](../.github/workflows/changelog-local.yaml)) that fixes the upstream version formatting bug. The fixed workflow properly formats versions as:
+- `<Version>X.Y.Z</Version>` (3 segments for NuGet)
+- `<AssemblyVersion>A.B.C.D</AssemblyVersion>` (4 segments, matches targetAbi from build.yaml)
+- `<FileVersion>X.Y.Z.0</FileVersion>` (4 segments)
+
+**Release Process:**
+1. **Merge PRs** to `master` with proper labels:
+   - `semver: major` - Breaking changes (1.0.0 → 2.0.0)
+   - `semver: minor` - New features (1.0.0 → 1.1.0)
+   - `semver: patch` - Bug fixes (1.0.0 → 1.0.1, default)
+2. **Release Drafter** auto-creates a draft release with changelog
+3. **Changelog workflow** creates `prepare-X.Y.Z` PR with updated versions
+4. **Review and merge** the prepare PR (version formats are now correct)
+5. **Publish** the draft release on GitHub
+6. **Automated deployment** triggers via [publish.yaml](../.github/workflows/publish.yaml)
+
 ### Testing
 
 Solution includes [Jellyfin.Plugin.AutoParentalTags.Tests](../Jellyfin.Plugin.AutoParentalTags.Tests/) project with:

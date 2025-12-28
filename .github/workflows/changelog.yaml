@@ -17,8 +17,9 @@ permissions:
 
 jobs:
   call:
-    uses: jellyfin/jellyfin-meta-plugins/.github/workflows/changelog.yaml@master
+    # Using local workflow with fixed version formatting
+    uses: ./.github/workflows/changelog-local.yaml
     with:
       repository-name: klopstack/auto-parental-tags
     secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.TOKEN }}
