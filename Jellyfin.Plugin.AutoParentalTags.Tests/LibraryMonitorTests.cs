@@ -23,8 +23,28 @@ namespace Jellyfin.Plugin.AutoParentalTags.Tests;
 /// <summary>
 /// Tests for the LibraryMonitor class.
 /// </summary>
-public class LibraryMonitorTests
+public class LibraryMonitorTests : IAsyncLifetime
 {
+    /// <summary>
+    /// Initializes the test by clearing any existing plugin instance.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public Task InitializeAsync()
+    {
+        ClearPluginInstance();
+        return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Disposes the test by clearing the plugin instance.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public Task DisposeAsync()
+    {
+        ClearPluginInstance();
+        return Task.CompletedTask;
+    }
+
     /// <summary>
     /// Tests that LibraryMonitor can be instantiated.
     /// </summary>
