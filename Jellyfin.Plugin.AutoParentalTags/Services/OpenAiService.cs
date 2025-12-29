@@ -96,48 +96,49 @@ public class OpenAiService : IAiService, IDisposable
             };
 
             var jsonContent = JsonSerializer.Serialize(requestBody);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-            // Add authorization header if API key is provided
-            if (!string.IsNullOrEmpty(_apiKey))
+            using (var content = new StringContent(jsonContent, Encoding.UTF8, "application/json"))
             {
-                _httpClient.DefaultRequestHeaders.Remove("Authorization");
-                _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
-            }
+                // Add authorization header if API key is provided
+                if (!string.IsNullOrEmpty(_apiKey))
+                {
+                    _httpClient.DefaultRequestHeaders.Remove("Authorization");
+                    _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
+                }
 
-            var response = await _httpClient.PostAsync(_endpoint, content).ConfigureAwait(false);
+                var response = await _httpClient.PostAsync(_endpoint, content).ConfigureAwait(false);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                _logger.LogError(
-                    "AI API error for '{Title}': {StatusCode} - {Error}",
-                    title,
-                    response.StatusCode,
-                    errorContent);
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    _logger.LogError(
+                        "AI API error for '{Title}': {StatusCode} - {Error}",
+                        title,
+                        response.StatusCode,
+                        errorContent);
+                    return null;
+                }
+
+                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var responseJson = JsonDocument.Parse(responseContent);
+
+                var choices = responseJson.RootElement.GetProperty("choices");
+                if (choices.GetArrayLength() > 0)
+                {
+                    var firstChoice = choices[0];
+                    var message = firstChoice.GetProperty("message");
+                    var responseText = message.GetProperty("content").GetString();
+
+                    if (!string.IsNullOrEmpty(responseText))
+                    {
+                        var tag = ParseAudienceTag(responseText);
+                        _logger.LogInformation("Classified '{Title}' ({Year}) as '{Tag}'", title, year, tag);
+                        return tag;
+                    }
+                }
+
+                _logger.LogWarning("No valid response from AI API for '{Title}'", title);
                 return null;
             }
-
-            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var responseJson = JsonDocument.Parse(responseContent);
-
-            var choices = responseJson.RootElement.GetProperty("choices");
-            if (choices.GetArrayLength() > 0)
-            {
-                var firstChoice = choices[0];
-                var message = firstChoice.GetProperty("message");
-                var responseText = message.GetProperty("content").GetString();
-
-                if (!string.IsNullOrEmpty(responseText))
-                {
-                    var tag = ParseAudienceTag(responseText);
-                    _logger.LogInformation("Classified '{Title}' ({Year}) as '{Tag}'", title, year, tag);
-                    return tag;
-                }
-            }
-
-            _logger.LogWarning("No valid response from AI API for '{Title}'", title);
-            return null;
         }
         catch (Exception ex)
         {
