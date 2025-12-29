@@ -46,7 +46,7 @@ public class GeminiService : IAiService, IDisposable
     /// <param name="modelName">The model name (e.g., gemini-pro, gemini-1.5-pro, gemini-1.5-flash).</param>
     public void SetModelName(string modelName)
     {
-        if (!string.IsNullOrWhiteSpace(modelName))
+        if (!string.IsNullOrEmpty(modelName))
         {
             _modelName = modelName;
         }
