@@ -21,6 +21,7 @@ jobs:
         uses: actions/download-artifact@v6
         with:
           name: build-artifact
+          path: .
       - name: Prepare GitHub Release assets
         run: |-
           for file in ./*; do
