@@ -1,2 +1,28 @@
 [
+  {
+    "category": "Metadata",
+    "description": "Uses AI (Google Gemini, OpenAI, or LocalAI) to analyze movie metadata and automatically add audience target tags (kids, teens, adults). Considers target audience rather than just content ratings.\n",
+    "guid": "eb5d7894-8eef-4b36-aa6f-5d124e828ce1",
+    "name": "Auto Parental Tags",
+    "overview": "Automatically tag movies with target audience using AI",
+    "owner": "benklop",
+    "versions": [
+      {
+        "changelog": "## Changes in 0.2.0\r\n\r\n- Prepare for release v0.2.0 (@[github-actions[bot]](https://github.com/apps/github-actions)) (#12)\r\n- Refactor publish workflow to separate build and upload jobs, enhancing asset preparation for GitHub releases (@benklop) (#11)\r\n",
+        "checksum": "e879404cefa2805911518ca6fd602852",
+        "sourceUrl": "https://github.com/klopstack/auto-parental-tags/releases/download/v0.2.0/auto-parental-tags_0.2.0.0.zip",
+        "targetAbi": "10.11.5.0",
+        "timestamp": "2025-12-29T05:48:47Z",
+        "version": "0.2.0"
+      },
+      {
+        "changelog": "## Changes in 0.1.0\r\n\r\n- Refactor changelog workflow to inherit secrets instead of specifying … (@benklop) (#9)\r\n- Add release instructions and fix version formatting in workflows (@benklop) (#7)\r\n- Prepare for release v0.1.0 (@[github-actions[bot]](https://github.com/apps/github-actions)) (#5)\r\n- Fix build failure (@benklop) (#4)\r\n- Prepare for release v0.1.0 (@[github-actions[bot]](https://github.com/apps/github-actions)) (#2)\r\n- Add comprehensive Copilot instructions for Auto Parental Tags plugin (@benklop) (#1)\r\n",
+        "checksum": "36546831a8417258b5e0ae2867ced962",
+        "sourceUrl": "https://github.com/klopstack/auto-parental-tags/releases/download/v0.1.0/auto-parental-tags_0.1.0.0.zip",
+        "targetAbi": "10.11.5.0",
+        "timestamp": "2025-12-29T04:59:01Z",
+        "version": "0.1.0"
+      }
+    ]
+  }
 ]
