@@ -10,7 +10,7 @@
             <div class="content-primary">
                 <form id="AutoParentalTagsConfigForm">
                     <h2>AI Provider Configuration</h2>
-                    
+
                     <div class="selectContainer">
                         <label class="selectLabel" for="Provider">AI Provider</label>
                         <select is="emby-select" id="Provider" name="Provider" class="emby-select-withcolor emby-select">
@@ -135,11 +135,11 @@
                     var params = new URLSearchParams({
                         provider: provider
                     });
-                    
+
                     if (apiKey) {
                         params.append('apiKey', apiKey);
                     }
-                    
+
                     if (endpoint && provider === 'LocalAI') {
                         params.append('endpoint', endpoint);
                     }
@@ -160,7 +160,7 @@
                             }
                             modelSelect.appendChild(option);
                         });
-                        
+
                         // If no model was selected, select the first one
                         if (!currentValue || !response.includes(currentValue)) {
                             modelSelect.selectedIndex = 0;
@@ -171,7 +171,7 @@
                 } catch (error) {
                     console.error('Error fetching models:', error);
                     modelSelect.innerHTML = '<option value="">Error loading models - check API credentials</option>';
-                    
+
                     // If we have a stored value, restore it
                     if (currentValue) {
                         var option = document.createElement('option');
@@ -205,9 +205,9 @@
                         document.querySelector('#EnableAutoTagging').checked = config.EnableAutoTagging;
                         document.querySelector('#ProcessOnLibraryScan').checked = config.ProcessOnLibraryScan;
                         document.querySelector('#OverwriteExistingTags').checked = config.OverwriteExistingTags;
-                        
+
                         updateFieldVisibility();
-                        
+
                         // Set model value and fetch available models
                         var modelSelect = document.querySelector('#ModelName');
                         if (config.ModelName) {
@@ -218,7 +218,7 @@
                             modelSelect.innerHTML = '';
                             modelSelect.appendChild(option);
                         }
-                        
+
                         // Fetch models asynchronously
                         fetchModels().finally(function() {
                             Dashboard.hideLoadingMsg();
@@ -229,7 +229,7 @@
             document.querySelector('#AutoParentalTagsConfigForm')
                 .addEventListener('submit', function(e) {
                     e.preventDefault();
-                    
+
                     Dashboard.showLoadingMsg();
                     ApiClient.getPluginConfiguration(AutoParentalTagsConfig.pluginUniqueId).then(function (config) {
                         config.Provider = document.querySelector('#Provider').value;
@@ -239,7 +239,7 @@
                         config.EnableAutoTagging = document.querySelector('#EnableAutoTagging').checked;
                         config.ProcessOnLibraryScan = document.querySelector('#ProcessOnLibraryScan').checked;
                         config.OverwriteExistingTags = document.querySelector('#OverwriteExistingTags').checked;
-                        
+
                         ApiClient.updatePluginConfiguration(AutoParentalTagsConfig.pluginUniqueId, config).then(function (result) {
                             Dashboard.processPluginConfigurationUpdateResult(result);
                         });

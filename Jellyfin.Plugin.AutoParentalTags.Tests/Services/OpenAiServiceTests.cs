@@ -420,4 +420,3 @@ public class OpenAiServiceTests
         Assert.NotNull(service);
     }
 }
-
