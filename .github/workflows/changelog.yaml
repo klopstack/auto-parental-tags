@@ -21,5 +21,4 @@ jobs:
     uses: ./.github/workflows/changelog-local.yaml
     with:
       repository-name: klopstack/auto-parental-tags
-    secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+    secrets: inherit
