@@ -4,7 +4,6 @@ on:
   release:
     types:
       - released
-  workflow_dispatch:
 
 jobs:
   build:
@@ -28,8 +27,8 @@ jobs:
             filename="${file#./}"
             # Skip checksum files to avoid generating checksums-of-checksums
             if [[ "$filename" != *.md5 && "$filename" != *.sha256 ]]; then
-              md5sum "$filename" >> "${filename}.md5"
-              sha256sum "$filename" >> "${filename}.sha256"
+              md5sum "$filename" >> "$filename.md5"
+              sha256sum "$filename" >> "$filename.sha256"
             fi
           done
           ls -l
