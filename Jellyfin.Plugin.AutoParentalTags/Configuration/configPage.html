@@ -113,23 +113,23 @@
 
             document.querySelector('#AutoParentalTagsConfigForm')
                 .addEventListener('submit', function(e) {
-                    Dashboard.showLoadingMsg();
-                    ApiClient.getPluginConfiguration(AutoParentalTagsConfig.pluginUniqueId).then(function (config) {
-                        config.Provider = document.querySelector('#Provider').value;
-                        config.ApiKey = document.querySelector('#ApiKey').value;
-                        config.ApiEndpoint = document.querySelector('#ApiEndpoint').value;
-                        config.ModelName = document.querySelector('#ModelName').value;
-                        config.EnableAutoTagging = document.querySelector('#EnableAutoTagging').checked;
-                        config.ProcessOnLibraryScan = document.querySelector('#ProcessOnLibraryScan').checked;
-                        config.OverwriteExistingTags = document.querySelector('#OverwriteExistingTags').checked;
-                        ApiClient.updatePluginConfiguration(AutoParentalTagsConfig.pluginUniqueId, config).then(function (result) {
-                            Dashboard.processPluginConfigurationUpdateResult(result);
-                        });
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(AutoParentalTagsConfig.pluginUniqueId).then(function (config) {
+                    config.Provider = document.querySelector('#Provider').value;
+                    config.ApiKey = document.querySelector('#ApiKey').value;
+                    config.ApiEndpoint = document.querySelector('#ApiEndpoint').value;
+                    config.ModelName = document.querySelector('#ModelName').value;
+                    config.EnableAutoTagging = document.querySelector('#EnableAutoTagging').checked;
+                    config.ProcessOnLibraryScan = document.querySelector('#ProcessOnLibraryScan').checked;
+                    config.OverwriteExistingTags = document.querySelector('#OverwriteExistingTags').checked;
+                    ApiClient.updatePluginConfiguration(AutoParentalTagsConfig.pluginUniqueId, config).then(function (result) {
+                        Dashboard.processPluginConfigurationUpdateResult(result);
                     });
-
-                    e.preventDefault();
-                    return false;
                 });
+
+                e.preventDefault();
+                return false;
+            });
         </script>
     </div>
 </body>
