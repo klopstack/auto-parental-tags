@@ -458,24 +458,24 @@ BRDA:229,115,0,0
 BRDA:229,115,1,0
 BRDA:229,134,0,0
 BRDA:229,134,1,0
-FN:293,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose()
+FN:295,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose()
 FNDA:20,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose()
-DA:294,20
-DA:295,20
 DA:296,20
 DA:297,20
-FN:303,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose(System.Boolean)
+DA:298,20
+DA:299,20
+FN:305,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose(System.Boolean)
 FNDA:20,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose(System.Boolean)
-DA:304,20
-DA:305,20
 DA:306,20
 DA:307,20
 DA:308,20
 DA:309,20
-BRDA:305,4,0,20
-BRDA:307,14,0,0
-BRDA:307,14,1,20
-BRDA:305,4,1,20
+DA:310,20
+DA:311,20
+BRDA:307,4,0,20
+BRDA:309,14,0,0
+BRDA:309,14,1,20
+BRDA:307,4,1,20
 FN:20,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.GeminiService>)
 FNDA:20,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.GeminiService>)
 DA:21,20
@@ -484,25 +484,25 @@ DA:28,20
 DA:29,20
 DA:30,20
 DA:31,20
-FN:269,System.Boolean Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<>c::<GetAvailableModelsAsync>b__12_0(System.Text.Json.JsonElement)
+FN:271,System.Boolean Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<>c::<GetAvailableModelsAsync>b__12_0(System.Text.Json.JsonElement)
 FNDA:0,System.Boolean Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<>c::<GetAvailableModelsAsync>b__12_0(System.Text.Json.JsonElement)
-DA:270,0
-BRDA:270,14,0,0
-BRDA:270,14,1,0
-FN:271,System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<>c::<GetAvailableModelsAsync>b__12_1(System.Text.Json.JsonElement)
-FNDA:0,System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<>c::<GetAvailableModelsAsync>b__12_1(System.Text.Json.JsonElement)
 DA:272,0
-DA:273,0
+BRDA:272,14,0,0
+BRDA:272,14,1,0
+FN:273,System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<>c::<GetAvailableModelsAsync>b__12_1(System.Text.Json.JsonElement)
+FNDA:0,System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<>c::<GetAvailableModelsAsync>b__12_1(System.Text.Json.JsonElement)
+DA:274,0
 DA:275,0
-DA:276,0
-BRDA:275,31,0,0
-BRDA:275,31,1,0
-FN:276,System.Boolean Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<>c::<GetAvailableModelsAsync>b__12_2(System.String)
-FNDA:0,System.Boolean Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<>c::<GetAvailableModelsAsync>b__12_2(System.String)
 DA:277,0
 DA:278,0
-BRDA:277,12,0,0
-BRDA:277,12,1,0
+BRDA:277,31,0,0
+BRDA:277,31,1,0
+FN:278,System.Boolean Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<>c::<GetAvailableModelsAsync>b__12_2(System.String)
+FNDA:0,System.Boolean Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<>c::<GetAvailableModelsAsync>b__12_2(System.String)
+DA:279,0
+DA:280,0
+BRDA:279,12,0,0
+BRDA:279,12,1,0
 FN:98,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<DetermineTargetAudienceAsync>d__9::MoveNext()
 FNDA:5,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<DetermineTargetAudienceAsync>d__9::MoveNext()
 DA:99,5
@@ -585,38 +585,39 @@ DA:249,1
 DA:250,1
 DA:251,1
 DA:253,1
-DA:254,1
 DA:255,1
 DA:256,1
 DA:257,1
 DA:258,1
 DA:259,1
 DA:260,1
-DA:263,0
-DA:264,0
+DA:261,1
+DA:262,1
+DA:265,0
 DA:266,0
-DA:267,0
 DA:268,0
 DA:269,0
+DA:270,0
 DA:271,0
-DA:274,0
-DA:279,0
-DA:280,0
+DA:273,0
+DA:276,0
+DA:281,0
 DA:282,0
-DA:283,0
+DA:284,0
 DA:285,0
-DA:286,0
 DA:287,0
 DA:288,0
-DA:290,2
+DA:289,0
+DA:290,0
+DA:292,2
 BRDA:242,34,0,1
 BRDA:242,34,1,2
-BRDA:253,301,0,1
-BRDA:253,301,1,0
-BRDA:267,735,0,0
-BRDA:267,735,1,0
-LF:187
-LH:119
+BRDA:255,340,0,1
+BRDA:255,340,1,0
+BRDA:269,774,0,0
+BRDA:269,774,1,0
+LF:188
+LH:120
 BRF:56
 BRH:25
 FNF:14
@@ -750,24 +751,24 @@ BRDA:234,115,0,0
 BRDA:234,115,1,0
 BRDA:234,134,0,0
 BRDA:234,134,1,0
-FN:294,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose()
+FN:295,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose()
 FNDA:26,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose()
-DA:295,26
 DA:296,26
 DA:297,26
 DA:298,26
-FN:304,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose(System.Boolean)
+DA:299,26
+FN:305,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose(System.Boolean)
 FNDA:26,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::Dispose(System.Boolean)
-DA:305,26
 DA:306,26
 DA:307,26
 DA:308,26
 DA:309,26
 DA:310,26
-BRDA:306,4,0,26
-BRDA:308,14,0,0
-BRDA:308,14,1,26
-BRDA:306,4,1,26
+DA:311,26
+BRDA:307,4,0,26
+BRDA:309,14,0,0
+BRDA:309,14,1,26
+BRDA:307,4,1,26
 FN:20,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService>)
 FNDA:26,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService>)
 DA:21,26
@@ -777,14 +778,14 @@ DA:29,26
 DA:30,26
 DA:31,26
 DA:32,26
-FN:277,System.Boolean Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<>c::<GetAvailableModelsAsync>b__13_0(System.Text.Json.JsonElement)
+FN:278,System.Boolean Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<>c::<GetAvailableModelsAsync>b__13_0(System.Text.Json.JsonElement)
 FNDA:0,System.Boolean Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<>c::<GetAvailableModelsAsync>b__13_0(System.Text.Json.JsonElement)
-DA:278,0
-BRDA:278,14,0,0
-BRDA:278,14,1,0
-FN:278,System.String Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<>c::<GetAvailableModelsAsync>b__13_1(System.Text.Json.JsonElement)
-FNDA:0,System.String Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<>c::<GetAvailableModelsAsync>b__13_1(System.Text.Json.JsonElement)
 DA:279,0
+BRDA:279,14,0,0
+BRDA:279,14,1,0
+FN:279,System.String Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<>c::<GetAvailableModelsAsync>b__13_1(System.Text.Json.JsonElement)
+FNDA:0,System.String Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<>c::<GetAvailableModelsAsync>b__13_1(System.Text.Json.JsonElement)
+DA:280,0
 FN:101,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<DetermineTargetAudienceAsync>d__10::MoveNext()
 FNDA:5,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<DetermineTargetAudienceAsync>d__10::MoveNext()
 DA:102,5
@@ -861,13 +862,12 @@ FNDA:3,System.Void Jellyfin.Plugin.AutoParentalTags.Services.OpenAiService/<GetA
 DA:246,3
 DA:248,3
 DA:250,3
-DA:253,3
-DA:254,1
-DA:255,1
+DA:252,3
+DA:255,3
 DA:256,1
 DA:257,1
-DA:259,3
-DA:261,2
+DA:258,1
+DA:260,3
 DA:262,2
 DA:263,2
 DA:264,2
@@ -875,27 +875,28 @@ DA:265,2
 DA:266,2
 DA:267,2
 DA:268,2
-DA:271,0
+DA:269,2
 DA:272,0
-DA:274,0
+DA:273,0
 DA:275,0
 DA:276,0
 DA:277,0
-DA:280,0
+DA:278,0
 DA:281,0
-DA:283,0
+DA:282,0
 DA:284,0
-DA:286,1
+DA:285,0
 DA:287,1
 DA:288,1
 DA:289,1
-DA:291,3
-BRDA:253,107,0,1
-BRDA:253,107,1,3
-BRDA:261,351,0,2
-BRDA:261,351,1,0
-BRDA:275,785,0,0
-BRDA:275,785,1,0
+DA:290,1
+DA:292,3
+BRDA:255,138,0,1
+BRDA:255,138,1,3
+BRDA:262,350,0,2
+BRDA:262,350,1,0
+BRDA:276,784,0,0
+BRDA:276,784,1,0
 LF:193
 LH:140
 BRF:54
@@ -954,39 +955,56 @@ DA:30,6
 DA:31,6
 DA:32,6
 DA:33,6
-FN:46,System.Void Jellyfin.Plugin.AutoParentalTags.Api.ModelsController/<GetModels>d__3::MoveNext()
+FN:41,System.Void Jellyfin.Plugin.AutoParentalTags.Api.ModelsController/<GetModels>d__3::MoveNext()
 FNDA:6,System.Void Jellyfin.Plugin.AutoParentalTags.Api.ModelsController/<GetModels>d__3::MoveNext()
-DA:47,6
-DA:49,6
-DA:50,6
-DA:51,1
-DA:52,1
+DA:42,6
+DA:44,6
+DA:45,6
+DA:46,1
+DA:47,1
+DA:50,5
+DA:53,5
+DA:54,5
 DA:55,5
+DA:56,5
+DA:57,5
 DA:58,5
-DA:59,5
 DA:60,5
 DA:61,5
-DA:62,5
-DA:63,5
-DA:65,5
-DA:66,5
-DA:68,4
-DA:70,4
-DA:72,1
-DA:73,1
-DA:74,1
-DA:75,1
-DA:77,6
-BRDA:50,50,0,1
-BRDA:50,50,1,5
-BRDA:58,160,0,1
-BRDA:58,160,1,5
-BRDA:58,182,0,4
-BRDA:58,182,1,5
+DA:63,4
+DA:65,4
+DA:67,1
+DA:68,1
+DA:69,1
+DA:70,1
+DA:72,6
+BRDA:45,55,0,1
+BRDA:45,55,1,5
+BRDA:53,175,0,1
+BRDA:53,175,1,5
+BRDA:53,202,0,4
+BRDA:53,202,1,5
 LF:28
 LH:28
 BRF:6
 BRH:6
 FNF:2
 FNH:2
+end_of_record
+SF:/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/Api/ModelsRequest.cs
+FN:10,System.String Jellyfin.Plugin.AutoParentalTags.Api.ModelsRequest::get_Provider()
+FNDA:19,System.String Jellyfin.Plugin.AutoParentalTags.Api.ModelsRequest::get_Provider()
+DA:11,19
+FN:15,System.String Jellyfin.Plugin.AutoParentalTags.Api.ModelsRequest::get_ApiKey()
+FNDA:10,System.String Jellyfin.Plugin.AutoParentalTags.Api.ModelsRequest::get_ApiKey()
+DA:16,10
+FN:20,System.String Jellyfin.Plugin.AutoParentalTags.Api.ModelsRequest::get_Endpoint()
+FNDA:6,System.String Jellyfin.Plugin.AutoParentalTags.Api.ModelsRequest::get_Endpoint()
+DA:21,6
+LF:3
+LH:3
+BRF:0
+BRH:0
+FNF:3
+FNH:3
 end_of_record

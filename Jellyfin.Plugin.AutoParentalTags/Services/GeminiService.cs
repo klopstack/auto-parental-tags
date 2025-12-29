@@ -247,8 +247,10 @@ Respond with just one word: kids, teens, or adults";
 
         try
         {
-            var url = $"https://generativelanguage.googleapis.com/v1beta/models?key={_apiKey}";
-            var response = await _httpClient.GetAsync(url).ConfigureAwait(false);
+            using var request = new HttpRequestMessage(HttpMethod.Get, "https://generativelanguage.googleapis.com/v1beta/models");
+            request.Headers.Add("x-goog-api-key", _apiKey);
+
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -261,7 +263,7 @@ Respond with just one word: kids, teens, or adults";
             }
 
             var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var responseJson = JsonDocument.Parse(responseContent);
+            using var responseJson = JsonDocument.Parse(responseContent);
 
             var models = new List<string>();
             if (responseJson.RootElement.TryGetProperty("models", out var modelsArray))

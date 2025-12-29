@@ -132,21 +132,23 @@
 
                 try {
                     // Build query parameters
-                    var params = new URLSearchParams({
+                    var requestBody = {
                         provider: provider
-                    });
+                    };
 
                     if (apiKey) {
-                        params.append('apiKey', apiKey);
+                        requestBody.apiKey = apiKey;
                     }
 
                     if (endpoint && provider === 'LocalAI') {
-                        params.append('endpoint', endpoint);
+                        requestBody.endpoint = endpoint;
                     }
 
                     var response = await ApiClient.fetch({
-                        type: 'GET',
-                        url: ApiClient.getUrl('AutoParentalTags/Models?' + params.toString())
+                        type: 'POST',
+                        url: ApiClient.getUrl('AutoParentalTags/Models'),
+                        contentType: 'application/json',
+                        data: JSON.stringify(requestBody)
                     });
 
                     if (response && response.length > 0) {

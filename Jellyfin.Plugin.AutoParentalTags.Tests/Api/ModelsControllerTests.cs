@@ -36,8 +36,14 @@ public class ModelsControllerTests
             mockFactory.Object,
             NullLogger<ModelsController>.Instance);
 
+        var request = new ModelsRequest
+        {
+            Provider = "Gemini",
+            ApiKey = "test-key"
+        };
+
         // Act
-        var result = await controller.GetModels("Gemini", "test-key");
+        var result = await controller.GetModels(request);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
@@ -59,8 +65,14 @@ public class ModelsControllerTests
             mockFactory.Object,
             NullLogger<ModelsController>.Instance);
 
+        var request = new ModelsRequest
+        {
+            Provider = "InvalidProvider",
+            ApiKey = "test-key"
+        };
+
         // Act
-        var result = await controller.GetModels("InvalidProvider", "test-key");
+        var result = await controller.GetModels(request);
 
         // Assert
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(result.Result);
@@ -86,8 +98,14 @@ public class ModelsControllerTests
             mockFactory.Object,
             NullLogger<ModelsController>.Instance);
 
+        var request = new ModelsRequest
+        {
+            Provider = "Gemini",
+            ApiKey = "test-key"
+        };
+
         // Act
-        var result = await controller.GetModels("Gemini", "test-key");
+        var result = await controller.GetModels(request);
 
         // Assert
         var statusResult = Assert.IsType<ObjectResult>(result.Result);
@@ -113,8 +131,14 @@ public class ModelsControllerTests
             mockFactory.Object,
             NullLogger<ModelsController>.Instance);
 
+        var request = new ModelsRequest
+        {
+            Provider = "OpenAI",
+            ApiKey = "test-key"
+        };
+
         // Act
-        var result = await controller.GetModels("OpenAI", "test-key");
+        var result = await controller.GetModels(request);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
@@ -143,8 +167,14 @@ public class ModelsControllerTests
             mockFactory.Object,
             NullLogger<ModelsController>.Instance);
 
+        var request = new ModelsRequest
+        {
+            Provider = "LocalAI",
+            Endpoint = "http://192.168.1.100:8080"
+        };
+
         // Act
-        var result = await controller.GetModels("LocalAI", null, "http://192.168.1.100:8080");
+        var result = await controller.GetModels(request);
 
         // Assert
         Assert.IsType<OkObjectResult>(result.Result);
@@ -172,8 +202,14 @@ public class ModelsControllerTests
             mockFactory.Object,
             NullLogger<ModelsController>.Instance);
 
+        var request = new ModelsRequest
+        {
+            Provider = "Gemini",
+            ApiKey = "test-key"
+        };
+
         // Act
-        var result = await controller.GetModels("Gemini", "test-key");
+        var result = await controller.GetModels(request);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);

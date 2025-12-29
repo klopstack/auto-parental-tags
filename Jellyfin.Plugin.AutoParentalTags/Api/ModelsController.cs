@@ -35,21 +35,16 @@ public class ModelsController : ControllerBase
     /// <summary>
     /// Gets available models for the specified provider.
     /// </summary>
-    /// <param name="provider">The AI provider.</param>
-    /// <param name="apiKey">The API key.</param>
-    /// <param name="endpoint">The API endpoint (for LocalAI/OpenAI).</param>
+    /// <param name="request">The request containing provider, API key, and endpoint.</param>
     /// <returns>Array of model names.</returns>
-    [HttpGet("Models")]
-    public async Task<ActionResult<string[]>> GetModels(
-        [FromQuery] string provider,
-        [FromQuery] string? apiKey = null,
-        [FromQuery] string? endpoint = null)
+    [HttpPost("Models")]
+    public async Task<ActionResult<string[]>> GetModels([FromBody] ModelsRequest request)
     {
         try
         {
-            if (!Enum.TryParse<AiProvider>(provider, true, out var aiProvider))
+            if (!Enum.TryParse<AiProvider>(request.Provider, true, out var aiProvider))
             {
-                return BadRequest($"Invalid provider: {provider}");
+                return BadRequest($"Invalid provider: {request.Provider}");
             }
 
             _logger.LogDebug("Fetching models for provider: {Provider}", aiProvider);
@@ -58,8 +53,8 @@ public class ModelsController : ControllerBase
             var tempConfig = new PluginConfiguration
             {
                 Provider = aiProvider,
-                ApiKey = apiKey ?? string.Empty,
-                ApiEndpoint = endpoint ?? "http://localhost:8080"
+                ApiKey = request.ApiKey ?? string.Empty,
+                ApiEndpoint = request.Endpoint ?? "http://localhost:8080"
             };
 
             using var aiService = _aiServiceFactory.CreateService(tempConfig);
