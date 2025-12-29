@@ -51,7 +51,15 @@ public class GeminiService : IAiService, IDisposable
     public void SetApiKey(string apiKey)
     {
         _apiKey = apiKey;
-        _logger.LogDebug("Gemini API key configured: {HasKey}", !string.IsNullOrEmpty(apiKey));
+
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            _logger.LogDebug("Gemini API key is not configured.");
+        }
+        else
+        {
+            _logger.LogDebug("Gemini API key is configured.");
+        }
     }
 
     /// <inheritdoc />

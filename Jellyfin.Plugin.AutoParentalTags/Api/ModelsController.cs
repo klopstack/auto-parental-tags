@@ -72,7 +72,7 @@ public class ModelsController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error fetching models: {Message}", ex.Message);
-            return StatusCode(500, new { error = ex.Message });
+            return StatusCode(500, new { error = "An unexpected error occurred while fetching models." });
         }
     }
 }

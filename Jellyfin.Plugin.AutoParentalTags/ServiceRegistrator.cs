@@ -16,20 +16,14 @@ public class ServiceRegistrator : IPluginServiceRegistrator
     {
         // Try to get logger factory, fallback to null logger if not available (e.g., in tests)
         var loggerFactory = applicationHost.Resolve<ILoggerFactory>();
-        if (loggerFactory != null)
-        {
-            var logger = loggerFactory.CreateLogger<ServiceRegistrator>();
-            logger.LogInformation("Registering Auto Parental Tags services");
-        }
+        var logger = loggerFactory?.CreateLogger<ServiceRegistrator>();
+
+        logger?.LogInformation("Registering Auto Parental Tags services");
 
         serviceCollection.AddSingleton<AiServiceFactory>();
         serviceCollection.AddSingleton<LibraryMonitor>();
         serviceCollection.AddSingleton<AutoParentalTagsScheduledTask>();
 
-        if (loggerFactory != null)
-        {
-            var logger = loggerFactory.CreateLogger<ServiceRegistrator>();
-            logger.LogDebug("Services registered: AiServiceFactory, LibraryMonitor, AutoParentalTagsScheduledTask");
-        }
+        logger?.LogDebug("Services registered: AiServiceFactory, LibraryMonitor, AutoParentalTagsScheduledTask");
     }
 }

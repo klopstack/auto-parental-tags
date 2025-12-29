@@ -52,7 +52,15 @@ public class OpenAiService : IAiService, IDisposable
     public void SetApiKey(string apiKey)
     {
         _apiKey = apiKey;
-        _logger.LogDebug("OpenAI API key configured: {HasKey}", !string.IsNullOrEmpty(apiKey));
+
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            _logger.LogDebug("OpenAI API key is not configured or is empty.");
+        }
+        else
+        {
+            _logger.LogDebug("OpenAI API key is configured.");
+        }
     }
 
     /// <inheritdoc />
