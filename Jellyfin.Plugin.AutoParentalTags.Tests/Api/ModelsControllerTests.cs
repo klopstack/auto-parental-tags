@@ -147,7 +147,7 @@ public class ModelsControllerTests
         var result = await controller.GetModels("LocalAI", null, "http://192.168.1.100:8080");
 
         // Assert
-        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.IsType<OkObjectResult>(result.Result);
         Assert.NotNull(capturedConfig);
         Assert.Equal(AiProvider.LocalAI, capturedConfig!.Provider);
         Assert.Equal("http://192.168.1.100:8080", capturedConfig.ApiEndpoint);

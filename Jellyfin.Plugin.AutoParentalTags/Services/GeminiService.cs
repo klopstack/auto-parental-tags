@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -257,24 +258,17 @@ Respond with just one word: kids, teens, or adults";
             var models = new List<string>();
             if (responseJson.RootElement.TryGetProperty("models", out var modelsArray))
             {
-                foreach (var model in modelsArray.EnumerateArray())
-                {
-                    if (model.TryGetProperty("name", out var nameElement))
+                models = modelsArray.EnumerateArray()
+                    .Where(model => model.TryGetProperty("name", out var nameElement) && !string.IsNullOrEmpty(nameElement.GetString()))
+                    .Select(model =>
                     {
-                        var fullName = nameElement.GetString();
-                        if (!string.IsNullOrEmpty(fullName))
-                        {
-                            // Extract model name from "models/gemini-pro" format
-                            var modelName = fullName.Contains('/', StringComparison.Ordinal) ? fullName.Split('/')[1] : fullName;
-                            // Only include generation models (not embedding models)
-                            if (modelName.Contains("gemini", StringComparison.OrdinalIgnoreCase) &&
-                                !modelName.Contains("embedding", StringComparison.OrdinalIgnoreCase))
-                            {
-                                models.Add(modelName);
-                            }
-                        }
-                    }
-                }
+                        var fullName = model.GetProperty("name").GetString()!;
+                        // Extract model name from "models/gemini-pro" format
+                        return fullName.Contains('/', StringComparison.Ordinal) ? fullName.Split('/')[1] : fullName;
+                    })
+                    .Where(modelName => modelName.Contains("gemini", StringComparison.OrdinalIgnoreCase) &&
+                                        !modelName.Contains("embedding", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
             }
 
             _logger.LogDebug("Found {Count} Gemini models", models.Count);

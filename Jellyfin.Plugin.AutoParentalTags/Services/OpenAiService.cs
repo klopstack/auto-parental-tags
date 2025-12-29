@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -265,17 +266,10 @@ Respond with just one word: kids, teens, or adults";
             var models = new List<string>();
             if (responseJson.RootElement.TryGetProperty("data", out var dataArray))
             {
-                foreach (var model in dataArray.EnumerateArray())
-                {
-                    if (model.TryGetProperty("id", out var idElement))
-                    {
-                        var modelId = idElement.GetString();
-                        if (!string.IsNullOrEmpty(modelId))
-                        {
-                            models.Add(modelId);
-                        }
-                    }
-                }
+                models = dataArray.EnumerateArray()
+                    .Where(model => model.TryGetProperty("id", out var idElement) && !string.IsNullOrEmpty(idElement.GetString()))
+                    .Select(model => model.GetProperty("id").GetString()!)
+                    .ToList();
             }
 
             _logger.LogDebug("Found {Count} OpenAI-compatible models", models.Count);
