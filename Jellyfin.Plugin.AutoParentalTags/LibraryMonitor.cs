@@ -44,6 +44,23 @@ public class LibraryMonitor : ILibraryPostScanTask
         _processingDelay = processingDelay ?? TimeSpan.FromSeconds(1);
     }
 
+    /// <summary>
+    /// Sanitizes a string for logging to prevent log forging attacks.
+    /// </summary>
+    /// <param name="value">The value to sanitize.</param>
+    /// <returns>A sanitized string safe for logging.</returns>
+    private static string SanitizeForLog(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return string.Empty;
+        }
+
+        return value.Replace("\r\n", " ", StringComparison.Ordinal)
+            .Replace("\n", " ", StringComparison.Ordinal)
+            .Replace("\r", " ", StringComparison.Ordinal);
+    }
+
     /// <inheritdoc />
     public async Task Run(IProgress<double> progress, CancellationToken cancellationToken)
     {
@@ -105,7 +122,7 @@ public class LibraryMonitor : ILibraryPostScanTask
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error processing movie '{Title}': {Message}", movie.Name, ex.Message);
+                _logger.LogError(ex, "Error processing movie '{Title}': {Message}", SanitizeForLog(movie.Name), ex.Message);
             }
 
             // Add a small delay to avoid rate limiting (configurable for testing)
@@ -164,7 +181,7 @@ public class LibraryMonitor : ILibraryPostScanTask
 
         if (string.IsNullOrEmpty(audienceTag))
         {
-            _logger.LogWarning("Could not determine audience for '{Title}'", title);
+            _logger.LogWarning("Could not determine audience for '{Title}'", SanitizeForLog(title));
             return;
         }
 
@@ -193,7 +210,7 @@ public class LibraryMonitor : ILibraryPostScanTask
             _logger.LogInformation(
                 "Added '{Tag}' tag to '{Title}' ({Year})",
                 audienceTag,
-                title,
+                SanitizeForLog(title),
                 year);
         }
     }

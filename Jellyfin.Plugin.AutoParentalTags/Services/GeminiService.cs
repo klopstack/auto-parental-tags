@@ -29,6 +29,23 @@ public class GeminiService : IAiService, IDisposable
         _httpClient = new HttpClient();
     }
 
+    /// <summary>
+    /// Sanitizes a string for logging to prevent log forging attacks.
+    /// </summary>
+    /// <param name="value">The value to sanitize.</param>
+    /// <returns>A sanitized string safe for logging.</returns>
+    private static string SanitizeForLog(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return string.Empty;
+        }
+
+        return value.Replace("\r\n", " ", StringComparison.Ordinal)
+            .Replace("\n", " ", StringComparison.Ordinal)
+            .Replace("\r", " ", StringComparison.Ordinal);
+    }
+
     /// <inheritdoc />
     public void SetApiKey(string apiKey)
     {
@@ -51,7 +68,7 @@ public class GeminiService : IAiService, IDisposable
         if (!string.IsNullOrWhiteSpace(modelName))
         {
             _modelName = modelName;
-            _logger.LogDebug("Gemini model name set to: {ModelName}", modelName);
+            _logger.LogDebug("Gemini model name set to: {ModelName}", SanitizeForLog(modelName));
         }
     }
 
@@ -81,7 +98,7 @@ public class GeminiService : IAiService, IDisposable
         {
             var prompt = BuildPrompt(title, year, overview, officialRating, genres);
 
-            _logger.LogDebug("Requesting audience classification for '{Title}' ({Year})", title, year);
+            _logger.LogDebug("Requesting audience classification for '{Title}' ({Year})", SanitizeForLog(title), year);
 
             var requestBody = new
             {
@@ -108,7 +125,7 @@ public class GeminiService : IAiService, IDisposable
                 var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 _logger.LogError(
                     "Gemini API error for '{Title}': {StatusCode} - {Error}",
-                    title,
+                    SanitizeForLog(title),
                     response.StatusCode,
                     errorContent);
                 return null;
@@ -130,18 +147,18 @@ public class GeminiService : IAiService, IDisposable
                     if (!string.IsNullOrEmpty(responseText))
                     {
                         var tag = ParseAudienceTag(responseText);
-                        _logger.LogInformation("Classified '{Title}' ({Year}) as '{Tag}'", title, year, tag);
+                        _logger.LogInformation("Classified '{Title}' ({Year}) as '{Tag}'", SanitizeForLog(title), year, tag);
                         return tag;
                     }
                 }
             }
 
-            _logger.LogWarning("No valid response from Gemini API for '{Title}'", title);
+            _logger.LogWarning("No valid response from Gemini API for '{Title}'", SanitizeForLog(title));
             return null;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error calling Gemini API for '{Title}': {Message}", title, ex.Message);
+            _logger.LogError(ex, "Error calling Gemini API for '{Title}': {Message}", SanitizeForLog(title), ex.Message);
             return null;
         }
     }
