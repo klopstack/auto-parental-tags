@@ -248,15 +248,8 @@ DA:46,1
 DA:48,1
 DA:49,1
 DA:52,4
-DA:53,2
-DA:54,2
-DA:55,2
-DA:56,2
-DA:57,2
-DA:58,2
-DA:59,2
-DA:61,4
-DA:62,4
+DA:54,4
+DA:55,4
 BRDA:30,13,1,2
 BRDA:30,13,2,1
 BRDA:30,13,3,1
@@ -265,20 +258,16 @@ BRDA:41,171,0,1
 BRDA:41,171,1,3
 BRDA:45,203,0,1
 BRDA:45,203,1,4
-BRDA:52,234,0,2
-BRDA:52,234,1,2
-BRDA:56,270,0,2
-BRDA:56,270,1,4
 FN:17,System.Void Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory::.ctor(Microsoft.Extensions.Logging.ILoggerFactory)
 FNDA:19,System.Void Jellyfin.Plugin.AutoParentalTags.Services.AiServiceFactory::.ctor(Microsoft.Extensions.Logging.ILoggerFactory)
 DA:18,19
 DA:19,19
 DA:20,19
 DA:21,19
-LF:31
-LH:31
-BRF:12
-BRH:12
+LF:24
+LH:24
+BRF:8
+BRH:8
 FNF:2
 FNH:2
 end_of_record
@@ -293,15 +282,15 @@ FNDA:1,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::SetE
 DA:39,1
 DA:41,1
 FN:47,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::SetModelName(System.String)
-FNDA:2,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::SetModelName(System.String)
-DA:48,2
-DA:49,2
-DA:50,2
-DA:51,2
-DA:52,2
-DA:53,2
-BRDA:49,12,0,2
-BRDA:49,12,1,2
+FNDA:6,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::SetModelName(System.String)
+DA:48,6
+DA:49,6
+DA:50,3
+DA:51,3
+DA:52,3
+DA:53,6
+BRDA:49,12,0,3
+BRDA:49,12,1,6
 FN:151,System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::BuildPrompt(System.String,System.Nullable`1<System.Int32>,System.String,System.String,System.String[])
 FNDA:4,System.String Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::BuildPrompt(System.String,System.Nullable`1<System.Int32>,System.String,System.String,System.String[])
 DA:152,4
@@ -376,31 +365,31 @@ BRDA:200,115,1,0
 BRDA:200,134,0,0
 BRDA:200,134,1,0
 FN:211,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose()
-FNDA:11,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose()
-DA:212,11
-DA:213,11
-DA:214,11
-DA:215,11
+FNDA:15,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose()
+DA:212,15
+DA:213,15
+DA:214,15
+DA:215,15
 FN:221,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose(System.Boolean)
-FNDA:11,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose(System.Boolean)
-DA:222,11
-DA:223,11
-DA:224,11
-DA:225,11
-DA:226,11
-DA:227,11
-BRDA:223,4,0,11
+FNDA:15,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::Dispose(System.Boolean)
+DA:222,15
+DA:223,15
+DA:224,15
+DA:225,15
+DA:226,15
+DA:227,15
+BRDA:223,4,0,15
 BRDA:225,14,0,0
-BRDA:225,14,1,11
-BRDA:223,4,1,11
+BRDA:225,14,1,15
+BRDA:223,4,1,15
 FN:18,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.GeminiService>)
-FNDA:11,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.GeminiService>)
-DA:19,11
-DA:25,11
-DA:26,11
-DA:27,11
-DA:28,11
-DA:29,11
+FNDA:15,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService::.ctor(Microsoft.Extensions.Logging.ILogger`1<Jellyfin.Plugin.AutoParentalTags.Services.GeminiService>)
+DA:19,15
+DA:25,15
+DA:26,15
+DA:27,15
+DA:28,15
+DA:29,15
 FN:69,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<DetermineTargetAudienceAsync>d__8::MoveNext()
 FNDA:5,System.Void Jellyfin.Plugin.AutoParentalTags.Services.GeminiService/<DetermineTargetAudienceAsync>d__8::MoveNext()
 DA:70,5

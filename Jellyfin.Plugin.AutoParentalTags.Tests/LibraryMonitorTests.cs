@@ -562,6 +562,10 @@ internal sealed class StubAiService : IAiService
     {
     }
 
+    public void SetModelName(string modelName)
+    {
+    }
+
     public Task<string?> DetermineTargetAudienceAsync(string title, int? year, string? overview, string? officialRating, string[]? genres)
     {
         Calls++;

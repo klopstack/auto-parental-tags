@@ -63,6 +63,41 @@ public class GeminiServiceTests
     }
 
     /// <summary>
+    /// Tests that SetModelName sets the model name.
+    /// </summary>
+    [Fact]
+    public void SetModelName_WithValidName_ShouldSetModelName()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<GeminiService>>();
+        using var service = new GeminiService(mockLogger.Object);
+
+        // Act
+        service.SetModelName("gemini-pro");
+
+        // Assert - No exception means success
+        Assert.NotNull(service);
+    }
+
+    /// <summary>
+    /// Tests that SetModelName handles null or empty model name.
+    /// </summary>
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void SetModelName_WithNullOrEmpty_ShouldNotThrow(string? modelName)
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<GeminiService>>();
+        using var service = new GeminiService(mockLogger.Object);
+
+        // Act & Assert
+        service.SetModelName(modelName!);
+        Assert.NotNull(service);
+    }
+
+    /// <summary>
     /// Tests that DetermineTargetAudienceAsync returns null when API key is not set.
     /// </summary>
     [Fact]

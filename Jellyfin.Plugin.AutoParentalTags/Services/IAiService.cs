@@ -21,6 +21,12 @@ public interface IAiService : IDisposable
     void SetEndpoint(string endpoint);
 
     /// <summary>
+    /// Sets the model name to use for AI requests.
+    /// </summary>
+    /// <param name="modelName">The model name.</param>
+    void SetModelName(string modelName);
+
+    /// <summary>
     /// Analyzes movie metadata to determine target audience.
     /// </summary>
     /// <param name="title">Movie title.</param>
