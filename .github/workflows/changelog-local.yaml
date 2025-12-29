@@ -16,9 +16,6 @@ on:
         default: "team@jellyfin.org"
         description: "This param overwrites the version bump committing git user.email"
         type: string
-    secrets:
-      token:
-        required: true
 
 jobs:
   update_release_draft:
