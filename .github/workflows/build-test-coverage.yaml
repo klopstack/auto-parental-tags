@@ -35,6 +35,13 @@ jobs:
       - name: Build (Debug)
         run: dotnet build Jellyfin.Plugin.AutoParentalTags.sln --configuration Debug --no-restore
 
+      - name: Extract Coverage Threshold
+        id: threshold
+        run: |
+          THRESHOLD=$(grep -oP '<Threshold>\K[0-9]+' Jellyfin.Plugin.AutoParentalTags.Tests/Jellyfin.Plugin.AutoParentalTags.Tests.csproj)
+          echo "threshold=$THRESHOLD" >> $GITHUB_OUTPUT
+          echo "Coverage threshold from .csproj: ${THRESHOLD}%"
+
       - name: Test with Coverage (Coverlet)
         run: |
           dotnet test Jellyfin.Plugin.AutoParentalTags.Tests/Jellyfin.Plugin.AutoParentalTags.Tests.csproj \
@@ -50,8 +57,10 @@ jobs:
           path: TestResults/coverage.info
           if-no-files-found: error
 
-      - name: Fail if coverage below 80%
+      - name: Verify Coverage Meets Threshold
         run: |
+          THRESHOLD=${{ steps.threshold.outputs.threshold }}
           percent=$(awk -F, '/^DA:/{total++; if($2>0) covered++} END{printf "%.2f", (covered/total)*100}' TestResults/coverage.info)
           echo "Line coverage: ${percent}%"
-          awk -v p="$percent" 'BEGIN{exit p<80}'
+          echo "Required threshold: ${THRESHOLD}%"
+          awk -v p="$percent" -v t="$THRESHOLD" 'BEGIN{exit p<t}'

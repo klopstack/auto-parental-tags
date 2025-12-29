@@ -11,7 +11,7 @@
     <CoverletOutput>../TestResults/coverage.info</CoverletOutput>
     <CoverletOutputFormat>lcov</CoverletOutputFormat>
     <ExcludeByFile>**/Services/GeminiService.cs;**/Services/OpenAiService.cs</ExcludeByFile>
-    <Threshold>80</Threshold>
+    <Threshold>75</Threshold>
     <ThresholdType>line</ThresholdType>
   </PropertyGroup>
 

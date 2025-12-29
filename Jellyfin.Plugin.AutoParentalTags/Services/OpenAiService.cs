@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -29,10 +31,36 @@ public class OpenAiService : IAiService, IDisposable
         _httpClient = new HttpClient();
     }
 
+    /// <summary>
+    /// Sanitizes a string for logging to prevent log forging attacks.
+    /// </summary>
+    /// <param name="value">The value to sanitize.</param>
+    /// <returns>A sanitized string safe for logging.</returns>
+    private static string SanitizeForLog(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return string.Empty;
+        }
+
+        return value.Replace("\r\n", " ", StringComparison.Ordinal)
+            .Replace("\n", " ", StringComparison.Ordinal)
+            .Replace("\r", " ", StringComparison.Ordinal);
+    }
+
     /// <inheritdoc />
     public void SetApiKey(string apiKey)
     {
         _apiKey = apiKey;
+
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            _logger.LogDebug("OpenAI API key is not configured or is empty.");
+        }
+        else
+        {
+            _logger.LogDebug("OpenAI API key is configured.");
+        }
     }
 
     /// <inheritdoc />
@@ -46,6 +74,8 @@ public class OpenAiService : IAiService, IDisposable
             {
                 _endpoint += "/v1/chat/completions";
             }
+
+            _logger.LogInformation("OpenAI endpoint configured: {Endpoint}", SanitizeForLog(_endpoint));
         }
     }
 
@@ -58,6 +88,7 @@ public class OpenAiService : IAiService, IDisposable
         if (!string.IsNullOrEmpty(modelName))
         {
             _modelName = modelName;
+            _logger.LogDebug("OpenAI model name set to: {ModelName}", SanitizeForLog(modelName));
         }
     }
 
@@ -73,7 +104,7 @@ public class OpenAiService : IAiService, IDisposable
         {
             var prompt = BuildPrompt(title, year, overview, officialRating, genres);
 
-            _logger.LogDebug("Requesting audience classification for '{Title}' ({Year})", title, year);
+            _logger.LogDebug("Requesting audience classification for '{Title}' ({Year})", SanitizeForLog(title), year);
 
             var requestBody = new
             {
@@ -112,7 +143,7 @@ public class OpenAiService : IAiService, IDisposable
                 var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 _logger.LogError(
                     "AI API error for '{Title}': {StatusCode} - {Error}",
-                    title,
+                    SanitizeForLog(title),
                     response.StatusCode,
                     errorContent);
                 return null;
@@ -131,17 +162,17 @@ public class OpenAiService : IAiService, IDisposable
                 if (!string.IsNullOrEmpty(responseText))
                 {
                     var tag = ParseAudienceTag(responseText);
-                    _logger.LogInformation("Classified '{Title}' ({Year}) as '{Tag}'", title, year, tag);
+                    _logger.LogInformation("Classified '{Title}' ({Year}) as '{Tag}'", SanitizeForLog(title), year, tag);
                     return tag;
                 }
             }
 
-            _logger.LogWarning("No valid response from AI API for '{Title}'", title);
+            _logger.LogWarning("No valid response from AI API for '{Title}'", SanitizeForLog(title));
             return null;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error calling AI API for '{Title}': {Message}", title, ex.Message);
+            _logger.LogError(ex, "Error calling AI API for '{Title}': {Message}", SanitizeForLog(title), ex.Message);
             return null;
         }
     }
@@ -208,6 +239,56 @@ Respond with just one word: kids, teens, or adults";
 
         // Default to adults if unclear
         return "adults";
+    }
+
+    /// <inheritdoc />
+    public async Task<string[]> GetAvailableModelsAsync()
+    {
+        try
+        {
+            // Build the models endpoint from the chat endpoint
+            var modelsEndpoint = _endpoint.Replace("/chat/completions", "/models", StringComparison.Ordinal);
+
+            using var request = new HttpRequestMessage(HttpMethod.Get, modelsEndpoint);
+
+            // Add authorization header if API key is provided
+            if (!string.IsNullOrEmpty(_apiKey))
+            {
+                request.Headers.Add("Authorization", $"Bearer {_apiKey}");
+            }
+
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                _logger.LogError(
+                    "Failed to fetch OpenAI models: {StatusCode} - {Error}",
+                    response.StatusCode,
+                    errorContent);
+                return Array.Empty<string>();
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            using var responseJson = JsonDocument.Parse(responseContent);
+
+            var models = new List<string>();
+            if (responseJson.RootElement.TryGetProperty("data", out var dataArray))
+            {
+                models = dataArray.EnumerateArray()
+                    .Where(model => model.TryGetProperty("id", out var idElement) && !string.IsNullOrEmpty(idElement.GetString()))
+                    .Select(model => model.GetProperty("id").GetString()!)
+                    .ToList();
+            }
+
+            _logger.LogDebug("Found {Count} OpenAI-compatible models", models.Count);
+            return models.ToArray();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching OpenAI models: {Message}", ex.Message);
+            return Array.Empty<string>();
+        }
     }
 
     /// <inheritdoc />

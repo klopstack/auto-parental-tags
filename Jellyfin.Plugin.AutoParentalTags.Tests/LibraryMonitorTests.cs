@@ -530,8 +530,10 @@ public class LibraryMonitorTests : IAsyncLifetime
             .Returns(config);
         mockSerializer.Setup(x => x.SerializeToFile(It.IsAny<PluginConfiguration>(), It.IsAny<string>()));
 
+        var mockLogger = new Mock<ILogger<Plugin>>();
+
         ClearPluginInstance();
-        _ = new Plugin(mockPaths.Object, mockSerializer.Object);
+        _ = new Plugin(mockPaths.Object, mockSerializer.Object, mockLogger.Object);
     }
 }
 
@@ -580,5 +582,10 @@ internal sealed class StubAiService : IAiService
     {
         Calls++;
         return Task.FromResult<string?>(_tag);
+    }
+
+    public Task<string[]> GetAvailableModelsAsync()
+    {
+        return Task.FromResult(Array.Empty<string>());
     }
 }
