@@ -26,7 +26,8 @@ public class OpenAiService : IAiService, IDisposable
     public OpenAiService(ILogger<OpenAiService> logger)
     {
         _logger = logger;
-        _httpClient = new HttpClient();
+        _httpClient = new HttpClient(new SocketsHttpHandler { AutomaticDecompression = System.Net.DecompressionMethods.All });
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Jellyfin.Plugin.AutoParentalTags/1.0");
     }
 
     /// <inheritdoc />
@@ -40,6 +41,14 @@ public class OpenAiService : IAiService, IDisposable
     {
         if (!string.IsNullOrEmpty(endpoint))
         {
+            // Validate endpoint URL to prevent open redirect
+            if (!Uri.TryParse(endpoint, UriKind.Absolute, out var uri)
+                || (uri.Scheme != "http" && uri.Scheme != "https"))
+            {
+                _logger.LogWarning("Invalid endpoint URL provided: {Endpoint}", endpoint);
+                return;
+            }
+
             // Ensure endpoint ends with proper path
             _endpoint = endpoint.TrimEnd('/');
             if (!_endpoint.EndsWith("/chat/completions", StringComparison.OrdinalIgnoreCase))
@@ -225,6 +234,16 @@ Respond with just one word: kids, teens, or adults";
     {
         if (disposing)
         {
+            // Clear sensitive headers before disposal
+            try
+            {
+                _httpClient.DefaultRequestHeaders.Remove("Authorization");
+            }
+            catch
+            {
+                // Ignore errors during cleanup
+            }
+
             _httpClient?.Dispose();
         }
     }

@@ -25,7 +25,8 @@ public class GeminiService : IAiService, IDisposable
     public GeminiService(ILogger<GeminiService> logger)
     {
         _logger = logger;
-        _httpClient = new HttpClient();
+        _httpClient = new HttpClient(new SocketsHttpHandler { AutomaticDecompression = System.Net.DecompressionMethods.All });
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "Jellyfin.Plugin.AutoParentalTags/1.0");
     }
 
     /// <inheritdoc />
@@ -97,7 +98,11 @@ public class GeminiService : IAiService, IDisposable
             var jsonContent = JsonSerializer.Serialize(requestBody);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var url = $"https://generativelanguage.googleapis.com/v1beta/models/{_modelName}:generateContent?key={_apiKey}";
+            // Use header for API key instead of URL parameter to prevent logging/exposure
+            var url = $"https://generativelanguage.googleapis.com/v1beta/models/{_modelName}:generateContent";
+            _httpClient.DefaultRequestHeaders.Remove("x-goog-api-key");
+            _httpClient.DefaultRequestHeaders.Add("x-goog-api-key", _apiKey);
+
             var response = await _httpClient.PostAsync(url, content).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
@@ -222,6 +227,17 @@ Respond with just one word: kids, teens, or adults";
     {
         if (disposing)
         {
+            // Clear sensitive headers before disposal
+            try
+            {
+                _httpClient.DefaultRequestHeaders.Remove("x-goog-api-key");
+                _httpClient.DefaultRequestHeaders.Remove("Authorization");
+            }
+            catch
+            {
+                // Ignore errors during cleanup
+            }
+
             _httpClient?.Dispose();
         }
     }
