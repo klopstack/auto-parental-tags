@@ -275,11 +275,9 @@ FNF:5
 FNH:5
 end_of_record
 SF:/home/benklop/repos/auto-parental-tags/Jellyfin.Plugin.AutoParentalTags/ServiceRegistrator.cs
-FN:14,System.Void Jellyfin.Plugin.AutoParentalTags.ServiceRegistrator::RegisterServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,MediaBrowser.Controller.IServerApplicationHost)
+FN:15,System.Void Jellyfin.Plugin.AutoParentalTags.ServiceRegistrator::RegisterServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,MediaBrowser.Controller.IServerApplicationHost)
 FNDA:3,System.Void Jellyfin.Plugin.AutoParentalTags.ServiceRegistrator::RegisterServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,MediaBrowser.Controller.IServerApplicationHost)
-DA:15,3
 DA:16,3
-DA:17,3
 DA:18,3
 DA:19,3
 LF:5
