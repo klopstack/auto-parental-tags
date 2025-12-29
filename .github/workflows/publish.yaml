@@ -25,10 +25,11 @@ jobs:
       - name: Prepare GitHub Release assets
         run: |-
           for file in ./*; do
+            filename="${file#./}"
             # Skip checksum files to avoid generating checksums-of-checksums
-            if [[ "$file" != *.md5 && "$file" != *.sha256 ]]; then
-              md5sum "${file#./}" >> "${file%.*}.md5"
-              sha256sum "${file#./}" >> "${file%.*}.sha256"
+            if [[ "$filename" != *.md5 && "$filename" != *.sha256 ]]; then
+              md5sum "$filename" >> "${filename}.md5"
+              sha256sum "$filename" >> "${filename}.sha256"
             fi
           done
           ls -l
