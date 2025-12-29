@@ -1,7 +1,7 @@
 ---
 name: "Auto Parental Tags"
 guid: "eb5d7894-8eef-4b36-aa6f-5d124e828ce1"
-version: "0.1.0"
+version: "0.2.0"
 targetAbi: "10.11.5.0"
 framework: "net9.0"
 overview: "Automatically tag movies with target audience using AI"
@@ -13,9 +13,4 @@ owner: "benklop"
 artifacts:
   - "Jellyfin.Plugin.AutoParentalTags.dll"
 changelog: |-
-  - Refactor changelog workflow to inherit secrets instead of specifying … (@benklop) (#9)
-  - Add release instructions and fix version formatting in workflows (@benklop) (#7)
-  - Prepare for release v0.1.0 (@[github-actions[bot]](https://github.com/apps/github-actions)) (#5)
-  - Fix build failure (@benklop) (#4)
-  - Prepare for release v0.1.0 (@[github-actions[bot]](https://github.com/apps/github-actions)) (#2)
-  - Add comprehensive Copilot instructions for Auto Parental Tags plugin (@benklop) (#1)
+  - Refactor publish workflow to separate build and upload jobs, enhancing asset preparation for GitHub releases (@benklop) (#11)
