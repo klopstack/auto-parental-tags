@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Model.Serialization;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -21,10 +22,12 @@ public class PluginTests
         // Arrange
         var mockAppPaths = new Mock<IApplicationPaths>();
         mockAppPaths.Setup(x => x.PluginsPath).Returns("/tmp/plugins");
+        mockAppPaths.Setup(x => x.PluginConfigurationsPath).Returns("/tmp/plugins");
         var mockXmlSerializer = new Mock<IXmlSerializer>();
+        var mockLogger = new Mock<ILogger<Plugin>>();
 
         // Act
-        var plugin = new Plugin(mockAppPaths.Object, mockXmlSerializer.Object);
+        var plugin = new Plugin(mockAppPaths.Object, mockXmlSerializer.Object, mockLogger.Object);
 
         // Assert
         Assert.NotNull(plugin);
@@ -41,10 +44,12 @@ public class PluginTests
         // Arrange
         var mockAppPaths = new Mock<IApplicationPaths>();
         mockAppPaths.Setup(x => x.PluginsPath).Returns("/tmp/plugins");
+        mockAppPaths.Setup(x => x.PluginConfigurationsPath).Returns("/tmp/plugins");
         var mockXmlSerializer = new Mock<IXmlSerializer>();
+        var mockLogger = new Mock<ILogger<Plugin>>();
 
         // Act
-        var plugin = new Plugin(mockAppPaths.Object, mockXmlSerializer.Object);
+        var plugin = new Plugin(mockAppPaths.Object, mockXmlSerializer.Object, mockLogger.Object);
 
         // Assert
         Assert.NotNull(Plugin.Instance);
@@ -60,8 +65,10 @@ public class PluginTests
         // Arrange
         var mockAppPaths = new Mock<IApplicationPaths>();
         mockAppPaths.Setup(x => x.PluginsPath).Returns("/tmp/plugins");
+        mockAppPaths.Setup(x => x.PluginConfigurationsPath).Returns("/tmp/plugins");
         var mockXmlSerializer = new Mock<IXmlSerializer>();
-        var plugin = new Plugin(mockAppPaths.Object, mockXmlSerializer.Object);
+        var mockLogger = new Mock<ILogger<Plugin>>();
+        var plugin = new Plugin(mockAppPaths.Object, mockXmlSerializer.Object, mockLogger.Object);
 
         // Act
         var pages = plugin.GetPages().ToList();
@@ -81,8 +88,10 @@ public class PluginTests
         // Arrange
         var mockAppPaths = new Mock<IApplicationPaths>();
         mockAppPaths.Setup(x => x.PluginsPath).Returns("/tmp/plugins");
+        mockAppPaths.Setup(x => x.PluginConfigurationsPath).Returns("/tmp/plugins");
         var mockXmlSerializer = new Mock<IXmlSerializer>();
-        var plugin = new Plugin(mockAppPaths.Object, mockXmlSerializer.Object);
+        var mockLogger = new Mock<ILogger<Plugin>>();
+        var plugin = new Plugin(mockAppPaths.Object, mockXmlSerializer.Object, mockLogger.Object);
 
         // Act & Assert
         Assert.Equal("Auto Parental Tags", plugin.Name);
@@ -97,8 +106,10 @@ public class PluginTests
         // Arrange
         var mockAppPaths = new Mock<IApplicationPaths>();
         mockAppPaths.Setup(x => x.PluginsPath).Returns("/tmp/plugins");
+        mockAppPaths.Setup(x => x.PluginConfigurationsPath).Returns("/tmp/plugins");
         var mockXmlSerializer = new Mock<IXmlSerializer>();
-        var plugin = new Plugin(mockAppPaths.Object, mockXmlSerializer.Object);
+        var mockLogger = new Mock<ILogger<Plugin>>();
+        var plugin = new Plugin(mockAppPaths.Object, mockXmlSerializer.Object, mockLogger.Object);
 
         // Act & Assert
         Assert.Equal(Guid.Parse("eb5d7894-8eef-4b36-aa6f-5d124e828ce1"), plugin.Id);

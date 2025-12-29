@@ -41,4 +41,10 @@ public interface IAiService : IDisposable
         string? overview,
         string? officialRating,
         string[]? genres);
+
+    /// <summary>
+    /// Gets a list of available models from the AI service.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation, containing the list of model names.</returns>
+    Task<string[]> GetAvailableModelsAsync();
 }

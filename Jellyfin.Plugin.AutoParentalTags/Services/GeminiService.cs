@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
 using System.Text;
@@ -32,6 +33,7 @@ public class GeminiService : IAiService, IDisposable
     public void SetApiKey(string apiKey)
     {
         _apiKey = apiKey;
+        _logger.LogDebug("Gemini API key configured: {HasKey}", !string.IsNullOrEmpty(apiKey));
     }
 
     /// <inheritdoc />
@@ -49,6 +51,7 @@ public class GeminiService : IAiService, IDisposable
         if (!string.IsNullOrWhiteSpace(modelName))
         {
             _modelName = modelName;
+            _logger.LogDebug("Gemini model name set to: {ModelName}", modelName);
         }
     }
 
@@ -205,6 +208,66 @@ Respond with just one word: kids, teens, or adults";
 
         // Default to adults if unclear
         return "adults";
+    }
+
+    /// <inheritdoc />
+    public async Task<string[]> GetAvailableModelsAsync()
+    {
+        if (string.IsNullOrEmpty(_apiKey))
+        {
+            _logger.LogWarning("Gemini API key is not configured");
+            return Array.Empty<string>();
+        }
+
+        try
+        {
+            var url = $"https://generativelanguage.googleapis.com/v1beta/models?key={_apiKey}";
+            var response = await _httpClient.GetAsync(url).ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                _logger.LogError(
+                    "Failed to fetch Gemini models: {StatusCode} - {Error}",
+                    response.StatusCode,
+                    errorContent);
+                return Array.Empty<string>();
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var responseJson = JsonDocument.Parse(responseContent);
+
+            var models = new List<string>();
+            if (responseJson.RootElement.TryGetProperty("models", out var modelsArray))
+            {
+                foreach (var model in modelsArray.EnumerateArray())
+                {
+                    if (model.TryGetProperty("name", out var nameElement))
+                    {
+                        var fullName = nameElement.GetString();
+                        if (!string.IsNullOrEmpty(fullName))
+                        {
+                            // Extract model name from "models/gemini-pro" format
+                            var modelName = fullName.Contains('/', StringComparison.Ordinal) ? fullName.Split('/')[1] : fullName;
+                            // Only include generation models (not embedding models)
+                            if (modelName.Contains("gemini", StringComparison.OrdinalIgnoreCase) &&
+                                !modelName.Contains("embedding", StringComparison.OrdinalIgnoreCase))
+                            {
+                                models.Add(modelName);
+                            }
+                        }
+                    }
+                }
+            }
+
+            _logger.LogDebug("Found {Count} Gemini models", models.Count);
+            return models.ToArray();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching Gemini models: {Message}", ex.Message);
+            return Array.Empty<string>();
+        }
     }
 
     /// <inheritdoc />

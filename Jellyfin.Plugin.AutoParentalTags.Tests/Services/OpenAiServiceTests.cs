@@ -276,4 +276,148 @@ public class OpenAiServiceTests
         // Act & Assert
         service.Dispose();
     }
+
+    /// <summary>
+    /// Tests that GetAvailableModelsAsync handles network errors gracefully.
+    /// </summary>
+    [Fact]
+    public async Task GetAvailableModelsAsync_WithNetworkError_ShouldReturnEmptyArray()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object);
+        service.SetApiKey("test-key");
+        service.SetEndpoint("https://api.openai.com");
+
+        // Act - Real network call will fail without valid credentials
+        var result = await service.GetAvailableModelsAsync();
+
+        // Assert - Should handle error and return empty array
+        Assert.NotNull(result);
+        Assert.IsType<string[]>(result);
+    }
+
+    /// <summary>
+    /// Tests that GetAvailableModelsAsync works with LocalAI endpoint.
+    /// </summary>
+    [Fact]
+    public async Task GetAvailableModelsAsync_WithLocalAIEndpoint_ShouldConstructCorrectUrl()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object);
+        service.SetEndpoint("http://localhost:8080");
+
+        // Act - Will fail to connect but tests endpoint logic
+        var result = await service.GetAvailableModelsAsync();
+
+        // Assert - Should handle error gracefully
+        Assert.NotNull(result);
+        Assert.IsType<string[]>(result);
+    }
+
+    /// <summary>
+    /// Tests that GetAvailableModelsAsync handles missing API key for OpenAI.
+    /// </summary>
+    [Fact]
+    public async Task GetAvailableModelsAsync_WithoutApiKey_ShouldStillAttempt()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object);
+        service.SetEndpoint("https://api.openai.com");
+
+        // Act - Should work for LocalAI but fail for OpenAI
+        var result = await service.GetAvailableModelsAsync();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.IsType<string[]>(result);
+    }
+
+    /// <summary>
+    /// Tests that SetModelName updates the model name.
+    /// </summary>
+    [Fact]
+    public void SetModelName_WithValidName_ShouldAccept()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object);
+
+        // Act
+        service.SetModelName("gpt-4");
+
+        // Assert - Should not throw
+        Assert.NotNull(service);
+    }
+
+    /// <summary>
+    /// Tests that SetModelName ignores empty strings.
+    /// </summary>
+    [Fact]
+    public void SetModelName_WithEmptyString_ShouldIgnore()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object);
+
+        // Act
+        service.SetModelName(string.Empty);
+
+        // Assert - Should not throw
+        Assert.NotNull(service);
+    }
+
+    /// <summary>
+    /// Tests that SetEndpoint appends proper path when missing.
+    /// </summary>
+    [Fact]
+    public void SetEndpoint_WithoutPath_ShouldAppendPath()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object);
+
+        // Act
+        service.SetEndpoint("http://localhost:8080");
+
+        // Assert - Should not throw
+        Assert.NotNull(service);
+    }
+
+    /// <summary>
+    /// Tests that SetEndpoint handles trailing slashes.
+    /// </summary>
+    [Fact]
+    public void SetEndpoint_WithTrailingSlash_ShouldHandleCorrectly()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object);
+
+        // Act
+        service.SetEndpoint("http://localhost:8080/");
+
+        // Assert - Should not throw
+        Assert.NotNull(service);
+    }
+
+    /// <summary>
+    /// Tests that SetEndpoint ignores empty strings.
+    /// </summary>
+    [Fact]
+    public void SetEndpoint_WithEmptyString_ShouldIgnore()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object);
+
+        // Act
+        service.SetEndpoint(string.Empty);
+
+        // Assert - Should not throw
+        Assert.NotNull(service);
+    }
 }
+

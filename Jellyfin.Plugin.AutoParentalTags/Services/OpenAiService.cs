@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
 using System.Text;
@@ -33,6 +34,7 @@ public class OpenAiService : IAiService, IDisposable
     public void SetApiKey(string apiKey)
     {
         _apiKey = apiKey;
+        _logger.LogDebug("OpenAI API key configured: {HasKey}", !string.IsNullOrEmpty(apiKey));
     }
 
     /// <inheritdoc />
@@ -46,6 +48,8 @@ public class OpenAiService : IAiService, IDisposable
             {
                 _endpoint += "/v1/chat/completions";
             }
+
+            _logger.LogInformation("OpenAI endpoint configured: {Endpoint}", _endpoint);
         }
     }
 
@@ -58,6 +62,7 @@ public class OpenAiService : IAiService, IDisposable
         if (!string.IsNullOrEmpty(modelName))
         {
             _modelName = modelName;
+            _logger.LogDebug("OpenAI model name set to: {ModelName}", modelName);
         }
     }
 
@@ -208,6 +213,62 @@ Respond with just one word: kids, teens, or adults";
 
         // Default to adults if unclear
         return "adults";
+    }
+
+    /// <inheritdoc />
+    public async Task<string[]> GetAvailableModelsAsync()
+    {
+        try
+        {
+            // Build the models endpoint from the chat endpoint
+            var modelsEndpoint = _endpoint.Replace("/chat/completions", "/models", StringComparison.Ordinal);
+
+            // Add authorization header if API key is provided
+            if (!string.IsNullOrEmpty(_apiKey))
+            {
+                _httpClient.DefaultRequestHeaders.Remove("Authorization");
+                _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
+            }
+
+            var response = await _httpClient.GetAsync(modelsEndpoint).ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                _logger.LogError(
+                    "Failed to fetch OpenAI models: {StatusCode} - {Error}",
+                    response.StatusCode,
+                    errorContent);
+                return Array.Empty<string>();
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var responseJson = JsonDocument.Parse(responseContent);
+
+            var models = new List<string>();
+            if (responseJson.RootElement.TryGetProperty("data", out var dataArray))
+            {
+                foreach (var model in dataArray.EnumerateArray())
+                {
+                    if (model.TryGetProperty("id", out var idElement))
+                    {
+                        var modelId = idElement.GetString();
+                        if (!string.IsNullOrEmpty(modelId))
+                        {
+                            models.Add(modelId);
+                        }
+                    }
+                }
+            }
+
+            _logger.LogDebug("Found {Count} OpenAI-compatible models", models.Count);
+            return models.ToArray();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching OpenAI models: {Message}", ex.Message);
+            return Array.Empty<string>();
+        }
     }
 
     /// <inheritdoc />

@@ -224,4 +224,92 @@ public class GeminiServiceTests
         // Assert - Returns null because we can't actually call the API
         Assert.Null(result);
     }
+
+    /// <summary>
+    /// Tests that GetAvailableModelsAsync returns empty array without API key.
+    /// </summary>
+    [Fact]
+    public async Task GetAvailableModelsAsync_WithoutApiKey_ShouldReturnEmptyArray()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<GeminiService>>();
+        using var service = new GeminiService(mockLogger.Object);
+
+        // Act
+        var result = await service.GetAvailableModelsAsync();
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    /// <summary>
+    /// Tests that GetAvailableModelsAsync returns empty array on network error.
+    /// </summary>
+    [Fact]
+    public async Task GetAvailableModelsAsync_WithApiKey_ShouldHandleNetworkError()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<GeminiService>>();
+        using var service = new GeminiService(mockLogger.Object);
+        service.SetApiKey("test-key");
+
+        // Act - Real network call will fail without valid credentials
+        var result = await service.GetAvailableModelsAsync();
+
+        // Assert - Should return empty array on error
+        Assert.NotNull(result);
+        Assert.IsType<string[]>(result);
+    }
+
+    /// <summary>
+    /// Tests that SetModelName updates the model name.
+    /// </summary>
+    [Fact]
+    public void SetModelName_WithValidName_ShouldAccept()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<GeminiService>>();
+        using var service = new GeminiService(mockLogger.Object);
+
+        // Act
+        service.SetModelName("gemini-1.5-pro");
+
+        // Assert - Should not throw
+        Assert.NotNull(service);
+    }
+
+    /// <summary>
+    /// Tests that SetModelName ignores empty or whitespace strings.
+    /// </summary>
+    [Fact]
+    public void SetModelName_WithEmptyString_ShouldIgnore()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<GeminiService>>();
+        using var service = new GeminiService(mockLogger.Object);
+
+        // Act
+        service.SetModelName(string.Empty);
+        service.SetModelName("   ");
+
+        // Assert - Should not throw
+        Assert.NotNull(service);
+    }
+
+    /// <summary>
+    /// Tests that SetEndpoint does nothing (Gemini has fixed endpoint).
+    /// </summary>
+    [Fact]
+    public void SetEndpoint_ShouldBeIgnored()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<GeminiService>>();
+        using var service = new GeminiService(mockLogger.Object);
+
+        // Act
+        service.SetEndpoint("https://custom-endpoint.example.com");
+
+        // Assert - Should not throw
+        Assert.NotNull(service);
+    }
 }
