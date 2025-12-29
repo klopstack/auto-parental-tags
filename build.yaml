@@ -13,4 +13,5 @@ owner: "benklop"
 artifacts:
   - "Jellyfin.Plugin.AutoParentalTags.dll"
 changelog: |-
+  - Prepare for release v1.0.0 (@[github-actions[bot]](https://github.com/apps/github-actions)) (#16)
   - Testing debugging fixes (@benklop) (#15)
