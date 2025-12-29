@@ -16,6 +16,7 @@ public class GeminiService : IAiService, IDisposable
     private readonly ILogger<GeminiService> _logger;
     private readonly HttpClient _httpClient;
     private string? _apiKey;
+    private string _modelName = "gemini-pro";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GeminiService"/> class.
@@ -37,6 +38,18 @@ public class GeminiService : IAiService, IDisposable
     public void SetEndpoint(string endpoint)
     {
         // Gemini uses a fixed endpoint, this is not used
+    }
+
+    /// <summary>
+    /// Sets the model name to use for Gemini API calls.
+    /// </summary>
+    /// <param name="modelName">The model name (e.g., gemini-pro, gemini-1.5-pro, gemini-1.5-flash).</param>
+    public void SetModelName(string modelName)
+    {
+        if (!string.IsNullOrWhiteSpace(modelName))
+        {
+            _modelName = modelName;
+        }
     }
 
     /// <summary>
@@ -84,7 +97,7 @@ public class GeminiService : IAiService, IDisposable
             var jsonContent = JsonSerializer.Serialize(requestBody);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={_apiKey}";
+            var url = $"https://generativelanguage.googleapis.com/v1beta/models/{_modelName}:generateContent?key={_apiKey}";
             var response = await _httpClient.PostAsync(url, content).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)

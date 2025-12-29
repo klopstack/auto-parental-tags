@@ -33,7 +33,7 @@
                     <div class="inputContainer" id="modelContainer" style="display:none;">
                         <label class="inputLabel inputLabelUnfocused" for="ModelName">Model Name</label>
                         <input id="ModelName" name="ModelName" type="text" is="emby-input" />
-                        <div class="fieldDescription">Model to use (e.g., gpt-3.5-turbo, gpt-4, or your LocalAI model name)</div>
+                        <div class="fieldDescription" id="modelDescription">Model to use</div>
                     </div>
                     <div class="checkboxContainer checkboxContainer-withDescription">
                         <label class="emby-checkbox-label">
@@ -73,13 +73,20 @@
                 var provider = document.querySelector('#Provider').value;
                 var endpointContainer = document.querySelector('#endpointContainer');
                 var modelContainer = document.querySelector('#modelContainer');
+                var modelDescription = document.querySelector('#modelDescription');
 
                 if (provider === 'LocalAI') {
                     endpointContainer.style.display = 'block';
                     modelContainer.style.display = 'block';
+                    modelDescription.textContent = 'Model to use (e.g., your LocalAI model name)';
                 } else if (provider === 'OpenAI') {
                     endpointContainer.style.display = 'none';
                     modelContainer.style.display = 'block';
+                    modelDescription.textContent = 'Model to use (e.g., gpt-3.5-turbo, gpt-4)';
+                } else if (provider === 'Gemini') {
+                    endpointContainer.style.display = 'none';
+                    modelContainer.style.display = 'block';
+                    modelDescription.textContent = 'Model to use (e.g., gemini-pro, gemini-1.5-pro, gemini-1.5-flash)';
                 } else {
                     endpointContainer.style.display = 'none';
                     modelContainer.style.display = 'none';
@@ -95,7 +102,7 @@
                         document.querySelector('#Provider').value = config.Provider || 'Gemini';
                         document.querySelector('#ApiKey').value = config.ApiKey || '';
                         document.querySelector('#ApiEndpoint').value = config.ApiEndpoint || 'http://localhost:8080';
-                        document.querySelector('#ModelName').value = config.ModelName || 'gpt-3.5-turbo';
+                        document.querySelector('#ModelName').value = config.ModelName || 'gemini-pro';
                         document.querySelector('#EnableAutoTagging').checked = config.EnableAutoTagging;
                         document.querySelector('#ProcessOnLibraryScan').checked = config.ProcessOnLibraryScan;
                         document.querySelector('#OverwriteExistingTags').checked = config.OverwriteExistingTags;
@@ -106,23 +113,23 @@
 
             document.querySelector('#AutoParentalTagsConfigForm')
                 .addEventListener('submit', function(e) {
-                Dashboard.showLoadingMsg();
-                ApiClient.getPluginConfiguration(AutoParentalTagsConfig.pluginUniqueId).then(function (config) {
-                    config.Provider = document.querySelector('#Provider').value;
-                    config.ApiKey = document.querySelector('#ApiKey').value;
-                    config.ApiEndpoint = document.querySelector('#ApiEndpoint').value;
-                    config.ModelName = document.querySelector('#ModelName').value;
-                    config.EnableAutoTagging = document.querySelector('#EnableAutoTagging').checked;
-                    config.ProcessOnLibraryScan = document.querySelector('#ProcessOnLibraryScan').checked;
-                    config.OverwriteExistingTags = document.querySelector('#OverwriteExistingTags').checked;
-                    ApiClient.updatePluginConfiguration(AutoParentalTagsConfig.pluginUniqueId, config).then(function (result) {
-                        Dashboard.processPluginConfigurationUpdateResult(result);
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(AutoParentalTagsConfig.pluginUniqueId).then(function (config) {
+                        config.Provider = document.querySelector('#Provider').value;
+                        config.ApiKey = document.querySelector('#ApiKey').value;
+                        config.ApiEndpoint = document.querySelector('#ApiEndpoint').value;
+                        config.ModelName = document.querySelector('#ModelName').value;
+                        config.EnableAutoTagging = document.querySelector('#EnableAutoTagging').checked;
+                        config.ProcessOnLibraryScan = document.querySelector('#ProcessOnLibraryScan').checked;
+                        config.OverwriteExistingTags = document.querySelector('#OverwriteExistingTags').checked;
+                        ApiClient.updatePluginConfiguration(AutoParentalTagsConfig.pluginUniqueId, config).then(function (result) {
+                            Dashboard.processPluginConfigurationUpdateResult(result);
+                        });
                     });
-                });
 
-                e.preventDefault();
-                return false;
-            });
+                    e.preventDefault();
+                    return false;
+                });
         </script>
     </div>
 </body>

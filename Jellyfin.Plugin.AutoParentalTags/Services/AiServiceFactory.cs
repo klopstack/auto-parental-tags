@@ -48,11 +48,8 @@ public class AiServiceFactory
             service.SetEndpoint("https://api.openai.com/v1/chat/completions");
         }
 
-        // Set model name for OpenAI-compatible services
-        if (service is OpenAiService openAiService)
-        {
-            openAiService.SetModelName(config.ModelName);
-        }
+        // Set model name for all services
+        service.SetModelName(config.ModelName);
 
         return service;
     }

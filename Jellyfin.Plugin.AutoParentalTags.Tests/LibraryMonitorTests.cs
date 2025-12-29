@@ -21,8 +21,18 @@ using Xunit;
 namespace Jellyfin.Plugin.AutoParentalTags.Tests;
 
 /// <summary>
+/// Collection definition for tests that use Plugin.Instance.
+/// Ensures tests run sequentially to avoid race conditions with static state.
+/// </summary>
+[CollectionDefinition("Plugin Instance Tests", DisableParallelization = true)]
+public class PluginInstanceTestCollection
+{
+}
+
+/// <summary>
 /// Tests for the LibraryMonitor class.
 /// </summary>
+[Collection("Plugin Instance Tests")]
 public class LibraryMonitorTests : IAsyncLifetime
 {
     /// <summary>
@@ -559,6 +569,10 @@ internal sealed class StubAiService : IAiService
     }
 
     public void SetEndpoint(string endpoint)
+    {
+    }
+
+    public void SetModelName(string modelName)
     {
     }
 

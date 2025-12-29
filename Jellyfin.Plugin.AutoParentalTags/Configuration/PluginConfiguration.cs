@@ -36,7 +36,7 @@ public class PluginConfiguration : BasePluginConfiguration
         Provider = AiProvider.Gemini;
         ApiKey = string.Empty;
         ApiEndpoint = "http://localhost:8080";
-        ModelName = "gpt-3.5-turbo";
+        ModelName = "gemini-pro";
         EnableAutoTagging = true;
         ProcessOnLibraryScan = true;
         OverwriteExistingTags = false;
@@ -58,7 +58,7 @@ public class PluginConfiguration : BasePluginConfiguration
     public string ApiEndpoint { get; set; }
 
     /// <summary>
-    /// Gets or sets the model name (for OpenAI/LocalAI).
+    /// Gets or sets the model name (for OpenAI/LocalAI/Gemini).
     /// </summary>
     public string ModelName { get; set; }
 
