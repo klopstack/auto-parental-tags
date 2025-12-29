@@ -13,4 +13,5 @@ owner: "benklop"
 artifacts:
   - "Jellyfin.Plugin.AutoParentalTags.dll"
 changelog: |-
+  - Prepare for release v0.2.0 (@[github-actions[bot]](https://github.com/apps/github-actions)) (#12)
   - Refactor publish workflow to separate build and upload jobs, enhancing asset preparation for GitHub releases (@benklop) (#11)
