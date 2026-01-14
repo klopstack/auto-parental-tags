@@ -14,16 +14,10 @@ public class ServiceRegistrator : IPluginServiceRegistrator
     /// <inheritdoc />
     public void RegisterServices(IServiceCollection serviceCollection, IServerApplicationHost applicationHost)
     {
-        // Try to get logger factory, fallback to null logger if not available (e.g., in tests)
-        var loggerFactory = applicationHost.Resolve<ILoggerFactory>();
-        var logger = loggerFactory?.CreateLogger<ServiceRegistrator>();
-
-        logger?.LogInformation("Registering Auto Parental Tags services");
-
+        // Register services without resolving ILoggerFactory during registration phase
+        // Logging will occur in the Plugin constructor instead
         serviceCollection.AddSingleton<AiServiceFactory>();
         serviceCollection.AddSingleton<LibraryMonitor>();
         serviceCollection.AddSingleton<AutoParentalTagsScheduledTask>();
-
-        logger?.LogDebug("Services registered: AiServiceFactory, LibraryMonitor, AutoParentalTagsScheduledTask");
     }
 }
