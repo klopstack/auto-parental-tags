@@ -158,7 +158,7 @@ public class LibraryMonitorTests : IAsyncLifetime
 
         var mockLibraryManager = new Mock<ILibraryManager>();
         mockLibraryManager.Setup(x => x.RootFolder)
-            .Returns(Mock.Of<AggregateFolder>(f => f.Children == new List<BaseItem>()));
+            .Returns(Mock.Of<AggregateFolder>());
         mockLibraryManager.Setup(x => x.GetItemList(It.IsAny<InternalItemsQuery>()))
             .Returns(new List<BaseItem>()); // no movies to avoid external calls
 
