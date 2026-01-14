@@ -94,21 +94,17 @@ public class LibraryMonitor : ILibraryPostScanTask
         using var aiService = _aiServiceFactory.CreateService(config);
 
         // Get all movies and series from active library folders
-        var allItems = new List<BaseItem>();
-
-        foreach (var library in _libraryManager.RootFolder.Children)
-        {
-            var libraryItems = _libraryManager.GetItemList(new InternalItemsQuery
+        var allItems = _libraryManager.RootFolder.Children
+            .SelectMany(library => _libraryManager.GetItemList(new InternalItemsQuery
             {
                 IncludeItemTypes = new[] { BaseItemKind.Movie, BaseItemKind.Series },
                 IsVirtualItem = false,
                 IsPlaceHolder = false,
                 Parent = library,
                 Recursive = true
-            });
-
-            allItems.AddRange(libraryItems.Where(i => i is Movie or Series));
-        }
+            }))
+            .Where(i => i is Movie or Series)
+            .ToList<BaseItem>();
 
         _logger.LogInformation(
             "Found {Count} items to process ({Movies} movies, {Series} series)",
