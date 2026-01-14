@@ -26,7 +26,7 @@ public class ModelsControllerTests
         // Arrange
         var mockService = new Mock<IAiService>();
         mockService.Setup(x => x.GetAvailableModelsAsync())
-            .ReturnsAsync(new[] { "gemini-pro", "gemini-1.5-pro" });
+            .ReturnsAsync(new[] { "gemini-pro", "gemini-2.5-flash-lite" });
 
         var mockFactory = new Mock<AiServiceFactory>(MockBehavior.Loose, null!);
         mockFactory.Setup(x => x.CreateService(It.IsAny<PluginConfiguration>()))
@@ -50,7 +50,7 @@ public class ModelsControllerTests
         var models = Assert.IsType<string[]>(okResult.Value);
         Assert.Equal(2, models.Length);
         Assert.Contains("gemini-pro", models);
-        Assert.Contains("gemini-1.5-pro", models);
+        Assert.Contains("gemini-2.5-flash-lite", models);
     }
 
     /// <summary>

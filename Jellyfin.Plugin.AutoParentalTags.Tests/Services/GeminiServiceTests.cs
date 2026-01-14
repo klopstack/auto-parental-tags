@@ -14,6 +14,8 @@ namespace Jellyfin.Plugin.AutoParentalTags.Tests.Services;
 /// </summary>
 public class GeminiServiceTests
 {
+    private const string TestPromptTemplate = "Test {itemType}: {title} ({year}) - {rating} - {genres} - {overview}";
+
     /// <summary>
     /// Tests that GeminiService can be instantiated.
     /// </summary>
@@ -113,7 +115,9 @@ public class GeminiServiceTests
             2020,
             "A test movie",
             "PG",
-            new[] { "Action", "Adventure" });
+            new[] { "Action", "Adventure" },
+            null,
+            null);
 
         // Assert
         Assert.Null(result);
@@ -143,6 +147,7 @@ public class GeminiServiceTests
         var mockLogger = new Mock<ILogger<GeminiService>>();
         using var service = new GeminiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
@@ -150,7 +155,9 @@ public class GeminiServiceTests
             null,
             "A test movie",
             "PG",
-            new[] { "Action" });
+            new[] { "Action" },
+            null,
+            null);
 
         // Assert - Returns null because we can't actually call the API
         Assert.Null(result);
@@ -166,6 +173,7 @@ public class GeminiServiceTests
         var mockLogger = new Mock<ILogger<GeminiService>>();
         using var service = new GeminiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
@@ -173,7 +181,9 @@ public class GeminiServiceTests
             2020,
             null,
             "PG",
-            new[] { "Action" });
+            new[] { "Action" },
+            null,
+            null);
 
         // Assert - Returns null because we can't actually call the API
         Assert.Null(result);
@@ -189,6 +199,7 @@ public class GeminiServiceTests
         var mockLogger = new Mock<ILogger<GeminiService>>();
         using var service = new GeminiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
@@ -196,7 +207,9 @@ public class GeminiServiceTests
             2020,
             "A test movie",
             null,
-            new[] { "Action" });
+            new[] { "Action" },
+            null,
+            null);
 
         // Assert - Returns null because we can't actually call the API
         Assert.Null(result);
@@ -212,6 +225,7 @@ public class GeminiServiceTests
         var mockLogger = new Mock<ILogger<GeminiService>>();
         using var service = new GeminiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
@@ -219,6 +233,8 @@ public class GeminiServiceTests
             2020,
             "A test movie",
             "PG",
+            null,
+            null,
             null);
 
         // Assert - Returns null because we can't actually call the API

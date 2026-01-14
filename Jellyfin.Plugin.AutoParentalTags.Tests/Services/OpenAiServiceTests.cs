@@ -12,6 +12,8 @@ namespace Jellyfin.Plugin.AutoParentalTags.Tests.Services;
 /// </summary>
 public class OpenAiServiceTests
 {
+    private const string TestPromptTemplate = "Test {itemType}: {title} ({year}) - {rating} - {genres} - {overview}";
+
     /// <summary>
     /// Tests that OpenAiService can be instantiated.
     /// </summary>
@@ -158,6 +160,7 @@ public class OpenAiServiceTests
         using var service = new OpenAiService(mockLogger.Object);
         service.SetApiKey("test-api-key");
         service.SetModelName("gpt-3.5-turbo");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
@@ -165,7 +168,9 @@ public class OpenAiServiceTests
             2020,
             "A test movie about adventures",
             "PG",
-            new[] { "Action", "Adventure" });
+            new[] { "Action", "Adventure" },
+            null,
+            null);
 
         // Assert - Will return null because we can't actually call the API
         Assert.Null(result);
@@ -181,6 +186,7 @@ public class OpenAiServiceTests
         var mockLogger = new Mock<ILogger<OpenAiService>>();
         using var service = new OpenAiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
@@ -188,7 +194,9 @@ public class OpenAiServiceTests
             null,
             "A test movie",
             "PG",
-            new[] { "Action" });
+            new[] { "Action" },
+            null,
+            null);
 
         // Assert
         Assert.Null(result);
@@ -204,6 +212,7 @@ public class OpenAiServiceTests
         var mockLogger = new Mock<ILogger<OpenAiService>>();
         using var service = new OpenAiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
@@ -211,7 +220,9 @@ public class OpenAiServiceTests
             2020,
             null,
             "PG",
-            new[] { "Action" });
+            new[] { "Action" },
+            null,
+            null);
 
         // Assert
         Assert.Null(result);
@@ -227,6 +238,7 @@ public class OpenAiServiceTests
         var mockLogger = new Mock<ILogger<OpenAiService>>();
         using var service = new OpenAiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
@@ -234,7 +246,9 @@ public class OpenAiServiceTests
             2020,
             "A test movie",
             null,
-            new[] { "Action" });
+            new[] { "Action" },
+            null,
+            null);
 
         // Assert
         Assert.Null(result);
@@ -250,6 +264,7 @@ public class OpenAiServiceTests
         var mockLogger = new Mock<ILogger<OpenAiService>>();
         using var service = new OpenAiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
@@ -257,6 +272,8 @@ public class OpenAiServiceTests
             2020,
             "A test movie",
             "PG",
+            null,
+            null,
             null);
 
         // Assert

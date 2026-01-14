@@ -14,6 +14,9 @@
     // However ${env:XDG_DATA_HOME} does not work in Visual Studio Code's development container!
     "jellyfinWindowsDataDir": "${env:LOCALAPPDATA}/jellyfin",
     "jellyfinLinuxDataDir": "$HOME/.local/share/jellyfin",
+    // Remote Jellyfin server configuration
+    "remoteJellyfinHost": "root@docker.klopnet.com",
+    "remoteJellyfinDataDir": "/datavol/data/jellyfin/data",
     // The name of the plugin
     "pluginName": "Jellyfin.Plugin.AutoParentalTags",
 }

@@ -55,7 +55,7 @@
                             <input id="EnableAutoTagging" name="EnableAutoTagging" type="checkbox" is="emby-checkbox" />
                             <span>Enable Automatic Tagging</span>
                         </label>
-                        <div class="fieldDescription">Automatically tag movies with audience categories (kids, teens, adults)</div>
+                        <div class="fieldDescription">Automatically tag movies and TV series with audience categories (kids, teens, family, adults)</div>
                     </div>
 
                     <div class="checkboxContainer checkboxContainer-withDescription">
@@ -63,7 +63,7 @@
                             <input id="ProcessOnLibraryScan" name="ProcessOnLibraryScan" type="checkbox" is="emby-checkbox" />
                             <span>Process on Library Scan</span>
                         </label>
-                        <div class="fieldDescription">Automatically process new movies when library is scanned</div>
+                        <div class="fieldDescription">Automatically process new content when library is scanned</div>
                     </div>
 
                     <div class="checkboxContainer checkboxContainer-withDescription">
@@ -71,7 +71,27 @@
                             <input id="OverwriteExistingTags" name="OverwriteExistingTags" type="checkbox" is="emby-checkbox" />
                             <span>Overwrite Existing Tags</span>
                         </label>
-                        <div class="fieldDescription">Replace existing audience tags when processing movies</div>
+                        <div class="fieldDescription">Replace existing audience tags when processing content</div>
+                    </div>
+
+                    <h2>Prompt Configuration</h2>
+
+                    <div class="inputContainer">
+                        <label class="inputLabel" for="PromptTemplate" style="display: block; margin-bottom: 8px;">AI Prompt Template</label>
+                        <textarea id="PromptTemplate" name="PromptTemplate" is="emby-textarea" rows="20" class="emby-textarea" style="font-family: monospace; font-size: 12px; width: 100%; min-height: 400px; box-sizing: border-box;"></textarea>
+                        <div class="fieldDescription">
+                            Customize the prompt sent to the AI. Available placeholders:
+                            <ul style="margin: 5px 0; padding-left: 20px;">
+                                <li><code>{itemType}</code> - "movie" or "series" (lowercase)</li>
+                                <li><code>{ItemType}</code> - "Movie" or "Series" (capitalized)</li>
+                                <li><code>{title}</code> - Item title</li>
+                                <li><code>{year}</code> - Release year</li>
+                                <li><code>{rating}</code> - Official rating (PG, PG-13, etc.)</li>
+                                <li><code>{genres}</code> - Comma-separated genres</li>
+                                <li><code>{overview}</code> - Plot summary</li>
+                            </ul>
+                            AI must respond with one of: <strong>kids</strong>, <strong>teens</strong>, <strong>family</strong>, or <strong>adults</strong>
+                        </div>
                     </div>
 
                     <div>
@@ -115,7 +135,7 @@
                     apiKeyInput.setAttribute('required', 'required');
                     apiKeyDescription.innerHTML = 'Google API key - Get it at <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a>';
                     endpointContainer.style.display = 'none';
-                    modelDescription.textContent = 'Model to use (e.g., gemini-pro, gemini-1.5-pro, gemini-1.5-flash)';
+                    modelDescription.textContent = 'Model to use (e.g., gemini-pro, gemini-2.5-pro, gemini-2.5-flash-lite)';
                 }
             }
 
@@ -148,12 +168,18 @@
                         type: 'POST',
                         url: ApiClient.getUrl('AutoParentalTags/Models'),
                         contentType: 'application/json',
-                        data: JSON.stringify(requestBody)
+                        data: JSON.stringify(requestBody),
+                        dataType: 'json'
                     });
 
-                    if (response && response.length > 0) {
+                    console.log('Models API response:', response);
+
+                    // Handle response - it should be an array
+                    var models = Array.isArray(response) ? response : [];
+
+                    if (models.length > 0) {
                         modelSelect.innerHTML = '';
-                        response.forEach(function(model) {
+                        models.forEach(function(model) {
                             var option = document.createElement('option');
                             option.value = model;
                             option.textContent = model;
@@ -164,10 +190,11 @@
                         });
 
                         // If no model was selected, select the first one
-                        if (!currentValue || !response.includes(currentValue)) {
+                        if (!currentValue || !models.includes(currentValue)) {
                             modelSelect.selectedIndex = 0;
                         }
                     } else {
+                        console.warn('No models returned from API');
                         modelSelect.innerHTML = '<option value="">No models available</option>';
                     }
                 } catch (error) {
@@ -207,6 +234,7 @@
                         document.querySelector('#EnableAutoTagging').checked = config.EnableAutoTagging;
                         document.querySelector('#ProcessOnLibraryScan').checked = config.ProcessOnLibraryScan;
                         document.querySelector('#OverwriteExistingTags').checked = config.OverwriteExistingTags;
+                        document.querySelector('#PromptTemplate').value = config.PromptTemplate || '';
 
                         updateFieldVisibility();
 
@@ -241,6 +269,7 @@
                         config.EnableAutoTagging = document.querySelector('#EnableAutoTagging').checked;
                         config.ProcessOnLibraryScan = document.querySelector('#ProcessOnLibraryScan').checked;
                         config.OverwriteExistingTags = document.querySelector('#OverwriteExistingTags').checked;
+                        config.PromptTemplate = document.querySelector('#PromptTemplate').value;
 
                         ApiClient.updatePluginConfiguration(AutoParentalTagsConfig.pluginUniqueId, config).then(function (result) {
                             Dashboard.processPluginConfigurationUpdateResult(result);

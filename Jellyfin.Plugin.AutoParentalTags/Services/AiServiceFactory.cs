@@ -51,6 +51,12 @@ public class AiServiceFactory
         // Set model name for all services
         service.SetModelName(config.ModelName);
 
+        // Set prompt template if provided
+        if (!string.IsNullOrEmpty(config.PromptTemplate))
+        {
+            service.SetPromptTemplate(config.PromptTemplate);
+        }
+
         return service;
     }
 }

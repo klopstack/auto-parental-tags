@@ -3,6 +3,16 @@
   "version": "2.0.0",
   "tasks": [
     {
+      // Build and deploy to remote server
+      "label": "build-and-copy-remote",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "build",
+        "make-remote-plugin-dir",
+        "copy-dll-remote"
+      ]
+    },
+    {
       // A chain task - build the plugin, then copy it to your
       // jellyfin server's plugin directory
       "label": "build-and-copy",
@@ -71,6 +81,27 @@
           "${config:jellyfinLinuxDataDir}/plugins/${config:pluginName}/"
         ]
       }
+    },
+    {
+      // Create remote plugin directory
+      "label": "make-remote-plugin-dir",
+      "type": "shell",
+      "command": "ssh",
+      "args": [
+        "${config:remoteJellyfinHost}",
+        "mkdir -p ${config:remoteJellyfinDataDir}/plugins/${config:pluginName}/"
+      ]
+    },
+    {
+      // Copy plugin to remote server
+      "label": "copy-dll-remote",
+      "type": "shell",
+      "command": "scp",
+      "args": [
+        "-r",
+        "./${config:pluginName}/bin/Debug/net9.0/publish/*",
+        "${config:remoteJellyfinHost}:${config:remoteJellyfinDataDir}/plugins/${config:pluginName}/"
+      ]
     },
   ]
 }

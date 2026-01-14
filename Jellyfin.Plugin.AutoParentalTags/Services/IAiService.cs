@@ -27,6 +27,12 @@ public interface IAiService : IDisposable
     void SetModelName(string modelName);
 
     /// <summary>
+    /// Sets the prompt template to use for AI requests.
+    /// </summary>
+    /// <param name="promptTemplate">The prompt template.</param>
+    void SetPromptTemplate(string promptTemplate);
+
+    /// <summary>
     /// Analyzes movie metadata to determine target audience.
     /// </summary>
     /// <param name="title">Movie title.</param>
@@ -34,13 +40,17 @@ public interface IAiService : IDisposable
     /// <param name="overview">Movie overview/synopsis.</param>
     /// <param name="officialRating">Official MPAA rating (if available).</param>
     /// <param name="genres">Movie genres.</param>
-    /// <returns>A task representing the asynchronous operation, containing the target audience tag (kids, teens, or adults).</returns>
+    /// <param name="existingTags">Existing tags on the item.</param>
+    /// <param name="studios">Production studios.</param>
+    /// <returns>A task representing the asynchronous operation, containing the target audience tag (kids, teens, family, or adults).</returns>
     Task<string?> DetermineTargetAudienceAsync(
         string title,
         int? year,
         string? overview,
         string? officialRating,
-        string[]? genres);
+        string[]? genres,
+        string[]? existingTags = null,
+        string[]? studios = null);
 
     /// <summary>
     /// Gets a list of available models from the AI service.
