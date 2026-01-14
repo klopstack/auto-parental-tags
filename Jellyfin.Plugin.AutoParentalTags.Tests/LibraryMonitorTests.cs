@@ -204,8 +204,10 @@ public class LibraryMonitorTests : IAsyncLifetime
         var testLibraryFolder = new CollectionFolder { Name = "Test Library" };
 
         var mockLibraryManager = new Mock<ILibraryManager>();
+        var mockRootFolder = new Mock<AggregateFolder>();
+        mockRootFolder.SetupGet(f => f.Children).Returns(new List<BaseItem> { testLibraryFolder });
         mockLibraryManager.Setup(x => x.RootFolder)
-            .Returns(Mock.Of<AggregateFolder>(f => f.Children == new List<BaseItem> { testLibraryFolder }));
+            .Returns(mockRootFolder.Object);
         mockLibraryManager.Setup(x => x.GetItemList(It.IsAny<InternalItemsQuery>()))
             .Returns(movies);
 
