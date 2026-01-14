@@ -8,6 +8,14 @@
     "owner": "benklop",
     "versions": [
       {
+        "changelog": "## Changes in 1.0.1\r\n\r\n- Testing debugging fixes (@benklop) (#18)\r\n- Prepare for release v1.0.0 (@[github-actions[bot]](https://github.com/apps/github-actions)) (#17)\r\n",
+        "checksum": "4f71b4a78497bbc0e090a6c3b4d63957",
+        "sourceUrl": "https://github.com/klopstack/auto-parental-tags/releases/download/v1.0.1/auto-parental-tags_1.0.0.0.zip",
+        "targetAbi": "10.11.5.0",
+        "timestamp": "2026-01-14T03:20:12Z",
+        "version": "1.0.0"
+      },
+      {
         "changelog": "## Changes in 1.0.0\r\n\r\n- Prepare for release v1.0.0 (@[github-actions[bot]](https://github.com/apps/github-actions)) (#16)\r\n- Testing debugging fixes (@benklop) (#15)\r\n",
         "checksum": "966f64258a7cf3787bdb559b602dbafe",
         "sourceUrl": "https://github.com/klopstack/auto-parental-tags/releases/download/v1.0.0/auto-parental-tags_1.0.0.0.zip",
