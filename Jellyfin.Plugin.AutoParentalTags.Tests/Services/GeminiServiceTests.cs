@@ -100,27 +100,25 @@ public class GeminiServiceTests
     }
 
     /// <summary>
-    /// Tests that DetermineTargetAudienceAsync returns null when API key is not set.
+    /// Tests that DetermineTargetAudienceAsync throws InvalidOperationException when API key is not set.
     /// </summary>
     [Fact]
-    public async Task DetermineTargetAudienceAsync_WithoutApiKey_ShouldReturnNull()
+    public async Task DetermineTargetAudienceAsync_WithoutApiKey_ShouldThrowInvalidOperationException()
     {
         // Arrange
         var mockLogger = new Mock<ILogger<GeminiService>>();
         using var service = new GeminiService(mockLogger.Object);
 
-        // Act
-        var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
-            2020,
-            "A test movie",
-            "PG",
-            new[] { "Action", "Adventure" },
-            null,
-            null);
-
-        // Assert
-        Assert.Null(result);
+        // Act & Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await service.DetermineTargetAudienceAsync(
+                "Test Movie",
+                2020,
+                "A test movie",
+                "PG",
+                new[] { "Action", "Adventure" },
+                null,
+                null));
     }
 
     /// <summary>
