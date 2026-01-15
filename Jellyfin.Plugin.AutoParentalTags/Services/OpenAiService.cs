@@ -99,11 +99,16 @@ public class OpenAiService : IAiService, IDisposable
     /// <param name="promptTemplate">The prompt template.</param>
     public void SetPromptTemplate(string promptTemplate)
     {
-        if (!string.IsNullOrWhiteSpace(promptTemplate))
+        if (string.IsNullOrWhiteSpace(promptTemplate))
         {
-            _promptTemplate = promptTemplate;
-            _logger.LogDebug("Prompt template set (length: {Length})", promptTemplate.Length);
+            // Explicitly clear the prompt template when an empty or whitespace value is provided.
+            _promptTemplate = null;
+            _logger.LogWarning("Empty or whitespace prompt template provided; clearing existing prompt template.");
+            return;
         }
+
+        _promptTemplate = promptTemplate;
+        _logger.LogDebug("Prompt template set (length: {Length})", promptTemplate.Length);
     }
 
     /// <inheritdoc />
