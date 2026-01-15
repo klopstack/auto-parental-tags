@@ -103,7 +103,8 @@ public class OpenAiService : IAiService, IDisposable
         {
             // Explicitly clear the prompt template when an empty or whitespace value is provided.
             _promptTemplate = null;
-            _logger.LogWarning("Empty or whitespace prompt template provided; clearing existing prompt template.");
+            // Treat this as an error: an empty prompt will prevent classification.
+            _logger.LogError("Empty or whitespace prompt template provided; clearing existing prompt template.");
             return;
         }
 
@@ -113,6 +114,7 @@ public class OpenAiService : IAiService, IDisposable
 
     /// <inheritdoc />
     public async Task<string?> DetermineTargetAudienceAsync(
+        string itemType,
         string title,
         int? year,
         string? overview,
@@ -129,7 +131,7 @@ public class OpenAiService : IAiService, IDisposable
 
         try
         {
-            var prompt = BuildPrompt(title, year, overview, officialRating, genres, existingTags, studios, _promptTemplate);
+            var prompt = BuildPrompt(itemType, title, year, overview, officialRating, genres, existingTags, studios, _promptTemplate);
 
             _logger.LogDebug("Requesting audience classification for '{Title}' ({Year})", SanitizeForLog(title), year);
             _logger.LogDebug("Prompt for '{Title}':\n{Prompt}", SanitizeForLog(title), prompt);
@@ -207,6 +209,7 @@ public class OpenAiService : IAiService, IDisposable
     }
 
     private static string BuildPrompt(
+        string itemType,
         string title,
         int? year,
         string? overview,
@@ -221,10 +224,13 @@ public class OpenAiService : IAiService, IDisposable
             throw new ArgumentNullException(nameof(promptTemplate), "Prompt template cannot be null or empty");
         }
 
+        var itemLower = (itemType ?? "item").ToLowerInvariant();
+        var itemCapitalized = char.ToUpperInvariant(itemLower[0]) + itemLower.Substring(1);
+
         // Replace placeholders
         var prompt = promptTemplate
-            .Replace("{itemType}", "movie", StringComparison.OrdinalIgnoreCase)
-            .Replace("{ItemType}", "Movie", StringComparison.Ordinal)
+            .Replace("{itemType}", itemLower, StringComparison.OrdinalIgnoreCase)
+            .Replace("{ItemType}", itemCapitalized, StringComparison.Ordinal)
             .Replace("{title}", title, StringComparison.Ordinal)
             .Replace("{year}", year?.ToString(CultureInfo.InvariantCulture) ?? "Unknown", StringComparison.Ordinal)
             .Replace("{studios}", studios?.Length > 0 ? string.Join(", ", studios) : "Unknown", StringComparison.Ordinal)

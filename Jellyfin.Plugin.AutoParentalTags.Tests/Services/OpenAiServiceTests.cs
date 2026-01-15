@@ -164,6 +164,7 @@ public class OpenAiServiceTests
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
+            "movie",
             "Test Movie",
             2020,
             "A test movie about adventures",
@@ -190,6 +191,7 @@ public class OpenAiServiceTests
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
+            "movie",
             "Test Movie",
             null,
             "A test movie",
@@ -216,6 +218,7 @@ public class OpenAiServiceTests
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
+            "movie",
             "Test Movie",
             2020,
             null,
@@ -242,6 +245,7 @@ public class OpenAiServiceTests
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
+            "movie",
             "Test Movie",
             2020,
             "A test movie",
@@ -267,8 +271,7 @@ public class OpenAiServiceTests
         service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
-        var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+        var result = await service.DetermineTargetAudienceAsync(            "movie",            "Test Movie",
             2020,
             "A test movie",
             "PG",
@@ -350,6 +353,40 @@ public class OpenAiServiceTests
         // Assert
         Assert.NotNull(result);
         Assert.IsType<string[]>(result);
+    }
+
+    /// <summary>
+    /// Tests that providing an empty or whitespace prompt will clear the template, log an error, and cause DetermineTargetAudienceAsync to fail.
+    /// </summary>
+    [Fact]
+    public async Task SetPromptTemplate_Empty_ShouldLogErrorAndThrowOnDetermine()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object);
+        service.SetApiKey("test-key");
+        service.SetPromptTemplate("   "); // whitespace
+
+        // Act & Assert - Attempting to determine audience without a prompt should throw
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await service.DetermineTargetAudienceAsync(
+                "Test Movie",
+                2020,
+                "A test movie",
+                "PG",
+                new[] { "Action" },
+                null,
+                null));
+
+        // Verify that an error was logged about clearing the prompt template
+        mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Empty or whitespace prompt template")),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+            Times.AtLeastOnce());
     }
 
     /// <summary>

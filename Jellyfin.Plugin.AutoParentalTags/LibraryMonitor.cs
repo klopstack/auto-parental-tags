@@ -91,10 +91,40 @@ public class LibraryMonitor : ILibraryPostScanTask
         }
 
         // Create the appropriate AI service
-        using var aiService = _aiServiceFactory.CreateService(config);
+        IAiService aiService;
+        try
+        {
+            aiService = _aiServiceFactory.CreateService(config);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to create AI service: {Message}", ex.Message);
+            progress?.Report(100);
+            return;
+        }
 
+        using (aiService)
+        {
         // Get all movies and series from active library folders
-        var allItems = _libraryManager.RootFolder.Children
+        var root = _libraryManager.RootFolder;
+        if (root == null)
+        {
+            _logger.LogWarning("Library root folder is null; skipping auto-tagging run");
+            progress?.Report(100);
+            return;
+        }
+
+        var libraries = root.Children;
+        if (libraries == null || !libraries.Any())
+        {
+            _logger.LogInformation("No active library folders found to process");
+            progress?.Report(100);
+            return;
+        }
+
+        // Collect items from each library folder; guard against null returns from GetItemList
+        var allItems = libraries
+            .Where(library => library != null)
             .SelectMany(library => _libraryManager.GetItemList(new InternalItemsQuery
             {
                 IncludeItemTypes = new[] { BaseItemKind.Movie, BaseItemKind.Series },
@@ -102,9 +132,8 @@ public class LibraryMonitor : ILibraryPostScanTask
                 IsPlaceHolder = false,
                 Parent = library,
                 Recursive = true
-            }))
-            .Where(i => i is Movie or Series)
-            .ToList<BaseItem>();
+            }) ?? Enumerable.Empty<BaseItem>())
+            .ToList();
 
         _logger.LogInformation(
             "Found {Count} items to process ({Movies} movies, {Series} series)",
@@ -192,7 +221,9 @@ public class LibraryMonitor : ILibraryPostScanTask
             !t.Equals("adults", StringComparison.OrdinalIgnoreCase)).ToArray();
 
         // Call AI API
+        var itemType = item is Movie ? "movie" : item is Series ? "series" : "item";
         var audienceTag = await aiService.DetermineTargetAudienceAsync(
+            itemType,
             title,
             year,
             overview,
