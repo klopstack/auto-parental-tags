@@ -117,8 +117,8 @@ public class GeminiService : IAiService, IDisposable
     {
         if (string.IsNullOrEmpty(_apiKey))
         {
-            _logger.LogWarning("Gemini API key is not configured");
-            return null;
+            _logger.LogError("Gemini API key is not configured");
+            throw new InvalidOperationException("API key must be configured before determining target audience");
         }
 
         if (string.IsNullOrEmpty(_promptTemplate))
