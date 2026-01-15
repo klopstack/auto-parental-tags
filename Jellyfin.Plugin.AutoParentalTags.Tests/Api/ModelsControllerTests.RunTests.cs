@@ -46,7 +46,7 @@ public partial class ModelsControllerTests
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var response = Assert.IsType<TestResponse>(okResult.Value);
-        Assert.Equal(4, response.Results.Length);
+        Assert.Equal(4, response.Results.Count);
         Assert.All(response.Results, r => Assert.NotNull(r.Title));
         Assert.True(response.Results[0].Success);
         Assert.True(response.Results[1].Success);
@@ -151,7 +151,7 @@ public partial class ModelsControllerTests
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var response = Assert.IsType<TestResponse>(okResult.Value);
-        Assert.Equal(4, response.Results.Length);
+        Assert.Equal(4, response.Results.Count);
         Assert.All(response.Results, r => Assert.False(r.Success));
         Assert.All(response.Results, r => Assert.NotNull(r.Error));
     }

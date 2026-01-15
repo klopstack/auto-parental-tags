@@ -520,6 +520,7 @@ public class LibraryMonitorTests : IAsyncLifetime
         var mockAiService = new Mock<IAiService>();
         mockAiService.Setup(x => x.DetermineTargetAudienceAsync(
                 It.IsAny<string>(),
+                It.IsAny<string>(),
                 It.IsAny<int?>(),
                 It.IsAny<string?>(),
                 It.IsAny<string?>(),

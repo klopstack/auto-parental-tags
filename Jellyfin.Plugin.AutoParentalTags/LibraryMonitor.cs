@@ -172,6 +172,7 @@ public class LibraryMonitor : ILibraryPostScanTask
 
         // Always report 100% completion at the end
         progress?.Report(100);
+        }
     }
 
     /// <summary>

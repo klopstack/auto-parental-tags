@@ -293,6 +293,7 @@ public class GeminiServiceTests
         // Act & Assert - Attempting to determine audience without a prompt should throw
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await service.DetermineTargetAudienceAsync(
+                "movie",
                 "Test Movie",
                 2020,
                 "A test movie",
@@ -306,9 +307,9 @@ public class GeminiServiceTests
             x => x.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Empty or whitespace prompt template")),
+                It.Is<It.IsAnyType>((v, t) => v != null && ((object)v).ToString()!.Contains("Empty or whitespace prompt template")),
                 It.IsAny<Exception>(),
-                It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.AtLeastOnce());
     }
 

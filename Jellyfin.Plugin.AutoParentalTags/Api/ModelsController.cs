@@ -36,6 +36,8 @@ public class ModelsController : ControllerBase
     /// Runs a small self-test using example items and the provided configuration.
     /// Returns classification results and whether each matched the expected category.
     /// </summary>
+    /// <param name="request">The test request containing provider configuration and prompt template.</param>
+    /// <returns>A <see cref="TestResponse"/> wrapped in an ActionResult containing the results of each test.</returns>
     [HttpPost("Test")]
     public async Task<ActionResult<TestResponse>> RunTests([FromBody] TestRequest request)
     {
@@ -107,7 +109,13 @@ public class ModelsController : ControllerBase
                 }
             }
 
-            return Ok(new TestResponse { Results = results.ToArray() });
+            var responseObj = new TestResponse();
+            foreach (var r in results)
+            {
+                responseObj.Results.Add(r);
+            }
+
+            return Ok(responseObj);
         }
         catch (System.Exception ex)
         {
@@ -119,6 +127,8 @@ public class ModelsController : ControllerBase
     /// <summary>
     /// Validates the supplied plugin configuration. Ensures required fields like PromptTemplate are present.
     /// </summary>
+    /// <param name="config">The plugin configuration to validate.</param>
+    /// <returns>HTTP 200 OK if valid; otherwise a BadRequest with error details.</returns>
     [HttpPost("ValidateConfig")]
     public ActionResult ValidateConfig([FromBody] Configuration.PluginConfiguration config)
     {
@@ -134,11 +144,12 @@ public class ModelsController : ControllerBase
 
         return Ok();
     }
+
     /// <summary>
     /// Gets available models for the specified provider.
     /// </summary>
     /// <param name="request">The request containing provider, API key, and endpoint.</param>
-    /// <returns>Array of model names.</returns>
+    /// <returns>An array of model names available for the configured provider.</returns>
     [HttpPost("Models")]
     public async Task<ActionResult<string[]>> GetModels([FromBody] ModelsRequest request)
     {

@@ -15,7 +15,7 @@ namespace Jellyfin.Plugin.AutoParentalTags.Tests.Api;
 /// <summary>
 /// Tests for ModelsController.
 /// </summary>
-public class ModelsControllerTests
+public partial class ModelsControllerTests
 {
     /// <summary>
     /// Tests that GetModels returns models for valid provider.
