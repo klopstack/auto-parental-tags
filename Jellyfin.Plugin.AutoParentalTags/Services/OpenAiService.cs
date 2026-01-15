@@ -20,6 +20,7 @@ public class OpenAiService : IAiService, IDisposable
     private string? _apiKey;
     private string _endpoint = "https://api.openai.com/v1/chat/completions";
     private string _modelName = "gpt-3.5-turbo";
+    private string? _promptTemplate;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenAiService"/> class.
@@ -92,19 +93,48 @@ public class OpenAiService : IAiService, IDisposable
         }
     }
 
+    /// <summary>
+    /// Sets the prompt template to use for AI requests.
+    /// </summary>
+    /// <param name="promptTemplate">The prompt template.</param>
+    public void SetPromptTemplate(string promptTemplate)
+    {
+        if (string.IsNullOrWhiteSpace(promptTemplate))
+        {
+            // Explicitly clear the prompt template when an empty or whitespace value is provided.
+            _promptTemplate = null;
+            // Treat this as an error: an empty prompt will prevent classification.
+            _logger.LogError("Empty or whitespace prompt template provided; clearing existing prompt template.");
+            return;
+        }
+
+        _promptTemplate = promptTemplate;
+        _logger.LogDebug("Prompt template set (length: {Length})", promptTemplate.Length);
+    }
+
     /// <inheritdoc />
     public async Task<string?> DetermineTargetAudienceAsync(
+        string itemType,
         string title,
         int? year,
         string? overview,
         string? officialRating,
-        string[]? genres)
+        string[]? genres,
+        string[]? existingTags = null,
+        string[]? studios = null)
     {
+        if (string.IsNullOrEmpty(_promptTemplate))
+        {
+            _logger.LogError("Prompt template is not configured");
+            throw new InvalidOperationException("Prompt template must be configured before determining target audience");
+        }
+
         try
         {
-            var prompt = BuildPrompt(title, year, overview, officialRating, genres);
+            var prompt = BuildPrompt(itemType, title, year, overview, officialRating, genres, existingTags, studios, _promptTemplate);
 
             _logger.LogDebug("Requesting audience classification for '{Title}' ({Year})", SanitizeForLog(title), year);
+            _logger.LogDebug("Prompt for '{Title}':\n{Prompt}", SanitizeForLog(title), prompt);
 
             var requestBody = new
             {
@@ -161,6 +191,7 @@ public class OpenAiService : IAiService, IDisposable
 
                 if (!string.IsNullOrEmpty(responseText))
                 {
+                    _logger.LogDebug("Raw API response for '{Title}': {Response}", SanitizeForLog(title), SanitizeForLog(responseText));
                     var tag = ParseAudienceTag(responseText);
                     _logger.LogInformation("Classified '{Title}' ({Year}) as '{Tag}'", SanitizeForLog(title), year, tag);
                     return tag;
@@ -178,38 +209,35 @@ public class OpenAiService : IAiService, IDisposable
     }
 
     private static string BuildPrompt(
+        string itemType,
         string title,
         int? year,
         string? overview,
         string? officialRating,
-        string[]? genres)
+        string[]? genres,
+        string[]? existingTags,
+        string[]? studios,
+        string promptTemplate)
     {
-        var prompt = $@"Analyze this movie and determine its TARGET AUDIENCE (not content rating).
-Consider that target audience is different from content appropriateness:
-- A PG movie from the 1970s might be targeted at adults despite being appropriate for children
-- A PG-13 action movie might be targeted specifically at teenagers
-- An unrated Christmas special might be clearly targeted at kids
+        if (string.IsNullOrEmpty(promptTemplate))
+        {
+            throw new ArgumentNullException(nameof(promptTemplate), "Prompt template cannot be null or empty");
+        }
 
-Movie Information:
-Title: {title}
-Year: {year?.ToString(CultureInfo.InvariantCulture) ?? "Unknown"}
-Official Rating: {officialRating ?? "Not Rated"}
-Genres: {(genres?.Length > 0 ? string.Join(", ", genres) : "Unknown")}
-Overview: {overview ?? "No overview available"}
+        var itemLower = (itemType ?? "item").ToLowerInvariant();
+        var itemCapitalized = char.ToUpperInvariant(itemLower[0]) + itemLower.Substring(1);
 
-Respond with ONLY ONE of these three options based on the PRIMARY target audience:
-- kids (targeted at children, typically ages 2-11)
-- teens (targeted at teenagers, typically ages 12-17)
-- adults (targeted at mature audiences, ages 18+)
-
-Consider:
-1. The film's marketing and intended demographic
-2. Themes and subject matter complexity
-3. Historical context (pre-1990 PG films often targeted adults)
-4. Whether it's a franchise aimed at kids/teens/adults
-5. The sophistication level of storytelling
-
-Respond with just one word: kids, teens, or adults";
+        // Replace placeholders
+        var prompt = promptTemplate
+            .Replace("{itemType}", itemLower, StringComparison.OrdinalIgnoreCase)
+            .Replace("{ItemType}", itemCapitalized, StringComparison.Ordinal)
+            .Replace("{title}", title, StringComparison.Ordinal)
+            .Replace("{year}", year?.ToString(CultureInfo.InvariantCulture) ?? "Unknown", StringComparison.Ordinal)
+            .Replace("{studios}", studios?.Length > 0 ? string.Join(", ", studios) : "Unknown", StringComparison.Ordinal)
+            .Replace("{rating}", officialRating ?? "Not Rated", StringComparison.Ordinal)
+            .Replace("{genres}", genres?.Length > 0 ? string.Join(", ", genres) : "Unknown", StringComparison.Ordinal)
+            .Replace("{tags}", existingTags?.Length > 0 ? string.Join(", ", existingTags) : "None", StringComparison.Ordinal)
+            .Replace("{overview}", overview ?? "No overview available", StringComparison.Ordinal);
 
         return prompt;
     }
@@ -229,6 +257,11 @@ Respond with just one word: kids, teens, or adults";
             || response.Contains("teenagers", StringComparison.OrdinalIgnoreCase))
         {
             return "teens";
+        }
+
+        if (response.Contains("family", StringComparison.OrdinalIgnoreCase))
+        {
+            return "family";
         }
 
         if (response.Contains("adults", StringComparison.OrdinalIgnoreCase)

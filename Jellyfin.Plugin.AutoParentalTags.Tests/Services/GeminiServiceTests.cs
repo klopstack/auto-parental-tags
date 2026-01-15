@@ -14,6 +14,8 @@ namespace Jellyfin.Plugin.AutoParentalTags.Tests.Services;
 /// </summary>
 public class GeminiServiceTests
 {
+    private const string TestPromptTemplate = "Test {itemType}: {title} ({year}) - {rating} - {genres} - {overview}";
+
     /// <summary>
     /// Tests that GeminiService can be instantiated.
     /// </summary>
@@ -98,25 +100,26 @@ public class GeminiServiceTests
     }
 
     /// <summary>
-    /// Tests that DetermineTargetAudienceAsync returns null when API key is not set.
+    /// Tests that DetermineTargetAudienceAsync throws InvalidOperationException when API key is not set.
     /// </summary>
     [Fact]
-    public async Task DetermineTargetAudienceAsync_WithoutApiKey_ShouldReturnNull()
+    public async Task DetermineTargetAudienceAsync_WithoutApiKey_ShouldThrowInvalidOperationException()
     {
         // Arrange
         var mockLogger = new Mock<ILogger<GeminiService>>();
         using var service = new GeminiService(mockLogger.Object);
 
-        // Act
-        var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
-            2020,
-            "A test movie",
-            "PG",
-            new[] { "Action", "Adventure" });
-
-        // Assert
-        Assert.Null(result);
+        // Act & Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Movie",
+                2020,
+                "A test movie",
+                "PG",
+                new[] { "Action", "Adventure" },
+                null,
+                null));
     }
 
     /// <summary>
@@ -143,14 +146,18 @@ public class GeminiServiceTests
         var mockLogger = new Mock<ILogger<GeminiService>>();
         using var service = new GeminiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
+            "movie",
             "Test Movie",
             null,
             "A test movie",
             "PG",
-            new[] { "Action" });
+            new[] { "Action" },
+            null,
+            null);
 
         // Assert - Returns null because we can't actually call the API
         Assert.Null(result);
@@ -166,14 +173,18 @@ public class GeminiServiceTests
         var mockLogger = new Mock<ILogger<GeminiService>>();
         using var service = new GeminiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
+            "movie",
             "Test Movie",
             2020,
             null,
             "PG",
-            new[] { "Action" });
+            new[] { "Action" },
+            null,
+            null);
 
         // Assert - Returns null because we can't actually call the API
         Assert.Null(result);
@@ -189,14 +200,18 @@ public class GeminiServiceTests
         var mockLogger = new Mock<ILogger<GeminiService>>();
         using var service = new GeminiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
+            "movie",
             "Test Movie",
             2020,
             "A test movie",
             null,
-            new[] { "Action" });
+            new[] { "Action" },
+            null,
+            null);
 
         // Assert - Returns null because we can't actually call the API
         Assert.Null(result);
@@ -212,13 +227,15 @@ public class GeminiServiceTests
         var mockLogger = new Mock<ILogger<GeminiService>>();
         using var service = new GeminiService(mockLogger.Object);
         service.SetApiKey("test-key");
+        service.SetPromptTemplate(TestPromptTemplate);
 
         // Act
-        var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+        var result = await service.DetermineTargetAudienceAsync(            "movie",            "Test Movie",
             2020,
             "A test movie",
             "PG",
+            null,
+            null,
             null);
 
         // Assert - Returns null because we can't actually call the API
@@ -259,6 +276,41 @@ public class GeminiServiceTests
         // Assert - Should return empty array on error
         Assert.NotNull(result);
         Assert.IsType<string[]>(result);
+    }
+
+    /// <summary>
+    /// Tests that providing an empty or whitespace prompt will clear the template, log an error, and cause DetermineTargetAudienceAsync to fail.
+    /// </summary>
+    [Fact]
+    public async Task SetPromptTemplate_Empty_ShouldLogErrorAndThrowOnDetermine()
+    {
+        // Arrange
+        var mockLogger = new Mock<ILogger<GeminiService>>();
+        using var service = new GeminiService(mockLogger.Object);
+        service.SetApiKey("test-key");
+        service.SetPromptTemplate(string.Empty);
+
+        // Act & Assert - Attempting to determine audience without a prompt should throw
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Movie",
+                2020,
+                "A test movie",
+                "PG",
+                new[] { "Action" },
+                null,
+                null));
+
+        // Verify that an error was logged about clearing the prompt template
+        mockLogger.Verify(
+            x => x.Log(
+                LogLevel.Error,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v != null && ((object)v).ToString()!.Contains("Empty or whitespace prompt template")),
+                It.IsAny<Exception>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+            Times.AtLeastOnce());
     }
 
     /// <summary>

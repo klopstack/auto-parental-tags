@@ -110,4 +110,24 @@ public class AiServiceFactoryTests
         // Assert
         Assert.NotNull(factory);
     }
+
+    /// <summary>
+    /// Tests that factory throws when PromptTemplate is empty or whitespace.
+    /// </summary>
+    [Fact]
+    public void CreateService_WithEmptyPromptTemplate_ShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var factory = new AiServiceFactory(NullLoggerFactory.Instance);
+        var config = new PluginConfiguration
+        {
+            Provider = AiProvider.OpenAI,
+            ApiKey = "test-key",
+            ModelName = "gpt-4",
+            PromptTemplate = string.Empty
+        };
+
+        // Act & Assert
+        Assert.Throws<InvalidOperationException>(() => factory.CreateService(config));
+    }
 }

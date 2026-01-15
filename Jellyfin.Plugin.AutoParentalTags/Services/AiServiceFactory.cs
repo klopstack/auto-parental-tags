@@ -51,6 +51,20 @@ public class AiServiceFactory
         // Set model name for all services
         service.SetModelName(config.ModelName);
 
+        // Set prompt template if provided
+        if (!string.IsNullOrEmpty(config.PromptTemplate))
+        {
+            service.SetPromptTemplate(config.PromptTemplate);
+        }
+
+        // Validate prompt template is configured; unlike other settings this is mandatory for classification
+        if (string.IsNullOrWhiteSpace(config.PromptTemplate))
+        {
+            var logger = _loggerFactory.CreateLogger<AiServiceFactory>();
+            logger.LogError("Prompt template is not configured in plugin configuration. Set 'PromptTemplate' in plugin settings.");
+            throw new InvalidOperationException("Prompt template is not configured. Please configure 'PromptTemplate' in the plugin settings before creating an AI service.");
+        }
+
         return service;
     }
 }

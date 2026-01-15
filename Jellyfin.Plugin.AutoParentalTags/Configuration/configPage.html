@@ -55,7 +55,7 @@
                             <input id="EnableAutoTagging" name="EnableAutoTagging" type="checkbox" is="emby-checkbox" />
                             <span>Enable Automatic Tagging</span>
                         </label>
-                        <div class="fieldDescription">Automatically tag movies with audience categories (kids, teens, adults)</div>
+                        <div class="fieldDescription">Automatically tag movies and TV series with audience categories (kids, teens, family, adults)</div>
                     </div>
 
                     <div class="checkboxContainer checkboxContainer-withDescription">
@@ -63,7 +63,7 @@
                             <input id="ProcessOnLibraryScan" name="ProcessOnLibraryScan" type="checkbox" is="emby-checkbox" />
                             <span>Process on Library Scan</span>
                         </label>
-                        <div class="fieldDescription">Automatically process new movies when library is scanned</div>
+                        <div class="fieldDescription">Automatically process new content when library is scanned</div>
                     </div>
 
                     <div class="checkboxContainer checkboxContainer-withDescription">
@@ -71,13 +71,57 @@
                             <input id="OverwriteExistingTags" name="OverwriteExistingTags" type="checkbox" is="emby-checkbox" />
                             <span>Overwrite Existing Tags</span>
                         </label>
-                        <div class="fieldDescription">Replace existing audience tags when processing movies</div>
+                        <div class="fieldDescription">Replace existing audience tags when processing content</div>
                     </div>
 
-                    <div>
+                    <h2>Prompt Configuration</h2>
+
+                    <div class="inputContainer">
+                        <label class="inputLabel" for="PromptTemplate" style="display: block; margin-bottom: 8px;">AI Prompt Template</label>
+                        <textarea id="PromptTemplate" name="PromptTemplate" is="emby-textarea" rows="20" class="emby-textarea" style="font-family: monospace; font-size: 12px; width: 100%; min-height: 400px; box-sizing: border-box;"></textarea>
+                        <div class="fieldDescription">
+                            Customize the prompt sent to the AI. Available placeholders:
+                            <ul style="margin: 5px 0; padding-left: 20px;">
+                                <li><code>{itemType}</code> - "movie" or "series" (lowercase)</li>
+                                <li><code>{ItemType}</code> - "Movie" or "Series" (capitalized)</li>
+                                <li><code>{title}</code> - Item title</li>
+                                <li><code>{year}</code> - Release year</li>
+                                <li><code>{rating}</code> - Official rating (PG, PG-13, etc.)</li>
+                                <li><code>{genres}</code> - Comma-separated genres</li>
+                                <li><code>{studios}</code> - Comma-separated studios</li>
+                                <li><code>{tags}</code> - Comma-separated existing item tags</li>
+                                <li><code>{overview}</code> - Plot summary</li>
+                            </ul>
+                            AI must respond with one of: <strong>kids</strong>, <strong>teens</strong>, <strong>family</strong>, or <strong>adults</strong>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap: 8px; align-items: center;">
                         <button is="emby-button" type="submit" class="raised button-submit block emby-button">
                             <span>Save</span>
                         </button>
+                        <button is="emby-button" type="button" id="RestoreDefaultPrompt" class="raised emby-button" style="margin-left: 8px;">
+                            <span>Restore Default Prompt</span>
+                        </button>
+                        <button is="emby-button" type="button" id="RunTestsButton" class="raised emby-button" style="margin-left: 8px;">
+                            <span>Run Tests</span>
+                        </button>
+                        <div id="PromptValidationMessage" style="color: #b00020; margin-left: 8px; display: none;">Prompt template cannot be empty.</div>
+                    </div>
+
+                    <div id="TestResults" style="margin-top: 16px; display: none;">
+                        <h3>Test Results</h3>
+                        <table id="TestResultsTable" style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left; padding:4px;">Title</th>
+                                    <th style="text-align:left; padding:4px;">Expected</th>
+                                    <th style="text-align:left; padding:4px;">Actual</th>
+                                    <th style="text-align:left; padding:4px;">Result</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </form>
             </div>
@@ -115,7 +159,7 @@
                     apiKeyInput.setAttribute('required', 'required');
                     apiKeyDescription.innerHTML = 'Google API key - Get it at <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a>';
                     endpointContainer.style.display = 'none';
-                    modelDescription.textContent = 'Model to use (e.g., gemini-pro, gemini-1.5-pro, gemini-1.5-flash)';
+                    modelDescription.textContent = 'Model to use (e.g., gemini-pro, gemini-2.5-pro, gemini-2.5-flash-lite)';
                 }
             }
 
@@ -148,12 +192,18 @@
                         type: 'POST',
                         url: ApiClient.getUrl('AutoParentalTags/Models'),
                         contentType: 'application/json',
-                        data: JSON.stringify(requestBody)
+                        data: JSON.stringify(requestBody),
+                        dataType: 'json'
                     });
 
-                    if (response && response.length > 0) {
+                    console.log('Models API response:', response);
+
+                    // Handle response - it should be an array
+                    var models = Array.isArray(response) ? response : [];
+
+                    if (models.length > 0) {
                         modelSelect.innerHTML = '';
-                        response.forEach(function(model) {
+                        models.forEach(function(model) {
                             var option = document.createElement('option');
                             option.value = model;
                             option.textContent = model;
@@ -164,10 +214,11 @@
                         });
 
                         // If no model was selected, select the first one
-                        if (!currentValue || !response.includes(currentValue)) {
+                        if (!currentValue || !models.includes(currentValue)) {
                             modelSelect.selectedIndex = 0;
                         }
                     } else {
+                        console.warn('No models returned from API');
                         modelSelect.innerHTML = '<option value="">No models available</option>';
                     }
                 } catch (error) {
@@ -196,6 +247,137 @@
                 fetchModels();
             });
 
+            // Default prompt template (matches PluginConfiguration default)
+            var defaultPromptTemplate = `**Persona:** Act as a film classification expert specializing in identifying target audiences based on content and ratings.
+
+**Context:** You are provided with detailed information about a film, including its title, year, studio, rating, genres, and a brief overview. You will also be given a set of definitions for target audience categories (kids, family, teens, adults) and specific classification rules.
+
+**Task:** Analyze the provided film information and, *strictly adhering to the provided definitions and classification rules*, determine its PRIMARY TARGET AUDIENCE.
+
+**Input Data:**
+*   **Title:** {title}
+*   **Year:** {year}
+*   **Studio(s):** {studios}
+*   **Official Rating:** {rating}
+*   **Genres:** {genres}
+*   **Overview:** {overview}
+
+**Definitions:**
+*   kids: Primary design for children (2-11). (Ex: 'Bluey', 'Cocomelon')
+*   family: Designed for shared viewing; appeals to kids AND parents. (Ex: 'Finding Nemo', 'Elf', 'Encanto', 'Aladdin')
+*   teens: Adolescent themes or stylized PG-13 action. (Ex: 'Spider-Man', 'Twilight')
+*   adults: Mature themes or R-rated content. (Ex: 'Blade Runner', 'John Wick', 'Die Hard')
+
+**Classification Examples (Follow this logic strictly):**
+*   'Aladdin' -> family
+*   'Finding Nemo' -> family
+*   'Elf' -> family
+*   'The Emperor's New Groove' -> family
+*   'The Bourne Identity' -> adults
+*   'Doctor Strange' -> teens
+*   'Rick and Morty' -> adults
+*   'Bill & Ted's Excellent Adventure' -> teens
+
+**Classification Rules:**
+1.  MANDATORY: All Pixar, Disney Animation, and Dreamworks films are 'family' by default, regardless of ""emotional depth.""
+2.  Use 'adults' for R-rated content or mature thrillers (e.g., James Bond, Bourne).
+3.  If a film is a ""blockbuster"" or ""holiday classic,"" default to 'family' or 'teens'.
+4. Consider the cover art style. If the art features scantily clad women (like classic Bond films) then it's not family.
+
+**Format/Output Constraints:** Respond with *only one word*: kids, teens, family, or adults. Do not include any additional text or explanation.
+
+**Goal:** To accurately categorize films based on their target audience using a defined set of criteria.`;
+
+            function validatePromptTemplate() {
+                var prompt = document.querySelector('#PromptTemplate').value || '';
+                var saveButton = document.querySelector('.button-submit');
+                var msg = document.querySelector('#PromptValidationMessage');
+                if (prompt.trim().length === 0) {
+                    saveButton.disabled = true;
+                    msg.style.display = 'block';
+                    return false;
+                }
+                saveButton.disabled = false;
+                msg.style.display = 'none';
+                return true;
+            }
+
+            document.querySelector('#PromptTemplate').addEventListener('input', function () {
+                validatePromptTemplate();
+            });
+
+            document.querySelector('#RestoreDefaultPrompt').addEventListener('click', function () {
+                document.querySelector('#PromptTemplate').value = defaultPromptTemplate;
+                validatePromptTemplate();
+            });
+
+            document.querySelector('#RunTestsButton').addEventListener('click', async function () {
+                if (!validatePromptTemplate()) {
+                    return;
+                }
+
+                var runButton = document.querySelector('#RunTestsButton');
+                runButton.disabled = true;
+
+                var requestBody = {
+                    provider: document.querySelector('#Provider').value,
+                    apiKey: document.querySelector('#ApiKey').value,
+                    endpoint: document.querySelector('#ApiEndpoint').value,
+                    modelName: document.querySelector('#ModelName').value,
+                    promptTemplate: document.querySelector('#PromptTemplate').value
+                };
+
+                try {
+                    var response = await ApiClient.fetch({
+                        type: 'POST',
+                        url: ApiClient.getUrl('AutoParentalTags/Test'),
+                        contentType: 'application/json',
+                        data: JSON.stringify(requestBody),
+                        dataType: 'json'
+                    });
+
+                    var resultsContainer = document.querySelector('#TestResults');
+                    var tbody = document.querySelector('#TestResultsTable tbody');
+                    tbody.innerHTML = '';
+
+                    if (Array.isArray(response.Results)) {
+                        response.Results.forEach(function (r) {
+                            var tr = document.createElement('tr');
+                            tr.style.borderTop = '1px solid #ddd';
+
+                            var tdTitle = document.createElement('td');
+                            tdTitle.textContent = r.Title;
+                            tdTitle.style.padding = '4px';
+
+                            var tdExpected = document.createElement('td');
+                            tdExpected.textContent = r.Expected;
+                            tdExpected.style.padding = '4px';
+
+                            var tdActual = document.createElement('td');
+                            tdActual.textContent = r.Actual || '(no response)';
+                            tdActual.style.padding = '4px';
+
+                            var tdResult = document.createElement('td');
+                            tdResult.textContent = r.Success ? 'PASS' : 'FAIL';
+                            tdResult.style.padding = '4px';
+                            tdResult.style.color = r.Success ? '#2e7d32' : '#b00020';
+
+                            tr.appendChild(tdTitle);
+                            tr.appendChild(tdExpected);
+                            tr.appendChild(tdActual);
+                            tr.appendChild(tdResult);
+                            tbody.appendChild(tr);
+                        });
+
+                        resultsContainer.style.display = 'block';
+                    }
+                } catch (err) {
+                    Dashboard.showError('Error running tests: ' + (err && err.message ? err.message : err));
+                } finally {
+                    runButton.disabled = false;
+                }
+            });
+
             document.querySelector('#AutoParentalTagsConfigPage')
                 .addEventListener('pageshow', function() {
                     Dashboard.showLoadingMsg();
@@ -207,6 +389,7 @@
                         document.querySelector('#EnableAutoTagging').checked = config.EnableAutoTagging;
                         document.querySelector('#ProcessOnLibraryScan').checked = config.ProcessOnLibraryScan;
                         document.querySelector('#OverwriteExistingTags').checked = config.OverwriteExistingTags;
+                        document.querySelector('#PromptTemplate').value = config.PromptTemplate || '';
 
                         updateFieldVisibility();
 
@@ -225,6 +408,9 @@
                         fetchModels().finally(function() {
                             Dashboard.hideLoadingMsg();
                         });
+
+                        // Initial validation for prompt template
+                        validatePromptTemplate();
                     });
                 });
 
@@ -241,9 +427,33 @@
                         config.EnableAutoTagging = document.querySelector('#EnableAutoTagging').checked;
                         config.ProcessOnLibraryScan = document.querySelector('#ProcessOnLibraryScan').checked;
                         config.OverwriteExistingTags = document.querySelector('#OverwriteExistingTags').checked;
+                        config.PromptTemplate = document.querySelector('#PromptTemplate').value;
 
-                        ApiClient.updatePluginConfiguration(AutoParentalTagsConfig.pluginUniqueId, config).then(function (result) {
-                            Dashboard.processPluginConfigurationUpdateResult(result);
+                        // Server-side validation before saving
+                        ApiClient.fetch({
+                            type: 'POST',
+                            url: ApiClient.getUrl('AutoParentalTags/ValidateConfig'),
+                            contentType: 'application/json',
+                            data: JSON.stringify(config),
+                            dataType: 'json'
+                        }).then(function () {
+                            ApiClient.updatePluginConfiguration(AutoParentalTagsConfig.pluginUniqueId, config).then(function (result) {
+                                Dashboard.processPluginConfigurationUpdateResult(result);
+                            }).catch(function(err){
+                                Dashboard.showError('Error saving configuration: ' + (err && err.message ? err.message : err));
+                            }).finally(function(){
+                                Dashboard.hideLoadingMsg();
+                            });
+                        }).catch(function(err){
+                            Dashboard.hideLoadingMsg();
+                            var message = (err && err.message) ? err.message : 'Invalid configuration';
+                            try {
+                                // Try to read error message from server response
+                                if (err && err.responseJSON && err.responseJSON.error) {
+                                    message = err.responseJSON.error;
+                                }
+                            } catch(e) {}
+                            Dashboard.showError('Configuration validation failed: ' + message);
                         });
                     });
 

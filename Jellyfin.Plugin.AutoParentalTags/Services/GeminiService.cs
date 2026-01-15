@@ -18,7 +18,8 @@ public class GeminiService : IAiService, IDisposable
     private readonly ILogger<GeminiService> _logger;
     private readonly HttpClient _httpClient;
     private string? _apiKey;
-    private string _modelName = "gemini-pro";
+    private string _modelName = "gemini-2.5-flash-lite";
+    private string? _promptTemplate;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GeminiService"/> class.
@@ -82,32 +83,64 @@ public class GeminiService : IAiService, IDisposable
     }
 
     /// <summary>
-    /// Analyzes movie metadata to determine target audience.
+    /// Sets the prompt template to use for AI requests.
     /// </summary>
-    /// <param name="title">Movie title.</param>
+    /// <param name="promptTemplate">The prompt template.</param>
+    public void SetPromptTemplate(string promptTemplate)
+    {
+        if (string.IsNullOrWhiteSpace(promptTemplate))
+        {
+            // Explicitly clear the prompt template when an empty or whitespace value is provided.
+            _promptTemplate = null;
+            // Treat this as an error: an empty prompt will prevent classification.
+            _logger.LogError("Empty or whitespace prompt template provided; clearing existing prompt template.");
+            return;
+        }
+
+        _promptTemplate = promptTemplate;
+        _logger.LogDebug("Prompt template set (length: {Length})", promptTemplate.Length);
+    }
+
+    /// <summary>
+    /// Analyzes item metadata to determine target audience.
+    /// </summary>
+    /// <param name="itemType">Lowercase item type (e.g., "movie" or "series").</param>
+    /// <param name="title">Item title.</param>
     /// <param name="year">Release year.</param>
-    /// <param name="overview">Movie overview/synopsis.</param>
-    /// <param name="officialRating">Official MPAA rating (if available).</param>
-    /// <param name="genres">Movie genres.</param>
+    /// <param name="overview">Overview/synopsis.</param>
+    /// <param name="officialRating">Official rating (if available).</param>
+    /// <param name="genres">Genres for the item.</param>
+    /// <param name="existingTags">Existing tags on the item.</param>
+    /// <param name="studios">Production studios.</param>
     /// <returns>A task representing the asynchronous operation, containing the target audience tag.</returns>
     public async Task<string?> DetermineTargetAudienceAsync(
+        string itemType,
         string title,
         int? year,
         string? overview,
         string? officialRating,
-        string[]? genres)
+        string[]? genres,
+        string[]? existingTags = null,
+        string[]? studios = null)
     {
         if (string.IsNullOrEmpty(_apiKey))
         {
-            _logger.LogWarning("Gemini API key is not configured");
-            return null;
+            _logger.LogError("Gemini API key is not configured");
+            throw new InvalidOperationException("API key must be configured before determining target audience");
+        }
+
+        if (string.IsNullOrEmpty(_promptTemplate))
+        {
+            _logger.LogError("Prompt template is not configured");
+            throw new InvalidOperationException("Prompt template must be configured before determining target audience");
         }
 
         try
         {
-            var prompt = BuildPrompt(title, year, overview, officialRating, genres);
+            var prompt = BuildPrompt(itemType, title, year, overview, officialRating, genres, existingTags, studios, _promptTemplate);
 
             _logger.LogDebug("Requesting audience classification for '{Title}' ({Year})", SanitizeForLog(title), year);
+            _logger.LogDebug("Prompt for '{Title}':\n{Prompt}", SanitizeForLog(title), prompt);
 
             var requestBody = new
             {
@@ -155,6 +188,7 @@ public class GeminiService : IAiService, IDisposable
 
                     if (!string.IsNullOrEmpty(responseText))
                     {
+                        _logger.LogDebug("Raw Gemini response for '{Title}': {Response}", SanitizeForLog(title), SanitizeForLog(responseText));
                         var tag = ParseAudienceTag(responseText);
                         _logger.LogInformation("Classified '{Title}' ({Year}) as '{Tag}'", SanitizeForLog(title), year, tag);
                         return tag;
@@ -173,38 +207,35 @@ public class GeminiService : IAiService, IDisposable
     }
 
     private static string BuildPrompt(
+        string itemType,
         string title,
         int? year,
         string? overview,
         string? officialRating,
-        string[]? genres)
+        string[]? genres,
+        string[]? existingTags,
+        string[]? studios,
+        string promptTemplate)
     {
-        var prompt = $@"Analyze this movie and determine its TARGET AUDIENCE (not content rating).
-Consider that target audience is different from content appropriateness:
-- A PG movie from the 1970s might be targeted at adults despite being appropriate for children
-- A PG-13 action movie might be targeted specifically at teenagers
-- An unrated Christmas special might be clearly targeted at kids
+        if (string.IsNullOrEmpty(promptTemplate))
+        {
+            throw new ArgumentNullException(nameof(promptTemplate), "Prompt template cannot be null or empty");
+        }
 
-Movie Information:
-Title: {title}
-Year: {year?.ToString(CultureInfo.InvariantCulture) ?? "Unknown"}
-Official Rating: {officialRating ?? "Not Rated"}
-Genres: {(genres?.Length > 0 ? string.Join(", ", genres) : "Unknown")}
-Overview: {overview ?? "No overview available"}
+        var itemLower = (itemType ?? "item").ToLowerInvariant();
+        var itemCapitalized = char.ToUpperInvariant(itemLower[0]) + itemLower.Substring(1);
 
-Respond with ONLY ONE of these three options based on the PRIMARY target audience:
-- kids (targeted at children, typically ages 2-11)
-- teens (targeted at teenagers, typically ages 12-17)
-- adults (targeted at mature audiences, ages 18+)
-
-Consider:
-1. The film's marketing and intended demographic
-2. Themes and subject matter complexity
-3. Historical context (pre-1990 PG films often targeted adults)
-4. Whether it's a franchise aimed at kids/teens/adults
-5. The sophistication level of storytelling
-
-Respond with just one word: kids, teens, or adults";
+        // Replace placeholders
+        var prompt = promptTemplate
+            .Replace("{itemType}", itemLower, StringComparison.OrdinalIgnoreCase)
+            .Replace("{ItemType}", itemCapitalized, StringComparison.Ordinal)
+            .Replace("{title}", title, StringComparison.Ordinal)
+            .Replace("{year}", year?.ToString(CultureInfo.InvariantCulture) ?? "Unknown", StringComparison.Ordinal)
+            .Replace("{studios}", studios?.Length > 0 ? string.Join(", ", studios) : "Unknown", StringComparison.Ordinal)
+            .Replace("{rating}", officialRating ?? "Not Rated", StringComparison.Ordinal)
+            .Replace("{genres}", genres?.Length > 0 ? string.Join(", ", genres) : "Unknown", StringComparison.Ordinal)
+            .Replace("{tags}", existingTags?.Length > 0 ? string.Join(", ", existingTags) : "None", StringComparison.Ordinal)
+            .Replace("{overview}", overview ?? "No overview available", StringComparison.Ordinal);
 
         return prompt;
     }
@@ -214,6 +245,28 @@ Respond with just one word: kids, teens, or adults";
         // Clean up the response and extract the tag
         response = response.ToLower(CultureInfo.InvariantCulture).Trim();
 
+        // Check for exact single-word matches first
+        if (response == "kids" || response == "children")
+        {
+            return "kids";
+        }
+
+        if (response == "teens" || response == "teenagers")
+        {
+            return "teens";
+        }
+
+        if (response == "family")
+        {
+            return "family";
+        }
+
+        if (response == "adults" || response == "mature")
+        {
+            return "adults";
+        }
+
+        // Fall back to contains checks for responses with extra text
         if (response.Contains("kids", StringComparison.OrdinalIgnoreCase)
             || response.Contains("children", StringComparison.OrdinalIgnoreCase))
         {
@@ -224,6 +277,11 @@ Respond with just one word: kids, teens, or adults";
             || response.Contains("teenagers", StringComparison.OrdinalIgnoreCase))
         {
             return "teens";
+        }
+
+        if (response.Contains("family", StringComparison.OrdinalIgnoreCase))
+        {
+            return "family";
         }
 
         if (response.Contains("adults", StringComparison.OrdinalIgnoreCase)

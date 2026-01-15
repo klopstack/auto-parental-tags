@@ -9,6 +9,7 @@ using Jellyfin.Plugin.AutoParentalTags.Configuration;
 using Jellyfin.Plugin.AutoParentalTags.Services;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
+using MediaBrowser.Controller.Entities.TV;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Entities;
 using Microsoft.Extensions.Logging;
@@ -16,7 +17,7 @@ using Microsoft.Extensions.Logging;
 namespace Jellyfin.Plugin.AutoParentalTags;
 
 /// <summary>
-/// Monitors library changes and processes movies.
+/// Monitors library changes and processes movies and TV series.
 /// </summary>
 public class LibraryMonitor : ILibraryPostScanTask
 {
@@ -90,22 +91,60 @@ public class LibraryMonitor : ILibraryPostScanTask
         }
 
         // Create the appropriate AI service
-        using var aiService = _aiServiceFactory.CreateService(config);
-
-        // Get all movies
-        var movies = _libraryManager.GetItemList(new InternalItemsQuery
+        IAiService aiService;
+        try
         {
-            IncludeItemTypes = new[] { BaseItemKind.Movie },
-            IsVirtualItem = false,
-            Recursive = true
-        }).OfType<Movie>().ToList();
+            aiService = _aiServiceFactory.CreateService(config);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to create AI service: {Message}", ex.Message);
+            progress?.Report(100);
+            return;
+        }
 
-        _logger.LogInformation("Found {Count} movies to process", movies.Count);
+        using (aiService)
+        {
+        // Get all movies and series from active library folders
+        var root = _libraryManager.RootFolder;
+        if (root == null)
+        {
+            _logger.LogWarning("Library root folder is null; skipping auto-tagging run");
+            progress?.Report(100);
+            return;
+        }
+
+        var libraries = root.Children;
+        if (libraries == null || !libraries.Any())
+        {
+            _logger.LogInformation("No active library folders found to process");
+            progress?.Report(100);
+            return;
+        }
+
+        // Collect items from each library folder; guard against null returns from GetItemList
+        var allItems = libraries
+            .Where(library => library != null)
+            .SelectMany(library => _libraryManager.GetItemList(new InternalItemsQuery
+            {
+                IncludeItemTypes = new[] { BaseItemKind.Movie, BaseItemKind.Series },
+                IsVirtualItem = false,
+                IsPlaceHolder = false,
+                Parent = library,
+                Recursive = true
+            }) ?? Enumerable.Empty<BaseItem>())
+            .ToList();
+
+        _logger.LogInformation(
+            "Found {Count} items to process ({Movies} movies, {Series} series)",
+            allItems.Count,
+            allItems.OfType<Movie>().Count(),
+            allItems.OfType<Series>().Count());
 
         var processedCount = 0;
-        var totalCount = movies.Count;
+        var totalCount = allItems.Count;
 
-        foreach (var movie in movies)
+        foreach (var item in allItems)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -114,7 +153,7 @@ public class LibraryMonitor : ILibraryPostScanTask
 
             try
             {
-                await ProcessMovieAsync(movie, aiService, config.OverwriteExistingTags, cancellationToken).ConfigureAwait(false);
+                await ProcessItemAsync(item, aiService, config.OverwriteExistingTags, cancellationToken).ConfigureAwait(false);
                 processedCount++;
 
                 var progressPercent = (double)processedCount / totalCount * 100;
@@ -122,62 +161,77 @@ public class LibraryMonitor : ILibraryPostScanTask
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error processing movie '{Title}': {Message}", SanitizeForLog(movie.Name), ex.Message);
+                _logger.LogError(ex, "Error processing item '{Title}': {Message}", SanitizeForLog(item.Name), ex.Message);
             }
 
             // Add a small delay to avoid rate limiting (configurable for testing)
             await Task.Delay(_processingDelay, cancellationToken).ConfigureAwait(false);
         }
 
-        _logger.LogInformation("Completed processing {Count} movies", processedCount);
+        _logger.LogInformation("Completed processing {Count} items", processedCount);
 
         // Always report 100% completion at the end
         progress?.Report(100);
+        }
     }
 
     /// <summary>
-    /// Processes a single movie to add audience tags.
+    /// Processes a single item (movie or series) to add audience tags.
     /// </summary>
-    /// <param name="movie">The movie to process.</param>
+    /// <param name="item">The item to process.</param>
     /// <param name="aiService">The AI service to use.</param>
     /// <param name="overwriteExisting">Whether to overwrite existing tags.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    public async Task ProcessMovieAsync(
-        Movie movie,
+    public async Task ProcessItemAsync(
+        BaseItem item,
         IAiService aiService,
         bool overwriteExisting,
         CancellationToken cancellationToken = default)
     {
-        // Check if movie already has an audience tag
-        var existingTags = movie.Tags?.Where(
+        // Check if item already has an audience tag
+        var existingTags = item.Tags?.Where(
             t => t.Equals("kids", StringComparison.OrdinalIgnoreCase)
                 || t.Equals("teens", StringComparison.OrdinalIgnoreCase)
+                || t.Equals("family", StringComparison.OrdinalIgnoreCase)
                 || t.Equals("adults", StringComparison.OrdinalIgnoreCase)).ToList();
 
         if (existingTags?.Count > 0 && !overwriteExisting)
         {
             _logger.LogDebug(
-                "Movie '{Title}' already has audience tag(s): {Tags}",
-                movie.Name,
+                "{ItemType} '{Title}' already has audience tag(s): {Tags}",
+                item is Movie ? "Movie" : "Series",
+                item.Name,
                 string.Join(", ", existingTags));
             return;
         }
 
-        // Get movie metadata
-        var title = movie.Name;
-        var year = movie.ProductionYear;
-        var overview = movie.Overview;
-        var rating = movie.OfficialRating;
-        var genres = movie.Genres?.ToArray();
+        // Get item metadata
+        var title = item.Name;
+        var year = item.ProductionYear;
+        var overview = item.Overview;
+        var rating = item.OfficialRating;
+        var genres = item.Genres?.ToArray();
+        var studios = item.Studios?.ToArray();
+
+        // Get non-audience tags to pass to AI
+        var nonAudienceTags = item.Tags?.Where(t =>
+            !t.Equals("kids", StringComparison.OrdinalIgnoreCase) &&
+            !t.Equals("teens", StringComparison.OrdinalIgnoreCase) &&
+            !t.Equals("family", StringComparison.OrdinalIgnoreCase) &&
+            !t.Equals("adults", StringComparison.OrdinalIgnoreCase)).ToArray();
 
         // Call AI API
+        var itemType = item is Movie ? "movie" : item is Series ? "series" : "item";
         var audienceTag = await aiService.DetermineTargetAudienceAsync(
+            itemType,
             title,
             year,
             overview,
             rating,
-            genres).ConfigureAwait(false);
+            genres,
+            nonAudienceTags,
+            studios).ConfigureAwait(false);
 
         if (string.IsNullOrEmpty(audienceTag))
         {
@@ -188,28 +242,29 @@ public class LibraryMonitor : ILibraryPostScanTask
         // Remove old audience tags if overwriting
         if (overwriteExisting && existingTags?.Count > 0)
         {
-            var tagsList = movie.Tags?.ToList() ?? new List<string>();
+            var tagsList = item.Tags?.ToList() ?? new List<string>();
             foreach (var tag in existingTags)
             {
                 tagsList.Remove(tag);
             }
 
-            movie.Tags = tagsList.ToArray();
+            item.Tags = tagsList.ToArray();
         }
 
         // Add the new tag
-        var currentTags = movie.Tags?.ToList() ?? new List<string>();
+        var currentTags = item.Tags?.ToList() ?? new List<string>();
         if (!currentTags.Contains(audienceTag, StringComparer.OrdinalIgnoreCase))
         {
             currentTags.Add(audienceTag);
-            movie.Tags = currentTags.ToArray();
+            item.Tags = currentTags.ToArray();
 
             // Save changes
-            await movie.UpdateToRepositoryAsync(ItemUpdateType.MetadataEdit, cancellationToken).ConfigureAwait(false);
+            await item.UpdateToRepositoryAsync(ItemUpdateType.MetadataEdit, cancellationToken).ConfigureAwait(false);
 
             _logger.LogInformation(
-                "Added '{Tag}' tag to '{Title}' ({Year})",
+                "Added '{Tag}' tag to {ItemType} '{Title}' ({Year})",
                 audienceTag,
+                item is Movie ? "movie" : "series",
                 SanitizeForLog(title),
                 year);
         }

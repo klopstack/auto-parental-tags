@@ -27,20 +27,36 @@ public interface IAiService : IDisposable
     void SetModelName(string modelName);
 
     /// <summary>
-    /// Analyzes movie metadata to determine target audience.
+    /// Sets the prompt template to use for AI requests.
     /// </summary>
-    /// <param name="title">Movie title.</param>
+    /// <param name="promptTemplate">The prompt template.</param>
+    void SetPromptTemplate(string promptTemplate);
+
+    /// <summary>
+    /// Analyzes item metadata (movie or series) to determine target audience.
+    /// </summary>
+    /// <remarks>
+    /// Implementations require a non-empty prompt template to be configured (via <see cref="SetPromptTemplate(string)"/>) prior to calling this method.
+    /// If no prompt template is set, implementations may throw an <see cref="InvalidOperationException"/>.
+    /// </remarks>
+    /// <param name="itemType">The lowercase item type (e.g., "movie" or "series").</param>
+    /// <param name="title">Item title.</param>
     /// <param name="year">Release year.</param>
-    /// <param name="overview">Movie overview/synopsis.</param>
-    /// <param name="officialRating">Official MPAA rating (if available).</param>
-    /// <param name="genres">Movie genres.</param>
-    /// <returns>A task representing the asynchronous operation, containing the target audience tag (kids, teens, or adults).</returns>
+    /// <param name="overview">Overview/synopsis.</param>
+    /// <param name="officialRating">Official rating (if available).</param>
+    /// <param name="genres">Genres for the item.</param>
+    /// <param name="existingTags">Existing tags on the item.</param>
+    /// <param name="studios">Production studios.</param>
+    /// <returns>A task representing the asynchronous operation, containing the target audience tag (kids, teens, family, or adults).</returns>
     Task<string?> DetermineTargetAudienceAsync(
+        string itemType,
         string title,
         int? year,
         string? overview,
         string? officialRating,
-        string[]? genres);
+        string[]? genres,
+        string[]? existingTags = null,
+        string[]? studios = null);
 
     /// <summary>
     /// Gets a list of available models from the AI service.
