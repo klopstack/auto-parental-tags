@@ -144,14 +144,26 @@
                         requestBody.endpoint = endpoint;
                     }
 
-                    var response = await ApiClient.fetch({
+                    var httpResponse = await ApiClient.fetch({
                         type: 'POST',
                         url: ApiClient.getUrl('AutoParentalTags/Models'),
                         contentType: 'application/json',
                         data: JSON.stringify(requestBody)
                     });
 
-                    if (response && response.length > 0) {
+                    if (!httpResponse.ok) {
+                        var errorText = await httpResponse.text();
+                        throw new Error(
+                            'Model request failed: ' +
+                            httpResponse.status +
+                            ' ' +
+                            errorText
+                        );
+                    }
+
+                    var response = await httpResponse.json();
+
+                    if (Array.isArray(response) && response.length > 0) {
                         modelSelect.innerHTML = '';
                         response.forEach(function(model) {
                             var option = document.createElement('option');

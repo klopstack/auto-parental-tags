@@ -269,15 +269,40 @@ Respond with just one word: kids, teens, or adults";
             if (responseJson.RootElement.TryGetProperty("models", out var modelsArray))
             {
                 models = modelsArray.EnumerateArray()
-                    .Where(model => model.TryGetProperty("name", out var nameElement) && !string.IsNullOrEmpty(nameElement.GetString()))
+                    .Where(model =>
+                        model.TryGetProperty("name", out var nameElement)
+                        && !string.IsNullOrEmpty(nameElement.GetString())
+                        && model.TryGetProperty(
+                            "supportedGenerationMethods",
+                            out var methods)
+                        && methods.ValueKind == JsonValueKind.Array
+                        && methods.EnumerateArray().Any(method =>
+                            string.Equals(
+                                method.GetString(),
+                                "generateContent",
+                                StringComparison.OrdinalIgnoreCase)))
                     .Select(model =>
                     {
                         var fullName = model.GetProperty("name").GetString()!;
-                        // Extract model name from "models/gemini-pro" format
-                        return fullName.Contains('/', StringComparison.Ordinal) ? fullName.Split('/')[1] : fullName;
+                        const string prefix = "models/";
+
+                        return fullName.StartsWith(
+                            prefix,
+                            StringComparison.OrdinalIgnoreCase)
+                            ? fullName[prefix.Length..]
+                            : fullName;
                     })
-                    .Where(modelName => modelName.Contains("gemini", StringComparison.OrdinalIgnoreCase) &&
-                                        !modelName.Contains("embedding", StringComparison.OrdinalIgnoreCase))
+                    .Where(modelName =>
+                        modelName.Contains(
+                            "gemini",
+                            StringComparison.OrdinalIgnoreCase)
+                        && !modelName.Contains(
+                            "embedding",
+                            StringComparison.OrdinalIgnoreCase))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .OrderBy(
+                        modelName => modelName,
+                        StringComparer.OrdinalIgnoreCase)
                     .ToList();
             }
 
