@@ -15,7 +15,7 @@ public interface IAiService : IDisposable
     void SetApiKey(string apiKey);
 
     /// <summary>
-    /// Sets the API endpoint URL (for self-hosted services like LocalAI).
+    /// Sets the API endpoint URL for self-hosted services such as LocalAI.
     /// </summary>
     /// <param name="endpoint">The endpoint URL.</param>
     void SetEndpoint(string endpoint);
@@ -27,15 +27,23 @@ public interface IAiService : IDisposable
     void SetModelName(string modelName);
 
     /// <summary>
-    /// Analyzes movie metadata to determine target audience.
+    /// Analyzes movie or TV-series metadata to determine the target audience.
     /// </summary>
-    /// <param name="title">Movie title.</param>
-    /// <param name="year">Release year.</param>
-    /// <param name="overview">Movie overview/synopsis.</param>
-    /// <param name="officialRating">Official MPAA rating (if available).</param>
-    /// <param name="genres">Movie genres.</param>
-    /// <returns>A task representing the asynchronous operation, containing the target audience tag (kids, teens, or adults).</returns>
+    /// <param name="mediaType">
+    /// Human-readable media type, such as movie or TV series.
+    /// </param>
+    /// <param name="title">The movie or TV-series title.</param>
+    /// <param name="year">The release or premiere year.</param>
+    /// <param name="overview">The item overview or synopsis.</param>
+    /// <param name="officialRating">
+    /// The official content rating, when available.
+    /// </param>
+    /// <param name="genres">The item's genres.</param>
+    /// <returns>
+    /// A task containing the target audience tag: kids, teens, or adults.
+    /// </returns>
     Task<string?> DetermineTargetAudienceAsync(
+        string mediaType,
         string title,
         int? year,
         string? overview,
@@ -45,6 +53,8 @@ public interface IAiService : IDisposable
     /// <summary>
     /// Gets a list of available models from the AI service.
     /// </summary>
-    /// <returns>A task representing the asynchronous operation, containing the list of model names.</returns>
+    /// <returns>
+    /// A task containing the available model names.
+    /// </returns>
     Task<string[]> GetAvailableModelsAsync();
 }

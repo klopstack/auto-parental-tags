@@ -5,83 +5,253 @@
     <title>Auto Parental Tags</title>
 </head>
 <body>
-    <div id="AutoParentalTagsConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-select,emby-checkbox">
+    <div
+        id="AutoParentalTagsConfigPage"
+        data-role="page"
+        class="page type-interior pluginConfigurationPage"
+        data-require="emby-input,emby-button,emby-select,emby-checkbox">
+
         <div data-role="content">
             <div class="content-primary">
                 <form id="AutoParentalTagsConfigForm">
                     <h2>AI Provider Configuration</h2>
 
                     <div class="selectContainer">
-                        <label class="selectLabel" for="Provider">AI Provider</label>
-                        <select is="emby-select" id="Provider" name="Provider" class="emby-select-withcolor emby-select">
+                        <label class="selectLabel" for="Provider">
+                            AI Provider
+                        </label>
+
+                        <select
+                            is="emby-select"
+                            id="Provider"
+                            name="Provider"
+                            class="emby-select-withcolor emby-select">
                             <option value="Gemini">Google Gemini</option>
                             <option value="OpenAI">OpenAI (GPT)</option>
-                            <option value="LocalAI">LocalAI / Custom Endpoint</option>
+                            <option value="LocalAI">
+                                LocalAI / Custom Endpoint
+                            </option>
                         </select>
-                        <div class="fieldDescription">Select your AI service provider</div>
+
+                        <div class="fieldDescription">
+                            Select your AI service provider.
+                        </div>
                     </div>
 
                     <div class="inputContainer" id="apiKeyContainer">
-                        <label class="inputLabel inputLabelUnfocused" for="ApiKey">API Key</label>
-                        <input id="ApiKey" name="ApiKey" type="password" is="emby-input" />
-                        <div class="fieldDescription" id="apiKeyDescription">
-                            Enter your API key. Get Gemini key at <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a> or OpenAI key at <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a>
+                        <label
+                            class="inputLabel inputLabelUnfocused"
+                            for="ApiKey">
+                            API Key
+                        </label>
+
+                        <input
+                            id="ApiKey"
+                            name="ApiKey"
+                            type="password"
+                            is="emby-input" />
+
+                        <div
+                            class="fieldDescription"
+                            id="apiKeyDescription">
+                            Enter your API key.
                         </div>
                     </div>
 
-                    <div class="inputContainer" id="endpointContainer" style="display:none;">
-                        <label class="inputLabel inputLabelUnfocused" for="ApiEndpoint">API Endpoint</label>
-                        <input id="ApiEndpoint" name="ApiEndpoint" type="text" is="emby-input" />
-                        <div class="fieldDescription">API endpoint URL (e.g., http://localhost:8080 for LocalAI)</div>
+                    <div
+                        class="inputContainer"
+                        id="endpointContainer"
+                        style="display: none;">
+                        <label
+                            class="inputLabel inputLabelUnfocused"
+                            for="ApiEndpoint">
+                            API Endpoint
+                        </label>
+
+                        <input
+                            id="ApiEndpoint"
+                            name="ApiEndpoint"
+                            type="text"
+                            is="emby-input" />
+
+                        <div class="fieldDescription">
+                            Enter the LocalAI or OpenAI-compatible API endpoint,
+                            such as http://192.168.1.26:8080/v1.
+                        </div>
                     </div>
 
                     <div class="selectContainer" id="modelContainer">
-                        <label class="selectLabel" for="ModelName">Model Name</label>
-                        <div style="display: flex; gap: 8px; align-items: center;">
-                            <select is="emby-select" id="ModelName" name="ModelName" class="emby-select-withcolor emby-select" style="flex: 1;">
-                                <option value="">Loading models...</option>
+                        <label class="selectLabel" for="ModelName">
+                            Model Name
+                        </label>
+
+                        <div
+                            style="
+                                display: flex;
+                                gap: 8px;
+                                align-items: center;
+                            ">
+
+                            <select
+                                is="emby-select"
+                                id="ModelName"
+                                name="ModelName"
+                                class="emby-select-withcolor emby-select"
+                                style="flex: 1;">
+                                <option value="">
+                                    Loading models...
+                                </option>
                             </select>
-                            <button type="button" is="emby-button" id="RefreshModels" class="raised emby-button" style="flex-shrink: 0;">
+
+                            <button
+                                type="button"
+                                is="emby-button"
+                                id="RefreshModels"
+                                class="raised emby-button"
+                                style="flex-shrink: 0;">
                                 <span>Refresh Models</span>
                             </button>
                         </div>
-                        <div class="fieldDescription" id="modelDescription">Select a model from the available options</div>
+
+                        <div
+                            class="fieldDescription"
+                            id="modelDescription">
+                            Select a model from the available options.
+                        </div>
                     </div>
 
                     <h2>Processing Options</h2>
 
-                    <div class="checkboxContainer checkboxContainer-withDescription">
+                    <div class="selectContainer">
+                        <label class="selectLabel" for="ScanMode">
+                            Content to Scan
+                        </label>
+
+                        <select
+                            is="emby-select"
+                            id="ScanMode"
+                            name="ScanMode"
+                            class="emby-select-withcolor emby-select">
+                            <option value="Movies">
+                                Movies only
+                            </option>
+
+                            <option value="TvSeries">
+                                TV series only
+                            </option>
+
+                            <option value="Both">
+                                Movies and TV series
+                            </option>
+                        </select>
+
+                        <div class="fieldDescription">
+                            TV shows are classified once at the series level.
+                            Seasons and episodes are not processed individually.
+                        </div>
+                    </div>
+
+                    <div
+                        class="
+                            checkboxContainer
+                            checkboxContainer-withDescription
+                        ">
                         <label class="emby-checkbox-label">
-                            <input id="EnableAutoTagging" name="EnableAutoTagging" type="checkbox" is="emby-checkbox" />
+                            <input
+                                id="EnableAutoTagging"
+                                name="EnableAutoTagging"
+                                type="checkbox"
+                                is="emby-checkbox" />
+
                             <span>Enable Automatic Tagging</span>
                         </label>
-                        <div class="fieldDescription">Automatically tag movies with audience categories (kids, teens, adults)</div>
+
+                        <div class="fieldDescription">
+                            Automatically tag selected movies and TV series
+                            with audience categories: kids, teens, or adults.
+                        </div>
                     </div>
 
-                    <div class="checkboxContainer checkboxContainer-withDescription">
+                    <div
+                        class="
+                            checkboxContainer
+                            checkboxContainer-withDescription
+                        ">
                         <label class="emby-checkbox-label">
-                            <input id="ProcessOnLibraryScan" name="ProcessOnLibraryScan" type="checkbox" is="emby-checkbox" />
+                            <input
+                                id="ProcessOnLibraryScan"
+                                name="ProcessOnLibraryScan"
+                                type="checkbox"
+                                is="emby-checkbox" />
+
                             <span>Process on Library Scan</span>
                         </label>
-                        <div class="fieldDescription">Automatically process new movies when library is scanned</div>
+
+                        <div class="fieldDescription">
+                            Automatically process new selected content when
+                            the Jellyfin library is scanned.
+                        </div>
                     </div>
 
-                    <div class="checkboxContainer checkboxContainer-withDescription">
+                    <div
+                        class="
+                            checkboxContainer
+                            checkboxContainer-withDescription
+                        ">
                         <label class="emby-checkbox-label">
-                            <input id="OverwriteExistingTags" name="OverwriteExistingTags" type="checkbox" is="emby-checkbox" />
-                            <span>Overwrite Existing Tags</span>
+                            <input
+                                id="OverwriteExistingTags"
+                                name="OverwriteExistingTags"
+                                type="checkbox"
+                                is="emby-checkbox" />
+
+                            <span>Overwrite Existing Audience Tags</span>
                         </label>
-                        <div class="fieldDescription">Replace existing audience tags when processing movies</div>
+
+                        <div class="fieldDescription">
+                            Replace existing kids, teens, or adults tags when
+                            reprocessing content.
+                        </div>
+                    </div>
+
+                    <div
+                        class="
+                            checkboxContainer
+                            checkboxContainer-withDescription
+                        ">
+                        <label class="emby-checkbox-label">
+                            <input
+                                id="SkipPreviouslyTagged"
+                                name="SkipPreviouslyTagged"
+                                type="checkbox"
+                                is="emby-checkbox" />
+
+                            <span>Skip Previously Classified Content</span>
+                        </label>
+
+                        <div class="fieldDescription">
+                            Skip movies or TV series that already contain a
+                            kids, teens, or adults audience tag.
+                        </div>
                     </div>
 
                     <div>
-                        <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                        <button
+                            is="emby-button"
+                            type="submit"
+                            class="
+                                raised
+                                button-submit
+                                block
+                                emby-button
+                            ">
                             <span>Save</span>
                         </button>
                     </div>
                 </form>
             </div>
         </div>
+
         <script type="text/javascript">
             var AutoParentalTagsConfig = {
                 pluginUniqueId: 'eb5d7894-8eef-4b36-aa6f-5d124e828ce1'
@@ -90,48 +260,88 @@
             var currentConfig = null;
 
             function updateFieldVisibility() {
-                var provider = document.querySelector('#Provider').value;
-                var apiKeyContainer = document.querySelector('#apiKeyContainer');
-                var endpointContainer = document.querySelector('#endpointContainer');
-                var apiKeyDescription = document.querySelector('#apiKeyDescription');
-                var modelDescription = document.querySelector('#modelDescription');
-                var apiKeyInput = document.querySelector('#ApiKey');
+                var provider =
+                    document.querySelector('#Provider').value;
 
-                // Update API key field based on provider
+                var apiKeyContainer =
+                    document.querySelector('#apiKeyContainer');
+
+                var endpointContainer =
+                    document.querySelector('#endpointContainer');
+
+                var apiKeyDescription =
+                    document.querySelector('#apiKeyDescription');
+
+                var modelDescription =
+                    document.querySelector('#modelDescription');
+
+                var apiKeyInput =
+                    document.querySelector('#ApiKey');
+
                 if (provider === 'LocalAI') {
                     apiKeyContainer.style.display = 'block';
-                    apiKeyInput.removeAttribute('required');
-                    apiKeyDescription.textContent = 'API key (optional for most LocalAI installations)';
                     endpointContainer.style.display = 'block';
-                    modelDescription.textContent = 'Model to use (configure in LocalAI)';
+
+                    apiKeyInput.removeAttribute('required');
+
+                    apiKeyDescription.textContent =
+                        'Enter a LocalAI API key when authentication is enabled.';
+
+                    modelDescription.textContent =
+                        'Select a model configured in LocalAI.';
                 } else if (provider === 'OpenAI') {
                     apiKeyContainer.style.display = 'block';
-                    apiKeyInput.setAttribute('required', 'required');
-                    apiKeyDescription.innerHTML = 'OpenAI API key - Get it at <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a>';
                     endpointContainer.style.display = 'none';
-                    modelDescription.textContent = 'Model to use (e.g., gpt-3.5-turbo, gpt-4)';
-                } else if (provider === 'Gemini') {
+
+                    apiKeyInput.setAttribute(
+                        'required',
+                        'required'
+                    );
+
+                    apiKeyDescription.innerHTML =
+                        'Enter your OpenAI API key. ' +
+                        'Create one through the OpenAI Platform.';
+
+                    modelDescription.textContent =
+                        'Select an available OpenAI model.';
+                } else {
                     apiKeyContainer.style.display = 'block';
-                    apiKeyInput.setAttribute('required', 'required');
-                    apiKeyDescription.innerHTML = 'Google API key - Get it at <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a>';
                     endpointContainer.style.display = 'none';
-                    modelDescription.textContent = 'Model to use (e.g., gemini-pro, gemini-1.5-pro, gemini-1.5-flash)';
+
+                    apiKeyInput.setAttribute(
+                        'required',
+                        'required'
+                    );
+
+                    apiKeyDescription.innerHTML =
+                        'Enter your Google Gemini API key.';
+
+                    modelDescription.textContent =
+                        'Select an available Google Gemini model.';
                 }
             }
 
             async function fetchModels() {
-                var provider = document.querySelector('#Provider').value;
-                var apiKey = document.querySelector('#ApiKey').value;
-                var endpoint = document.querySelector('#ApiEndpoint').value;
-                var modelSelect = document.querySelector('#ModelName');
+                var provider =
+                    document.querySelector('#Provider').value;
+
+                var apiKey =
+                    document.querySelector('#ApiKey').value;
+
+                var endpoint =
+                    document.querySelector('#ApiEndpoint').value;
+
+                var modelSelect =
+                    document.querySelector('#ModelName');
+
                 var currentValue = modelSelect.value;
 
-                // Show loading state
-                modelSelect.innerHTML = '<option value="">Loading models...</option>';
+                modelSelect.innerHTML =
+                    '<option value="">Loading models...</option>';
+
                 modelSelect.disabled = true;
 
                 try {
-                    // Build query parameters
                     var requestBody = {
                         provider: provider
                     };
@@ -140,46 +350,93 @@
                         requestBody.apiKey = apiKey;
                     }
 
-                    if (endpoint && provider === 'LocalAI') {
+                    if (
+                        endpoint &&
+                        provider === 'LocalAI'
+                    ) {
                         requestBody.endpoint = endpoint;
                     }
 
-                    var response = await ApiClient.fetch({
+                    var httpResponse = await ApiClient.fetch({
                         type: 'POST',
-                        url: ApiClient.getUrl('AutoParentalTags/Models'),
+                        url: ApiClient.getUrl(
+                            'AutoParentalTags/Models'
+                        ),
                         contentType: 'application/json',
                         data: JSON.stringify(requestBody)
                     });
 
-                    if (response && response.length > 0) {
+                    if (!httpResponse.ok) {
+                        var errorText =
+                            await httpResponse.text();
+
+                        throw new Error(
+                            'Model request failed: ' +
+                            httpResponse.status +
+                            ' ' +
+                            errorText
+                        );
+                    }
+
+                    var response =
+                        await httpResponse.json();
+
+                    if (
+                        Array.isArray(response) &&
+                        response.length > 0
+                    ) {
                         modelSelect.innerHTML = '';
-                        response.forEach(function(model) {
-                            var option = document.createElement('option');
+
+                        response.forEach(function (model) {
+                            var option =
+                                document.createElement(
+                                    'option'
+                                );
+
                             option.value = model;
                             option.textContent = model;
+
                             if (model === currentValue) {
                                 option.selected = true;
                             }
+
                             modelSelect.appendChild(option);
                         });
 
-                        // If no model was selected, select the first one
-                        if (!currentValue || !response.includes(currentValue)) {
+                        if (
+                            !currentValue ||
+                            !response.includes(currentValue)
+                        ) {
                             modelSelect.selectedIndex = 0;
                         }
                     } else {
-                        modelSelect.innerHTML = '<option value="">No models available</option>';
+                        modelSelect.innerHTML =
+                            '<option value="">' +
+                            'No models available' +
+                            '</option>';
                     }
                 } catch (error) {
-                    console.error('Error fetching models:', error);
-                    modelSelect.innerHTML = '<option value="">Error loading models - check API credentials</option>';
+                    console.error(
+                        'Error fetching models:',
+                        error
+                    );
 
-                    // If we have a stored value, restore it
+                    modelSelect.innerHTML =
+                        '<option value="">' +
+                        'Error loading models - ' +
+                        'check API credentials' +
+                        '</option>';
+
                     if (currentValue) {
-                        var option = document.createElement('option');
+                        var option =
+                            document.createElement(
+                                'option'
+                            );
+
                         option.value = currentValue;
                         option.textContent = currentValue;
                         option.selected = true;
+
                         modelSelect.appendChild(option);
                     }
                 } finally {
@@ -187,68 +444,232 @@
                 }
             }
 
-            document.querySelector('#Provider').addEventListener('change', function() {
-                updateFieldVisibility();
-                fetchModels();
-            });
-
-            document.querySelector('#RefreshModels').addEventListener('click', function() {
-                fetchModels();
-            });
-
-            document.querySelector('#AutoParentalTagsConfigPage')
-                .addEventListener('pageshow', function() {
-                    Dashboard.showLoadingMsg();
-                    ApiClient.getPluginConfiguration(AutoParentalTagsConfig.pluginUniqueId).then(function (config) {
-                        currentConfig = config;
-                        document.querySelector('#Provider').value = config.Provider || 'Gemini';
-                        document.querySelector('#ApiKey').value = config.ApiKey || '';
-                        document.querySelector('#ApiEndpoint').value = config.ApiEndpoint || 'http://localhost:8080';
-                        document.querySelector('#EnableAutoTagging').checked = config.EnableAutoTagging;
-                        document.querySelector('#ProcessOnLibraryScan').checked = config.ProcessOnLibraryScan;
-                        document.querySelector('#OverwriteExistingTags').checked = config.OverwriteExistingTags;
-
+            document
+                .querySelector('#Provider')
+                .addEventListener(
+                    'change',
+                    function () {
                         updateFieldVisibility();
+                        fetchModels();
+                    }
+                );
 
-                        // Set model value and fetch available models
-                        var modelSelect = document.querySelector('#ModelName');
-                        if (config.ModelName) {
-                            var option = document.createElement('option');
-                            option.value = config.ModelName;
-                            option.textContent = config.ModelName;
-                            option.selected = true;
-                            modelSelect.innerHTML = '';
-                            modelSelect.appendChild(option);
-                        }
+            document
+                .querySelector('#RefreshModels')
+                .addEventListener(
+                    'click',
+                    function () {
+                        fetchModels();
+                    }
+                );
 
-                        // Fetch models asynchronously
-                        fetchModels().finally(function() {
-                            Dashboard.hideLoadingMsg();
-                        });
-                    });
-                });
+            document
+                .querySelector(
+                    '#AutoParentalTagsConfigPage'
+                )
+                .addEventListener(
+                    'pageshow',
+                    function () {
+                        Dashboard.showLoadingMsg();
 
-            document.querySelector('#AutoParentalTagsConfigForm')
-                .addEventListener('submit', function(e) {
-                    e.preventDefault();
+                        ApiClient
+                            .getPluginConfiguration(
+                                AutoParentalTagsConfig
+                                    .pluginUniqueId
+                            )
+                            .then(function (config) {
+                                currentConfig = config;
 
-                    Dashboard.showLoadingMsg();
-                    ApiClient.getPluginConfiguration(AutoParentalTagsConfig.pluginUniqueId).then(function (config) {
-                        config.Provider = document.querySelector('#Provider').value;
-                        config.ApiKey = document.querySelector('#ApiKey').value;
-                        config.ApiEndpoint = document.querySelector('#ApiEndpoint').value;
-                        config.ModelName = document.querySelector('#ModelName').value;
-                        config.EnableAutoTagging = document.querySelector('#EnableAutoTagging').checked;
-                        config.ProcessOnLibraryScan = document.querySelector('#ProcessOnLibraryScan').checked;
-                        config.OverwriteExistingTags = document.querySelector('#OverwriteExistingTags').checked;
+                                document
+                                    .querySelector('#Provider')
+                                    .value =
+                                        config.Provider ||
+                                        'Gemini';
 
-                        ApiClient.updatePluginConfiguration(AutoParentalTagsConfig.pluginUniqueId, config).then(function (result) {
-                            Dashboard.processPluginConfigurationUpdateResult(result);
-                        });
-                    });
+                                document
+                                    .querySelector('#ApiKey')
+                                    .value =
+                                        config.ApiKey ||
+                                        '';
 
-                    return false;
-                });
+                                document
+                                    .querySelector(
+                                        '#ApiEndpoint'
+                                    )
+                                    .value =
+                                        config.ApiEndpoint ||
+                                        'http://localhost:8080';
+
+                                document
+                                    .querySelector(
+                                        '#EnableAutoTagging'
+                                    )
+                                    .checked =
+                                        config.EnableAutoTagging;
+
+                                document
+                                    .querySelector(
+                                        '#ProcessOnLibraryScan'
+                                    )
+                                    .checked =
+                                        config.ProcessOnLibraryScan;
+
+                                document
+                                    .querySelector(
+                                        '#OverwriteExistingTags'
+                                    )
+                                    .checked =
+                                        config.OverwriteExistingTags;
+
+                                document
+                                    .querySelector('#ScanMode')
+                                    .value =
+                                        config.ScanMode ||
+                                        'Movies';
+
+                                document
+                                    .querySelector(
+                                        '#SkipPreviouslyTagged'
+                                    )
+                                    .checked =
+                                        config
+                                            .SkipPreviouslyTagged
+                                            !== false;
+
+                                updateFieldVisibility();
+
+                                var modelSelect =
+                                    document.querySelector(
+                                        '#ModelName'
+                                    );
+
+                                if (config.ModelName) {
+                                    var option =
+                                        document.createElement(
+                                            'option'
+                                        );
+
+                                    option.value =
+                                        config.ModelName;
+
+                                    option.textContent =
+                                        config.ModelName;
+
+                                    option.selected = true;
+
+                                    modelSelect.innerHTML = '';
+                                    modelSelect.appendChild(
+                                        option
+                                    );
+                                }
+
+                                fetchModels().finally(
+                                    function () {
+                                        Dashboard
+                                            .hideLoadingMsg();
+                                    }
+                                );
+                            });
+                    }
+                );
+
+            document
+                .querySelector(
+                    '#AutoParentalTagsConfigForm'
+                )
+                .addEventListener(
+                    'submit',
+                    function (event) {
+                        event.preventDefault();
+
+                        Dashboard.showLoadingMsg();
+
+                        ApiClient
+                            .getPluginConfiguration(
+                                AutoParentalTagsConfig
+                                    .pluginUniqueId
+                            )
+                            .then(function (config) {
+                                config.Provider =
+                                    document
+                                        .querySelector(
+                                            '#Provider'
+                                        )
+                                        .value;
+
+                                config.ApiKey =
+                                    document
+                                        .querySelector(
+                                            '#ApiKey'
+                                        )
+                                        .value;
+
+                                config.ApiEndpoint =
+                                    document
+                                        .querySelector(
+                                            '#ApiEndpoint'
+                                        )
+                                        .value;
+
+                                config.ModelName =
+                                    document
+                                        .querySelector(
+                                            '#ModelName'
+                                        )
+                                        .value;
+
+                                config.EnableAutoTagging =
+                                    document
+                                        .querySelector(
+                                            '#EnableAutoTagging'
+                                        )
+                                        .checked;
+
+                                config.ProcessOnLibraryScan =
+                                    document
+                                        .querySelector(
+                                            '#ProcessOnLibraryScan'
+                                        )
+                                        .checked;
+
+                                config.OverwriteExistingTags =
+                                    document
+                                        .querySelector(
+                                            '#OverwriteExistingTags'
+                                        )
+                                        .checked;
+
+                                config.ScanMode =
+                                    document
+                                        .querySelector(
+                                            '#ScanMode'
+                                        )
+                                        .value;
+
+                                config.SkipPreviouslyTagged =
+                                    document
+                                        .querySelector(
+                                            '#SkipPreviouslyTagged'
+                                        )
+                                        .checked;
+
+                                ApiClient
+                                    .updatePluginConfiguration(
+                                        AutoParentalTagsConfig
+                                            .pluginUniqueId,
+                                        config
+                                    )
+                                    .then(function (result) {
+                                        Dashboard
+                                            .processPluginConfigurationUpdateResult(
+                                                result
+                                            );
+                                    });
+                            });
+
+                        return false;
+                    }
+                );
         </script>
     </div>
 </body>

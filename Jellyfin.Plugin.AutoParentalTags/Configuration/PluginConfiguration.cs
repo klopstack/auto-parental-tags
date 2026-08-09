@@ -24,6 +24,27 @@ public enum AiProvider
 }
 
 /// <summary>
+/// Media types the plugin can scan.
+/// </summary>
+public enum MediaScanMode
+{
+    /// <summary>
+    /// Scan movies only.
+    /// </summary>
+    Movies,
+
+    /// <summary>
+    /// Scan TV series only.
+    /// </summary>
+    TvSeries,
+
+    /// <summary>
+    /// Scan both movies and TV series.
+    /// </summary>
+    Both
+}
+
+/// <summary>
 /// Plugin configuration.
 /// </summary>
 public class PluginConfiguration : BasePluginConfiguration
@@ -40,6 +61,8 @@ public class PluginConfiguration : BasePluginConfiguration
         EnableAutoTagging = true;
         ProcessOnLibraryScan = true;
         OverwriteExistingTags = false;
+        ScanMode = MediaScanMode.Movies;
+        SkipPreviouslyTagged = true;
     }
 
     /// <summary>
@@ -53,12 +76,12 @@ public class PluginConfiguration : BasePluginConfiguration
     public string ApiKey { get; set; }
 
     /// <summary>
-    /// Gets or sets the API endpoint (for LocalAI or custom endpoints).
+    /// Gets or sets the API endpoint for LocalAI or custom endpoints.
     /// </summary>
     public string ApiEndpoint { get; set; }
 
     /// <summary>
-    /// Gets or sets the model name (for OpenAI/LocalAI/Gemini).
+    /// Gets or sets the model name.
     /// </summary>
     public string ModelName { get; set; }
 
@@ -68,7 +91,7 @@ public class PluginConfiguration : BasePluginConfiguration
     public bool EnableAutoTagging { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether to process movies on library scan.
+    /// Gets or sets a value indicating whether to process content on library scan.
     /// </summary>
     public bool ProcessOnLibraryScan { get; set; }
 
@@ -76,4 +99,15 @@ public class PluginConfiguration : BasePluginConfiguration
     /// Gets or sets a value indicating whether to overwrite existing audience tags.
     /// </summary>
     public bool OverwriteExistingTags { get; set; }
+
+    /// <summary>
+    /// Gets or sets the types of media to scan.
+    /// </summary>
+    public MediaScanMode ScanMode { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether items that already have an
+    /// audience classification tag should be skipped.
+    /// </summary>
+    public bool SkipPreviouslyTagged { get; set; }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Jellyfin.Plugin.AutoParentalTags.Configuration;
 using MediaBrowser.Model.Tasks;
 using Microsoft.Extensions.Logging;
 
@@ -36,7 +35,7 @@ public class AutoParentalTagsScheduledTask : IScheduledTask
     public string Key => "AutoParentalTags";
 
     /// <inheritdoc />
-    public string Description => "Analyzes movies and adds target audience tags (kids, teens, adults) using AI.";
+    public string Description => "Analyzes movies and TV series and adds target audience tags (kids, teens, adults) using AI.";
 
     /// <inheritdoc />
     public string Category => "Library";
@@ -48,7 +47,10 @@ public class AutoParentalTagsScheduledTask : IScheduledTask
 
         try
         {
-            await _libraryMonitor.Run(progress, cancellationToken).ConfigureAwait(false);
+            await _libraryMonitor
+                .RunManualAsync(progress, cancellationToken)
+                .ConfigureAwait(false);
+
             _logger.LogInformation("Manual Auto Parental Tags task completed successfully");
         }
         catch (Exception ex)
@@ -61,7 +63,7 @@ public class AutoParentalTagsScheduledTask : IScheduledTask
     /// <inheritdoc />
     public IEnumerable<TaskTriggerInfo> GetDefaultTriggers()
     {
-        // No default triggers - user must manually run
+        // No default triggers - user must manually run.
         return Array.Empty<TaskTriggerInfo>();
     }
 }

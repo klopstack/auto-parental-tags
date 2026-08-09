@@ -109,7 +109,8 @@ public class GeminiServiceTests
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+                "movie",
+                "Test Movie",
             2020,
             "A test movie",
             "PG",
@@ -146,7 +147,8 @@ public class GeminiServiceTests
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+                "movie",
+                "Test Movie",
             null,
             "A test movie",
             "PG",
@@ -169,7 +171,8 @@ public class GeminiServiceTests
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+                "movie",
+                "Test Movie",
             2020,
             null,
             "PG",
@@ -192,7 +195,8 @@ public class GeminiServiceTests
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+                "movie",
+                "Test Movie",
             2020,
             "A test movie",
             null,
@@ -215,7 +219,8 @@ public class GeminiServiceTests
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+                "movie",
+                "Test Movie",
             2020,
             "A test movie",
             "PG",

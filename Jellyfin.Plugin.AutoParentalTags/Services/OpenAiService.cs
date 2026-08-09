@@ -11,20 +11,53 @@ using Microsoft.Extensions.Logging;
 namespace Jellyfin.Plugin.AutoParentalTags.Services;
 
 /// <summary>
-/// Service for interacting with OpenAI-compatible APIs (OpenAI, LocalAI, etc.).
+/// Service for interacting with OpenAI-compatible APIs such as OpenAI and LocalAI.
 /// </summary>
 public class OpenAiService : IAiService, IDisposable
 {
+    private static readonly HashSet<string> ValidAudienceTags =
+        new(StringComparer.OrdinalIgnoreCase)
+        {
+            "kids",
+            "teens",
+            "adults"
+        };
+
+    private static readonly char[] AudienceResponseSeparators =
+    {
+        ' ',
+        '\t',
+        '\r',
+        '\n',
+        '.',
+        ',',
+        ':',
+        ';',
+        '-',
+        '_',
+        '/',
+        '\\',
+        '(',
+        ')',
+        '[',
+        ']'
+    };
+
     private readonly ILogger<OpenAiService> _logger;
     private readonly HttpClient _httpClient;
+
     private string? _apiKey;
-    private string _endpoint = "https://api.openai.com/v1/chat/completions";
+    private string _endpoint =
+        "https://api.openai.com/v1/chat/completions";
+
     private string _modelName = "gpt-3.5-turbo";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenAiService"/> class.
     /// </summary>
-    /// <param name="logger">Instance of the <see cref="ILogger{OpenAiService}"/> interface.</param>
+    /// <param name="logger">
+    /// Instance of the <see cref="ILogger{OpenAiService}"/> interface.
+    /// </param>
     public OpenAiService(ILogger<OpenAiService> logger)
     {
         _logger = logger;
@@ -32,7 +65,7 @@ public class OpenAiService : IAiService, IDisposable
     }
 
     /// <summary>
-    /// Sanitizes a string for logging to prevent log forging attacks.
+    /// Sanitizes a string for logging to prevent log-forging attacks.
     /// </summary>
     /// <param name="value">The value to sanitize.</param>
     /// <returns>A sanitized string safe for logging.</returns>
@@ -43,9 +76,36 @@ public class OpenAiService : IAiService, IDisposable
             return string.Empty;
         }
 
-        return value.Replace("\r\n", " ", StringComparison.Ordinal)
+        return value
+            .Replace("\r\n", " ", StringComparison.Ordinal)
             .Replace("\n", " ", StringComparison.Ordinal)
             .Replace("\r", " ", StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Normalizes the supplied media-type label.
+    /// </summary>
+    /// <param name="mediaType">The supplied media type.</param>
+    /// <returns>A normalized media-type label.</returns>
+    private static string NormalizeMediaType(string? mediaType)
+    {
+        if (string.Equals(
+                mediaType,
+                "TV series",
+                StringComparison.OrdinalIgnoreCase)
+            || string.Equals(
+                mediaType,
+                "series",
+                StringComparison.OrdinalIgnoreCase)
+            || string.Equals(
+                mediaType,
+                "tv",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            return "TV series";
+        }
+
+        return "movie";
     }
 
     /// <inheritdoc />
@@ -55,56 +115,99 @@ public class OpenAiService : IAiService, IDisposable
 
         if (string.IsNullOrEmpty(apiKey))
         {
-            _logger.LogDebug("OpenAI API key is not configured or is empty.");
+            _logger.LogDebug(
+                "OpenAI-compatible API key is not configured or is empty.");
         }
         else
         {
-            _logger.LogDebug("OpenAI API key is configured.");
+            _logger.LogDebug(
+                "OpenAI-compatible API key is configured.");
         }
     }
 
     /// <inheritdoc />
     public void SetEndpoint(string endpoint)
     {
-        if (!string.IsNullOrEmpty(endpoint))
+        if (string.IsNullOrWhiteSpace(endpoint))
         {
-            // Ensure endpoint ends with proper path
-            _endpoint = endpoint.TrimEnd('/');
-            if (!_endpoint.EndsWith("/chat/completions", StringComparison.OrdinalIgnoreCase))
-            {
-                _endpoint += "/v1/chat/completions";
-            }
-
-            _logger.LogInformation("OpenAI endpoint configured: {Endpoint}", SanitizeForLog(_endpoint));
+            return;
         }
+
+        // Accept:
+        // - a server base URL
+        // - a /v1 base URL
+        // - a complete /chat/completions endpoint
+        _endpoint = endpoint
+            .Trim()
+            .TrimEnd('/');
+
+        if (_endpoint.EndsWith(
+                "/v1/chat/completions",
+                StringComparison.OrdinalIgnoreCase)
+            || _endpoint.EndsWith(
+                "/chat/completions",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            // Complete endpoint was supplied.
+        }
+        else if (_endpoint.EndsWith(
+                     "/v1",
+                     StringComparison.OrdinalIgnoreCase))
+        {
+            _endpoint += "/chat/completions";
+        }
+        else
+        {
+            _endpoint += "/v1/chat/completions";
+        }
+
+        _logger.LogInformation(
+            "OpenAI endpoint configured: {Endpoint}",
+            SanitizeForLog(_endpoint));
     }
 
-    /// <summary>
-    /// Sets the model name to use.
-    /// </summary>
-    /// <param name="modelName">The model name.</param>
+    /// <inheritdoc />
     public void SetModelName(string modelName)
     {
-        if (!string.IsNullOrEmpty(modelName))
+        if (string.IsNullOrWhiteSpace(modelName))
         {
-            _modelName = modelName;
-            _logger.LogDebug("OpenAI model name set to: {ModelName}", SanitizeForLog(modelName));
+            return;
         }
+
+        _modelName = modelName;
+
+        _logger.LogDebug(
+            "OpenAI-compatible model name set to: {ModelName}",
+            SanitizeForLog(modelName));
     }
 
     /// <inheritdoc />
     public async Task<string?> DetermineTargetAudienceAsync(
+        string mediaType,
         string title,
         int? year,
         string? overview,
         string? officialRating,
         string[]? genres)
     {
+        var normalizedMediaType =
+            NormalizeMediaType(mediaType);
+
         try
         {
-            var prompt = BuildPrompt(title, year, overview, officialRating, genres);
+            var prompt = BuildPrompt(
+                normalizedMediaType,
+                title,
+                year,
+                overview,
+                officialRating,
+                genres);
 
-            _logger.LogDebug("Requesting audience classification for '{Title}' ({Year})", SanitizeForLog(title), year);
+            _logger.LogDebug(
+                "Requesting audience classification for {MediaType} '{Title}' ({Year})",
+                normalizedMediaType,
+                SanitizeForLog(title),
+                year);
 
             var requestBody = new
             {
@@ -114,7 +217,10 @@ public class OpenAiService : IAiService, IDisposable
                     new
                     {
                         role = "system",
-                        content = "You are a movie analyst that determines the target audience for films."
+                        content =
+                            "You classify the primary target audience for movies and TV series. "
+                            + "Reply with exactly one lowercase word: kids, teens, or adults. "
+                            + "Do not explain your answer."
                     },
                     new
                     {
@@ -122,123 +228,276 @@ public class OpenAiService : IAiService, IDisposable
                         content = prompt
                     }
                 },
-                temperature = 0.3,
-                max_tokens = 10
+                temperature = 0.1,
+                max_tokens = 64,
+                reasoning_effort = "none",
+                metadata = new Dictionary<string, string>
+                {
+                    ["enable_thinking"] = "false"
+                }
             };
 
-            var jsonContent = JsonSerializer.Serialize(requestBody);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var jsonContent =
+                JsonSerializer.Serialize(requestBody);
 
-            // Add authorization header if API key is provided
-            if (!string.IsNullOrEmpty(_apiKey))
+            using var content = new StringContent(
+                jsonContent,
+                Encoding.UTF8,
+                "application/json");
+
+            using var request = new HttpRequestMessage(
+                HttpMethod.Post,
+                _endpoint)
             {
-                _httpClient.DefaultRequestHeaders.Remove("Authorization");
-                _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_apiKey}");
+                Content = content
+            };
+
+            if (!string.IsNullOrWhiteSpace(_apiKey))
+            {
+                request.Headers.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue(
+                        "Bearer",
+                        _apiKey);
             }
 
-            var response = await _httpClient.PostAsync(_endpoint, content).ConfigureAwait(false);
+            using var response =
+                await _httpClient
+                    .SendAsync(request)
+                    .ConfigureAwait(false);
+
+            var responseContent =
+                await response.Content
+                    .ReadAsStringAsync()
+                    .ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
-                var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 _logger.LogError(
-                    "AI API error for '{Title}': {StatusCode} - {Error}",
+                    "AI API error for {MediaType} '{Title}': {StatusCode} - {Error}",
+                    normalizedMediaType,
                     SanitizeForLog(title),
                     response.StatusCode,
-                    errorContent);
+                    responseContent);
+
                 return null;
             }
 
-            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            var responseJson = JsonDocument.Parse(responseContent);
+            using var responseJson =
+                JsonDocument.Parse(responseContent);
 
-            var choices = responseJson.RootElement.GetProperty("choices");
-            if (choices.GetArrayLength() > 0)
+            if (!responseJson.RootElement.TryGetProperty(
+                    "choices",
+                    out var choices)
+                || choices.ValueKind != JsonValueKind.Array
+                || choices.GetArrayLength() == 0)
             {
-                var firstChoice = choices[0];
-                var message = firstChoice.GetProperty("message");
-                var responseText = message.GetProperty("content").GetString();
+                _logger.LogWarning(
+                    "AI API returned no choices for {MediaType} '{Title}'",
+                    normalizedMediaType,
+                    SanitizeForLog(title));
 
-                if (!string.IsNullOrEmpty(responseText))
-                {
-                    var tag = ParseAudienceTag(responseText);
-                    _logger.LogInformation("Classified '{Title}' ({Year}) as '{Tag}'", SanitizeForLog(title), year, tag);
-                    return tag;
-                }
+                return null;
             }
 
-            _logger.LogWarning("No valid response from AI API for '{Title}'", SanitizeForLog(title));
-            return null;
+            var firstChoice = choices[0];
+
+            if (!firstChoice.TryGetProperty(
+                    "message",
+                    out var message)
+                || !message.TryGetProperty(
+                    "content",
+                    out var contentElement))
+            {
+                _logger.LogWarning(
+                    "AI API returned no message content for {MediaType} '{Title}'",
+                    normalizedMediaType,
+                    SanitizeForLog(title));
+
+                return null;
+            }
+
+            var responseText =
+                contentElement.GetString();
+
+            if (string.IsNullOrWhiteSpace(responseText))
+            {
+                _logger.LogWarning(
+                    "AI API returned empty content for {MediaType} '{Title}'",
+                    normalizedMediaType,
+                    SanitizeForLog(title));
+
+                return null;
+            }
+
+            var tag =
+                ParseAudienceTag(responseText);
+
+            if (tag == null)
+            {
+                _logger.LogWarning(
+                    "AI API returned an unsupported audience response for {MediaType} '{Title}': {Response}",
+                    normalizedMediaType,
+                    SanitizeForLog(title),
+                    SanitizeForLog(responseText));
+
+                return null;
+            }
+
+            _logger.LogInformation(
+                "Classified {MediaType} '{Title}' ({Year}) as '{Tag}'",
+                normalizedMediaType,
+                SanitizeForLog(title),
+                year,
+                tag);
+
+            return tag;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error calling AI API for '{Title}': {Message}", SanitizeForLog(title), ex.Message);
+            _logger.LogError(
+                ex,
+                "Error calling AI API for {MediaType} '{Title}': {Message}",
+                normalizedMediaType,
+                SanitizeForLog(title),
+                ex.Message);
+
             return null;
         }
     }
 
+    /// <summary>
+    /// Builds the classification prompt.
+    /// </summary>
+    /// <param name="mediaType">Movie or TV series.</param>
+    /// <param name="title">Item title.</param>
+    /// <param name="year">Release or premiere year.</param>
+    /// <param name="overview">Item synopsis.</param>
+    /// <param name="officialRating">Official content rating.</param>
+    /// <param name="genres">Item genres.</param>
+    /// <returns>The completed classification prompt.</returns>
     private static string BuildPrompt(
+        string mediaType,
         string title,
         int? year,
         string? overview,
         string? officialRating,
         string[]? genres)
     {
-        var prompt = $@"Analyze this movie and determine its TARGET AUDIENCE (not content rating).
-Consider that target audience is different from content appropriateness:
-- A PG movie from the 1970s might be targeted at adults despite being appropriate for children
-- A PG-13 action movie might be targeted specifically at teenagers
-- An unrated Christmas special might be clearly targeted at kids
+        var typeHeading =
+            mediaType.Equals(
+                "TV series",
+                StringComparison.OrdinalIgnoreCase)
+                ? "TV Series Information"
+                : "Movie Information";
 
-Movie Information:
+        var contextualGuidance =
+            mediaType.Equals(
+                "TV series",
+                StringComparison.OrdinalIgnoreCase)
+                ? @"For a TV series, classify the intended audience of the series as a whole.
+Do not classify individual seasons or episodes.
+Consider the show's overall premise, long-term themes, marketing, official rating, and intended demographic."
+                : @"For a movie, classify the intended audience of the film as a whole.
+Consider the film's marketing, themes, official rating, and intended demographic.";
+
+        return $@"Analyze this {mediaType} and determine its PRIMARY TARGET AUDIENCE, not merely its content rating.
+
+Target audience is different from content appropriateness:
+- A family-safe title may still primarily target adults.
+- A PG-13 action title may primarily target teenagers.
+- An unrated animated special may clearly target children.
+
+{contextualGuidance}
+
+{typeHeading}:
 Title: {title}
 Year: {year?.ToString(CultureInfo.InvariantCulture) ?? "Unknown"}
 Official Rating: {officialRating ?? "Not Rated"}
 Genres: {(genres?.Length > 0 ? string.Join(", ", genres) : "Unknown")}
 Overview: {overview ?? "No overview available"}
 
-Respond with ONLY ONE of these three options based on the PRIMARY target audience:
-- kids (targeted at children, typically ages 2-11)
-- teens (targeted at teenagers, typically ages 12-17)
-- adults (targeted at mature audiences, ages 18+)
+Choose exactly one category:
+- kids: primarily targeted at children, generally ages 2-11
+- teens: primarily targeted at teenagers, generally ages 12-17
+- adults: primarily targeted at adults, generally ages 18+
 
 Consider:
-1. The film's marketing and intended demographic
-2. Themes and subject matter complexity
-3. Historical context (pre-1990 PG films often targeted adults)
-4. Whether it's a franchise aimed at kids/teens/adults
-5. The sophistication level of storytelling
+1. Marketing and intended demographic
+2. Themes and subject-matter complexity
+3. Historical and cultural context
+4. Franchise or brand audience
+5. Storytelling sophistication
+6. For TV series, the audience of the overall series rather than isolated episodes
 
-Respond with just one word: kids, teens, or adults";
-
-        return prompt;
+Reply with exactly one lowercase word:
+kids
+teens
+adults";
     }
 
-    private static string ParseAudienceTag(string response)
+    /// <summary>
+    /// Parses an audience classification from the AI response.
+    /// </summary>
+    /// <param name="response">The AI response.</param>
+    /// <returns>A supported audience tag, or null.</returns>
+    private static string? ParseAudienceTag(string response)
     {
-        // Clean up the response and extract the tag
-        response = response.ToLower(CultureInfo.InvariantCulture).Trim();
+        var normalized = response
+            .Trim()
+            .ToLower(CultureInfo.InvariantCulture);
 
-        if (response.Contains("kids", StringComparison.OrdinalIgnoreCase)
-            || response.Contains("children", StringComparison.OrdinalIgnoreCase))
+        if (ValidAudienceTags.Contains(normalized))
+        {
+            return normalized;
+        }
+
+        var words = normalized.Split(
+            AudienceResponseSeparators,
+            StringSplitOptions.RemoveEmptyEntries);
+
+        if (words.Contains(
+                "kids",
+                StringComparer.OrdinalIgnoreCase)
+            || words.Contains(
+                "children",
+                StringComparer.OrdinalIgnoreCase)
+            || words.Contains(
+                "child",
+                StringComparer.OrdinalIgnoreCase))
         {
             return "kids";
         }
 
-        if (response.Contains("teens", StringComparison.OrdinalIgnoreCase)
-            || response.Contains("teenagers", StringComparison.OrdinalIgnoreCase))
+        if (words.Contains(
+                "teens",
+                StringComparer.OrdinalIgnoreCase)
+            || words.Contains(
+                "teen",
+                StringComparer.OrdinalIgnoreCase)
+            || words.Contains(
+                "teenagers",
+                StringComparer.OrdinalIgnoreCase)
+            || words.Contains(
+                "teenager",
+                StringComparer.OrdinalIgnoreCase))
         {
             return "teens";
         }
 
-        if (response.Contains("adults", StringComparison.OrdinalIgnoreCase)
-            || response.Contains("mature", StringComparison.OrdinalIgnoreCase))
+        if (words.Contains(
+                "adults",
+                StringComparer.OrdinalIgnoreCase)
+            || words.Contains(
+                "adult",
+                StringComparer.OrdinalIgnoreCase)
+            || words.Contains(
+                "mature",
+                StringComparer.OrdinalIgnoreCase))
         {
             return "adults";
         }
 
-        // Default to adults if unclear
-        return "adults";
+        return null;
     }
 
     /// <inheritdoc />
@@ -246,47 +505,86 @@ Respond with just one word: kids, teens, or adults";
     {
         try
         {
-            // Build the models endpoint from the chat endpoint
-            var modelsEndpoint = _endpoint.Replace("/chat/completions", "/models", StringComparison.Ordinal);
+            var modelsEndpoint = _endpoint.Replace(
+                "/chat/completions",
+                "/models",
+                StringComparison.OrdinalIgnoreCase);
 
-            using var request = new HttpRequestMessage(HttpMethod.Get, modelsEndpoint);
+            using var request =
+                new HttpRequestMessage(
+                    HttpMethod.Get,
+                    modelsEndpoint);
 
-            // Add authorization header if API key is provided
-            if (!string.IsNullOrEmpty(_apiKey))
+            if (!string.IsNullOrWhiteSpace(_apiKey))
             {
-                request.Headers.Add("Authorization", $"Bearer {_apiKey}");
+                request.Headers.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue(
+                        "Bearer",
+                        _apiKey);
             }
 
-            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            using var response =
+                await _httpClient
+                    .SendAsync(request)
+                    .ConfigureAwait(false);
+
+            var responseContent =
+                await response.Content
+                    .ReadAsStringAsync()
+                    .ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
-                var errorContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 _logger.LogError(
-                    "Failed to fetch OpenAI models: {StatusCode} - {Error}",
+                    "Failed to fetch OpenAI-compatible models: {StatusCode} - {Error}",
                     response.StatusCode,
-                    errorContent);
+                    responseContent);
+
                 return Array.Empty<string>();
             }
 
-            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            using var responseJson = JsonDocument.Parse(responseContent);
+            using var responseJson =
+                JsonDocument.Parse(responseContent);
 
-            var models = new List<string>();
-            if (responseJson.RootElement.TryGetProperty("data", out var dataArray))
+            if (!responseJson.RootElement.TryGetProperty(
+                    "data",
+                    out var dataArray)
+                || dataArray.ValueKind != JsonValueKind.Array)
             {
-                models = dataArray.EnumerateArray()
-                    .Where(model => model.TryGetProperty("id", out var idElement) && !string.IsNullOrEmpty(idElement.GetString()))
-                    .Select(model => model.GetProperty("id").GetString()!)
-                    .ToList();
+                return Array.Empty<string>();
             }
 
-            _logger.LogDebug("Found {Count} OpenAI-compatible models", models.Count);
-            return models.ToArray();
+            var models = dataArray
+                .EnumerateArray()
+                .Where(
+                    model =>
+                        model.TryGetProperty(
+                            "id",
+                            out var idElement)
+                        && !string.IsNullOrWhiteSpace(
+                            idElement.GetString()))
+                .Select(
+                    model =>
+                        model.GetProperty("id").GetString()!)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(
+                    model => model,
+                    StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+
+            _logger.LogDebug(
+                "Found {Count} OpenAI-compatible models",
+                models.Length);
+
+            return models;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error fetching OpenAI models: {Message}", ex.Message);
+            _logger.LogError(
+                ex,
+                "Error fetching OpenAI-compatible models: {Message}",
+                ex.Message);
+
             return Array.Empty<string>();
         }
     }
@@ -301,12 +599,14 @@ Respond with just one word: kids, teens, or adults";
     /// <summary>
     /// Disposes the service.
     /// </summary>
-    /// <param name="disposing">Whether to dispose managed resources.</param>
+    /// <param name="disposing">
+    /// Whether managed resources should be disposed.
+    /// </param>
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
         {
-            _httpClient?.Dispose();
+            _httpClient.Dispose();
         }
     }
 }

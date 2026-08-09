@@ -254,6 +254,7 @@ public class LibraryMonitorTests : IAsyncLifetime
         mockAiService.Verify(
             x => x.DetermineTargetAudienceAsync(
                 It.IsAny<string>(),
+                It.IsAny<string>(),
                 It.IsAny<int?>(),
                 It.IsAny<string?>(),
                 It.IsAny<string?>(),
@@ -273,6 +274,7 @@ public class LibraryMonitorTests : IAsyncLifetime
         var mockAiServiceFactory = new Mock<AiServiceFactory>(Mock.Of<ILoggerFactory>());
         var mockAiService = new Mock<IAiService>();
         mockAiService.Setup(x => x.DetermineTargetAudienceAsync(
+                It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<int?>(),
                 It.IsAny<string?>(),
@@ -300,6 +302,7 @@ public class LibraryMonitorTests : IAsyncLifetime
         // Assert
         mockAiService.Verify(
             x => x.DetermineTargetAudienceAsync(
+                "movie",
                 "Test Movie",
                 2020,
                 "A test movie",
@@ -320,6 +323,7 @@ public class LibraryMonitorTests : IAsyncLifetime
         var mockAiServiceFactory = new Mock<AiServiceFactory>(Mock.Of<ILoggerFactory>());
         var mockAiService = new Mock<IAiService>();
         mockAiService.Setup(x => x.DetermineTargetAudienceAsync(
+                It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<int?>(),
                 It.IsAny<string?>(),
@@ -358,6 +362,7 @@ public class LibraryMonitorTests : IAsyncLifetime
         var mockAiServiceFactory = new Mock<AiServiceFactory>(Mock.Of<ILoggerFactory>());
         var mockAiService = new Mock<IAiService>();
         mockAiService.Setup(x => x.DetermineTargetAudienceAsync(
+                It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<int?>(),
                 It.IsAny<string?>(),
@@ -399,6 +404,7 @@ public class LibraryMonitorTests : IAsyncLifetime
         var mockAiService = new Mock<IAiService>();
         mockAiService.Setup(x => x.DetermineTargetAudienceAsync(
                 It.IsAny<string>(),
+                It.IsAny<string>(),
                 It.IsAny<int?>(),
                 It.IsAny<string?>(),
                 It.IsAny<string?>(),
@@ -439,6 +445,7 @@ public class LibraryMonitorTests : IAsyncLifetime
         var mockAiService = new Mock<IAiService>();
         mockAiService.Setup(x => x.DetermineTargetAudienceAsync(
                 It.IsAny<string>(),
+                It.IsAny<string>(),
                 It.IsAny<int?>(),
                 It.IsAny<string?>(),
                 It.IsAny<string?>(),
@@ -478,6 +485,7 @@ public class LibraryMonitorTests : IAsyncLifetime
         var mockAiServiceFactory = new Mock<AiServiceFactory>(Mock.Of<ILoggerFactory>());
         var mockAiService = new Mock<IAiService>();
         mockAiService.Setup(x => x.DetermineTargetAudienceAsync(
+                It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<int?>(),
                 It.IsAny<string?>(),
@@ -578,7 +586,7 @@ internal sealed class StubAiService : IAiService
     {
     }
 
-    public Task<string?> DetermineTargetAudienceAsync(string title, int? year, string? overview, string? officialRating, string[]? genres)
+    public Task<string?> DetermineTargetAudienceAsync(string mediaType, string title, int? year, string? overview, string? officialRating, string[]? genres)
     {
         Calls++;
         return Task.FromResult<string?>(_tag);
