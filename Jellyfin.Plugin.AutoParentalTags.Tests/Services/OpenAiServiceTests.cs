@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.AutoParentalTags.Services;
 using Microsoft.Extensions.Logging;
@@ -148,26 +149,368 @@ public class OpenAiServiceTests
     }
 
     /// <summary>
-    /// Tests that DetermineTargetAudienceAsync handles API call.
+    /// Tests that DetermineTargetAudienceAsync can be constructed with a custom handler.
     /// </summary>
     [Fact]
-    public async Task DetermineTargetAudienceAsync_WithApiKey_ShouldAttemptApiCall()
+    public void Constructor_WithHandler_ShouldNotThrow()
     {
         // Arrange
         var mockLogger = new Mock<ILogger<OpenAiService>>();
-        using var service = new OpenAiService(mockLogger.Object);
-        service.SetApiKey("test-api-key");
+        var handler = new MockHttpMessageHandler();
+
+        // Act & Assert
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        Assert.NotNull(service);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync returns "kids" for a direct response.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_DirectKids_ShouldReturnKids()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiSuccessResponse("kids"));
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
         service.SetModelName("gpt-3.5-turbo");
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+                "movie",
+                "Test Movie",
             2020,
-            "A test movie about adventures",
+            "A kids movie",
             "PG",
-            new[] { "Action", "Adventure" });
+            new[] { "Animation" });
 
-        // Assert - Will return null because we can't actually call the API
+        // Assert
+        Assert.Equal("kids", result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync returns "teens" for a direct response.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_DirectTeens_ShouldReturnTeens()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiSuccessResponse("teens"));
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "TV series",
+                "Test Show",
+            2020,
+            "A teen show",
+            "TV-14",
+            null);
+
+        // Assert
+        Assert.Equal("teens", result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync returns "adults" for a direct response.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_DirectAdults_ShouldReturnAdults()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiSuccessResponse("adults"));
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Film",
+            2020,
+            "A mature film",
+            "R",
+            new[] { "Drama" });
+
+        // Assert
+        Assert.Equal("adults", result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync parses "children" as kids.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_Children_ShouldReturnKids()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiSuccessResponse("This is for children only"));
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Movie",
+            2020,
+            "A movie",
+            "PG",
+            null);
+
+        // Assert
+        Assert.Equal("kids", result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync parses "teenagers" as teens.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_Teenagers_ShouldReturnTeens()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiSuccessResponse("Great for teenagers"));
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "TV series",
+                "Test Show",
+            2020,
+            "A show",
+            "TV-14",
+            null);
+
+        // Assert
+        Assert.Equal("teens", result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync parses "adult" as adults.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_Adult_ShouldReturnAdults()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiSuccessResponse("An adult story"));
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Film",
+            2020,
+            "A film",
+            "R",
+            null);
+
+        // Assert
+        Assert.Equal("adults", result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync returns null when no choices are present.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_NoChoices_ShouldReturnNull()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, "{\"usage\":{}}");
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Movie",
+            2020,
+            "A movie",
+            "PG",
+            null);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync returns null when choices is empty.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_EmptyChoices_ShouldReturnNull()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, "{\"choices\":[]}");
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Movie",
+            2020,
+            "A movie",
+            "PG",
+            null);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync returns null when the choice has no message content.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_NoMessageContent_ShouldReturnNull()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, "{\"choices\":[{\"message\":{}}]}");
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Movie",
+            2020,
+            "A movie",
+            "PG",
+            null);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync returns null for empty content.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_EmptyContent_ShouldReturnNull()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, "{\"choices\":[{\"message\":{\"content\":\"\"}}]}");
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Movie",
+            2020,
+            "A movie",
+            "PG",
+            null);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync returns null for an unsupported response.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_Unsupported_ShouldReturnNull()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiSuccessResponse("maybe later"));
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Movie",
+            2020,
+            "A movie",
+            "PG",
+            null);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync returns null on a non-success status code.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_ErrorStatus_ShouldReturnNull()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.InternalServerError, "{\"error\":\"boom\"}");
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Movie",
+            2020,
+            "A movie",
+            "PG",
+            null);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    /// <summary>
+    /// Tests that DetermineTargetAudienceAsync returns null on a malformed JSON response.
+    /// </summary>
+    [Fact]
+    public async Task DetermineTargetAudienceAsync_MalformedJson_ShouldReturnNull()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, "{not valid json");
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
+
+        // Act
+        var result = await service.DetermineTargetAudienceAsync(
+                "movie",
+                "Test Movie",
+            2020,
+            "A movie",
+            "PG",
+            null);
+
+        // Assert
         Assert.Null(result);
     }
 
@@ -178,20 +521,24 @@ public class OpenAiServiceTests
     public async Task DetermineTargetAudienceAsync_WithNullYear_ShouldHandleGracefully()
     {
         // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiSuccessResponse("teens"));
         var mockLogger = new Mock<ILogger<OpenAiService>>();
-        using var service = new OpenAiService(mockLogger.Object);
+        using var service = new OpenAiService(mockLogger.Object, handler);
         service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+                "movie",
+                "Test Movie",
             null,
             "A test movie",
             "PG",
             new[] { "Action" });
 
         // Assert
-        Assert.Null(result);
+        Assert.Equal("teens", result);
     }
 
     /// <summary>
@@ -201,20 +548,24 @@ public class OpenAiServiceTests
     public async Task DetermineTargetAudienceAsync_WithNullOverview_ShouldHandleGracefully()
     {
         // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiSuccessResponse("teens"));
         var mockLogger = new Mock<ILogger<OpenAiService>>();
-        using var service = new OpenAiService(mockLogger.Object);
+        using var service = new OpenAiService(mockLogger.Object, handler);
         service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+                "movie",
+                "Test Movie",
             2020,
             null,
             "PG",
             new[] { "Action" });
 
         // Assert
-        Assert.Null(result);
+        Assert.Equal("teens", result);
     }
 
     /// <summary>
@@ -224,20 +575,24 @@ public class OpenAiServiceTests
     public async Task DetermineTargetAudienceAsync_WithNullRating_ShouldHandleGracefully()
     {
         // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiSuccessResponse("teens"));
         var mockLogger = new Mock<ILogger<OpenAiService>>();
-        using var service = new OpenAiService(mockLogger.Object);
+        using var service = new OpenAiService(mockLogger.Object, handler);
         service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+                "movie",
+                "Test Movie",
             2020,
             "A test movie",
             null,
             new[] { "Action" });
 
         // Assert
-        Assert.Null(result);
+        Assert.Equal("teens", result);
     }
 
     /// <summary>
@@ -247,20 +602,24 @@ public class OpenAiServiceTests
     public async Task DetermineTargetAudienceAsync_WithNullGenres_ShouldHandleGracefully()
     {
         // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiSuccessResponse("teens"));
         var mockLogger = new Mock<ILogger<OpenAiService>>();
-        using var service = new OpenAiService(mockLogger.Object);
+        using var service = new OpenAiService(mockLogger.Object, handler);
         service.SetApiKey("test-key");
+        service.SetModelName("gpt-3.5-turbo");
 
         // Act
         var result = await service.DetermineTargetAudienceAsync(
-            "Test Movie",
+                "movie",
+                "Test Movie",
             2020,
             "A test movie",
             "PG",
             null);
 
         // Assert
-        Assert.Null(result);
+        Assert.Equal("teens", result);
     }
 
     /// <summary>
@@ -278,61 +637,111 @@ public class OpenAiServiceTests
     }
 
     /// <summary>
-    /// Tests that GetAvailableModelsAsync handles network errors gracefully.
+    /// Tests that GetAvailableModelsAsync returns configured models.
     /// </summary>
     [Fact]
-    public async Task GetAvailableModelsAsync_WithNetworkError_ShouldReturnEmptyArray()
+    public async Task GetAvailableModelsAsync_ShouldReturnModels()
     {
         // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiModelsResponse());
         var mockLogger = new Mock<ILogger<OpenAiService>>();
-        using var service = new OpenAiService(mockLogger.Object);
+        using var service = new OpenAiService(mockLogger.Object, handler);
         service.SetApiKey("test-key");
-        service.SetEndpoint("https://api.openai.com");
-
-        // Act - Real network call will fail without valid credentials
-        var result = await service.GetAvailableModelsAsync();
-
-        // Assert - Should handle error and return empty array
-        Assert.NotNull(result);
-        Assert.IsType<string[]>(result);
-    }
-
-    /// <summary>
-    /// Tests that GetAvailableModelsAsync works with LocalAI endpoint.
-    /// </summary>
-    [Fact]
-    public async Task GetAvailableModelsAsync_WithLocalAIEndpoint_ShouldConstructCorrectUrl()
-    {
-        // Arrange
-        var mockLogger = new Mock<ILogger<OpenAiService>>();
-        using var service = new OpenAiService(mockLogger.Object);
         service.SetEndpoint("http://localhost:8080");
 
-        // Act - Will fail to connect but tests endpoint logic
-        var result = await service.GetAvailableModelsAsync();
-
-        // Assert - Should handle error gracefully
-        Assert.NotNull(result);
-        Assert.IsType<string[]>(result);
-    }
-
-    /// <summary>
-    /// Tests that GetAvailableModelsAsync handles missing API key for OpenAI.
-    /// </summary>
-    [Fact]
-    public async Task GetAvailableModelsAsync_WithoutApiKey_ShouldStillAttempt()
-    {
-        // Arrange
-        var mockLogger = new Mock<ILogger<OpenAiService>>();
-        using var service = new OpenAiService(mockLogger.Object);
-        service.SetEndpoint("https://api.openai.com");
-
-        // Act - Should work for LocalAI but fail for OpenAI
+        // Act
         var result = await service.GetAvailableModelsAsync();
 
         // Assert
-        Assert.NotNull(result);
-        Assert.IsType<string[]>(result);
+        Assert.Contains("gpt-3.5-turbo", result);
+        Assert.Contains("gpt-4", result);
+        Assert.Equal(2, result.Length);
+    }
+
+    /// <summary>
+    /// Tests that GetAvailableModelsAsync returns empty when the data array is missing.
+    /// </summary>
+    [Fact]
+    public async Task GetAvailableModelsAsync_NoModels_ShouldReturnEmpty()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, "{\"foo\":\"bar\"}");
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetEndpoint("http://localhost:8080");
+
+        // Act
+        var result = await service.GetAvailableModelsAsync();
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    /// <summary>
+    /// Tests that GetAvailableModelsAsync returns empty on a non-success status code.
+    /// </summary>
+    [Fact]
+    public async Task GetAvailableModelsAsync_ErrorStatus_ShouldReturnEmpty()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.Forbidden, "{\"error\":\"forbidden\"}");
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetEndpoint("http://localhost:8080");
+
+        // Act
+        var result = await service.GetAvailableModelsAsync();
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    /// <summary>
+    /// Tests that GetAvailableModelsAsync returns empty on a malformed JSON response.
+    /// </summary>
+    [Fact]
+    public async Task GetAvailableModelsAsync_MalformedJson_ShouldReturnEmpty()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, "{not valid json");
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetEndpoint("http://localhost:8080");
+
+        // Act
+        var result = await service.GetAvailableModelsAsync();
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    /// <summary>
+    /// Tests that GetAvailableModelsAsync uses the /models endpoint derived from the base URL.
+    /// </summary>
+    [Fact]
+    public async Task GetAvailableModelsAsync_ShouldUseModelsEndpoint()
+    {
+        // Arrange
+        var handler = new MockHttpMessageHandler()
+            .RespondWithJson(HttpStatusCode.OK, OpenAiModelsResponse());
+        var mockLogger = new Mock<ILogger<OpenAiService>>();
+        using var service = new OpenAiService(mockLogger.Object, handler);
+        service.SetApiKey("test-key");
+        service.SetEndpoint("http://localhost:8080");
+
+        // Act
+        await service.GetAvailableModelsAsync();
+
+        // Assert
+        Assert.Equal(1, handler.RequestCount);
+        Assert.Contains("/models", handler.Requests[0].RequestUri!.ToString());
     }
 
     /// <summary>
@@ -418,5 +827,18 @@ public class OpenAiServiceTests
 
         // Assert - Should not throw
         Assert.NotNull(service);
+    }
+
+    private static string OpenAiSuccessResponse(string text)
+    {
+        return "{\"choices\":[{\"message\":{\"role\":\"assistant\",\"content\":\"" + text + "\"}}]}";
+    }
+
+    private static string OpenAiModelsResponse()
+    {
+        return "{\"data\":[\n" +
+               "{\"id\":\"gpt-3.5-turbo\",\"object\":\"model\"},\n" +
+               "{\"id\":\"gpt-4\",\"object\":\"model\"}\n" +
+               "]}";
     }
 }

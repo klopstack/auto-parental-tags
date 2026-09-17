@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Model.Serialization;
 using Microsoft.Extensions.Logging;
@@ -11,8 +12,28 @@ namespace Jellyfin.Plugin.AutoParentalTags.Tests;
 /// <summary>
 /// Tests for the Plugin class.
 /// </summary>
-public class PluginTests
+/// <remarks>
+/// <see cref="Plugin.Instance"/> is a static field shared with other test
+/// collections that construct plugins in parallel. This class clears it before
+/// and after each test so the static-instance assertions are not affected by
+/// concurrent construction from other collections.
+/// </remarks>
+public class PluginTests : IAsyncLifetime
 {
+    /// <inheritdoc />
+    public Task InitializeAsync()
+    {
+        ClearPluginInstance();
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public Task DisposeAsync()
+    {
+        ClearPluginInstance();
+        return Task.CompletedTask;
+    }
+
     /// <summary>
     /// Tests that Plugin can be instantiated.
     /// </summary>
@@ -113,5 +134,16 @@ public class PluginTests
 
         // Act & Assert
         Assert.Equal(Guid.Parse("eb5d7894-8eef-4b36-aa6f-5d124e828ce1"), plugin.Id);
+    }
+
+    private static void ClearPluginInstance()
+    {
+        var instanceProperty = typeof(Plugin).GetProperty(
+            "Instance",
+            System.Reflection.BindingFlags.Static |
+            System.Reflection.BindingFlags.Public |
+            System.Reflection.BindingFlags.NonPublic);
+
+        instanceProperty?.SetValue(null, null);
     }
 }

@@ -47,7 +47,10 @@ public class ModelsController : ControllerBase
                 return BadRequest($"Invalid provider: {request.Provider}");
             }
 
-            _logger.LogDebug("Fetching models for provider: {Provider}", aiProvider);
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Fetching models for provider: {Provider}", aiProvider);
+            }
 
             // Create temporary config for fetching models
             var tempConfig = new PluginConfiguration
@@ -60,7 +63,10 @@ public class ModelsController : ControllerBase
             using var aiService = _aiServiceFactory.CreateService(tempConfig);
             var models = await aiService.GetAvailableModelsAsync().ConfigureAwait(false);
 
-            _logger.LogInformation("Retrieved {Count} models for {Provider}", models.Length, aiProvider);
+            if (_logger.IsEnabled(LogLevel.Information))
+            {
+                _logger.LogInformation("Retrieved {Count} models for {Provider}", models.Length, aiProvider);
+            }
 
             return Ok(models);
         }

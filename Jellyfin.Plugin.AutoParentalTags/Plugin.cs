@@ -29,7 +29,10 @@ public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
         Instance = this;
         _logger = logger;
 
-        _logger.LogInformation("Auto Parental Tags plugin initialized (v{Version})", Version);
+        if (_logger.IsEnabled(LogLevel.Information))
+        {
+            _logger.LogInformation("Auto Parental Tags plugin initialized (v{Version})", Version);
+        }
     }
 
     /// <inheritdoc />
