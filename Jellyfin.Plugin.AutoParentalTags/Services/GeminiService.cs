@@ -124,7 +124,7 @@ public class GeminiService : IAiService, IDisposable
             };
 
             var jsonContent = JsonSerializer.Serialize(requestBody);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            using var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
             var url = $"https://generativelanguage.googleapis.com/v1beta/models/{_modelName}:generateContent?key={_apiKey}";
             var response = await _httpClient.PostAsync(url, content).ConfigureAwait(false);
@@ -306,7 +306,11 @@ Respond with just one word: kids, teens, or adults";
                     .ToList();
             }
 
-            _logger.LogDebug("Found {Count} Gemini models", models.Count);
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Found {Count} Gemini models", models.Count);
+            }
+
             return models.ToArray();
         }
         catch (Exception ex)
