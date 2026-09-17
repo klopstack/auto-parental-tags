@@ -306,7 +306,11 @@ Respond with just one word: kids, teens, or adults";
                     .ToList();
             }
 
-            _logger.LogDebug("Found {Count} Gemini models", models.Count);
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug("Found {Count} Gemini models", models.Count);
+            }
+
             return models.ToArray();
         }
         catch (Exception ex)
